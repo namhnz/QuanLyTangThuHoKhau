@@ -6,11 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\QuanLyTangThuHoKhau.Core\QuanLyTangThuHoKhau.Core.csproj" />
+    <PackageReference Include="Prism.Core" Version="8.1.97" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Exceptions\" />
+    <ProjectReference Include="..\..\QuanLyTangThuHoKhau.Core\QuanLyTangThuHoKhau.Core.csproj" />
   </ItemGroup>
 
 </Project>
