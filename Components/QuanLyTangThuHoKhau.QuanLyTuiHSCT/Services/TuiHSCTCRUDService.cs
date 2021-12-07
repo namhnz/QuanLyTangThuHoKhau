@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.DbDataSerivces;
 using QuanLyTangThuHoKhau.Core.Models;
@@ -10,7 +9,7 @@ using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 {
-    public class TuiHSCTCRUDService: ITuiHSCTCRUDService
+    public class TuiHSCTCRUDService : ITuiHSCTCRUDService
     {
         private readonly ILiteDbDataService _dataService;
 
@@ -19,11 +18,13 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             _dataService = dataService;
         }
 
+        #region Lay danh sach tui ho so
+
         public async Task<List<TuiHSCT>> LietKeToanBoTuiHSCTTheoThonXom(ThonXom thonXom)
         {
             if (thonXom == null)
             {
-                throw new ChuaChonThonXomCuaTuiHSCTException()
+                throw new ThonXomKhongTonTaiException()
                 {
                     ErrorMessage = "Chưa chọn thôn, xóm để lấy các túi hồ sơ"
                 };
@@ -32,7 +33,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             var thonXomDaCo = _dataService.ThonXomRepository.FindOne(thonXom.Id);
             if (thonXomDaCo == null)
             {
-                throw new ChuaChonThonXomCuaTuiHSCTException()
+                throw new ThonXomKhongTonTaiException()
                 {
                     ErrorMessage = "Thôn, xóm đã chọn không tồn tại"
                 };
@@ -45,76 +46,126 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             return toanBoThonXom;
         }
 
-        public async Task ThemTuiHSCTMoi(HSCT hsct, TapHSCT tapHSCT, int viTriTui)
+        #endregion
+
+
+        #region Them tui ho so moi
+        public async Task ThemTuiHSCTMoi(TapHSCT tapHSCT, int viTriTui, string chuHo = "")
         {
-            tenThonXom = tenThonXom.Trim();
-
-            if (string.IsNullOrEmpty(tenThonXom))
+            if (tapHSCT == null)
             {
-                throw new TenThonXomKhongDungException()
+                throw new TapHSCTChuaTuiHSCTMoiKhongDungException()
                 {
-                    ErrorMessage = "Tên thôn, xóm thêm mới không đúng"
+                    ErrorMessage = "Chưa chọn tập hồ sơ để thêm túi hồ sơ mới"
                 };
             }
 
-            if (donViHanhChinhXaPhuong == null || donViHanhChinhXaPhuong.LoaiCapDonVi != CapDonViHanhChinh.PhuongXa)
+            //Kiem tra tap ho so ton tai
+            var tapHSCTDaCo = _dataService.TapHSCTRepository.FindOne(tapHSCT.Id);
+            if (tapHSCTDaCo == null)
             {
-                throw new DonViHanhChinhXaPhuongKhongDungException()
+                throw new TapHSCTChuaTuiHSCTMoiKhongDungException()
                 {
-                    ErrorMessage = "Lựa chọn đơn vị hành chính của thôn, xóm thêm mới không phải cấp xã, phường"
+                    ErrorMessage = "Tập hồ sơ đã chọn không tồn tại"
                 };
             }
 
-            var thonXomMoi = new ThonXom()
+            // Tao ho so moi
+            var thonXomThemHSCTMoi = tapHSCT.ThonXom;
+            var hsctMoi = await TaoHSCTMoi(thonXomThemHSCTMoi, chuHo);
+
+            // Lay vi tri tui ho so moi
+            var viTriTuiHSCTMoi = _dataService.TuiHSCTRepository.FindAll().Count(x => x.TapHSCT.Id == tapHSCT.Id) + 1;
+            
+            // Tao tui ho so moi
+            var tuiHSCTMoi = new TuiHSCT()
             {
-                TenThonXom = tenThonXom,
-                DonViHanhChinhPhuongXa = donViHanhChinhXaPhuong
+                HSCT = hsctMoi,
+                TapHSCT = tapHSCT,
+                ViTriTui = viTriTuiHSCTMoi
             };
 
-            await Task.Run(() =>
-            {
-                _dataService.ThonXomRepository.Insert(thonXomMoi);
-            });
+            await Task.Run(() => { _dataService.TuiHSCTRepository.Insert(tuiHSCTMoi); });
         }
 
-        private void TaoHSCTMoi
-
-        public async Task ThayDoiTenThonXomDaCo(int idThonXomDaCo, string tenThonXom)
+        private async Task<HSCT> TaoHSCTMoi(ThonXom thonXom, string chuHo = "")
         {
-            tenThonXom = tenThonXom.Trim();
-
-            if (string.IsNullOrEmpty(tenThonXom))
+            //Kiem tra thon xom da chon xem ton tai hay khong
+            if (thonXom == null)
             {
-                throw new TenThonXomKhongDungException()
+                throw new ThonXomKhongTonTaiException()
                 {
-                    ErrorMessage = "Tên thôn, xóm không đúng"
+                    ErrorMessage = "Chưa chọn thôn, xóm để thêm mới hồ sơ"
+                };
+            }
+
+            var thonXomDaCo = _dataService.ThonXomRepository.FindOne(thonXom.Id);
+            if (thonXomDaCo == null)
+            {
+                throw new ThonXomKhongTonTaiException()
+                {
+                    ErrorMessage = "Thôn, xóm đã chọn không tồn tại"
+                };
+            }
+
+            var hsctMoi = await Task.Run(() =>
+            {
+                //Lay so ho so moi nhat
+                var tuiHSCTCuoiCung = _dataService.TuiHSCTRepository.FindTuiHSCTMoiNhat();
+                uint soHSCTMoiNhat;
+
+                soHSCTMoiNhat = tuiHSCTCuoiCung == null ? (uint)1 : tuiHSCTCuoiCung.HSCT.SoHSCT + 1;
+
+                //Tao ho so moi
+                return new HSCT(soHSCTMoiNhat, thonXom, chuHo);
+            });
+
+            return hsctMoi;
+        }
+
+        #endregion
+
+        #region Chinh sua tui ho so, thong tin trong ho so
+
+        public async Task ThayDoiTenChuHoCuaTuiHSCT(int idTuiHSCT, string chuHoMoi)
+        {
+            chuHoMoi = chuHoMoi.Trim();
+
+            if (string.IsNullOrEmpty(chuHoMoi))
+            {
+                throw new TenChuHoKhongDungException()
+                {
+                    ErrorMessage = "Tên chủ hộ không đúng"
                 };
             }
 
             await Task.Run(() =>
             {
-                var thonXomCanDoiTen = _dataService.ThonXomRepository.FindOne(idThonXomDaCo);
+                var tuiHSCTDoiTenChuHo = _dataService.TuiHSCTRepository.FindOne(idTuiHSCT);
 
-                if (thonXomCanDoiTen == null)
+                if (tuiHSCTDoiTenChuHo == null)
                 {
-                    throw new ThonXomKhongTonTaiException()
+                    throw new TuiHSCTKhongTonTaiException()
                     {
-                        ErrorMessage = "Thôn, xóm cần chỉnh sửa không tồn tại"
+                        ErrorMessage = "Túi hồ sơ cần chỉnh sửa không tồn tại"
                     };
                 }
 
-                thonXomCanDoiTen.TenThonXom = tenThonXom;
+                tuiHSCTDoiTenChuHo.HSCT.ChuHo = chuHoMoi;
 
-                _dataService.ThonXomRepository.Update(thonXomCanDoiTen);
+                _dataService.TuiHSCTRepository.Update(tuiHSCTDoiTenChuHo);
             });
         }
+
+        #endregion
+
+        #region Xoa tui ho so cu tru
 
         public async Task XoaTuiHSCT(int idTuiHSCT)
         {
-            await Task.Run(() =>
-            {
-                _dataService.TuiHSCTRepository.Delete(idTuiHSCT);
-            });
+            await Task.Run(() => { _dataService.TuiHSCTRepository.Delete(idTuiHSCT); });
         }
+
+        #endregion
     }
 }

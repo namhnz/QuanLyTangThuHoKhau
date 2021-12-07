@@ -11,12 +11,22 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos
 
         public TuiHSCT FindOne(int id);
 
+        public TuiHSCT FindTuiHSCTMoiNhat();
+
         #endregion
+
+        #region Them moi, chinh sua
 
         public bool Insert(TuiHSCT tuiHSCT);
 
         public bool Update(TuiHSCT tuiHSCT);
 
+        #endregion
+
+        #region Xoa
+
         public bool Delete(int id);
+
+        #endregion
     }
 }

@@ -20,12 +20,14 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos
         public IEnumerable<TapHSCT> FindAll()
         {
             return _liteDb.GetCollection<TapHSCT>(DataReposNames.CAC_TAP_HSCT)
+                .Include(x => x.ThonXom)
                 .FindAll();
         }
         
         public TapHSCT FindOne(int id)
         {
             return _liteDb.GetCollection<TapHSCT>(DataReposNames.CAC_TAP_HSCT)
+                .Include(x => x.ThonXom)
                 .Find(x => x.Id == id).FirstOrDefault();
         }
         

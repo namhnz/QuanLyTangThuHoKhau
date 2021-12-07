@@ -2,7 +2,7 @@
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions
 {
-    public class ChuaChonThonXomCuaTuiHSCTException: BaseException
+    public class TapHSCTChuaTuiHSCTMoiKhongDungException: BaseException
     {
         
     }
