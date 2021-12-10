@@ -9,5 +9,7 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices
     public interface IDonViHanhChinhService
     {
         public Task<List<DonViHanhChinhChung>> LoadCacDonViHanhChinhVietNam();
+
+        public Task<List<DonViHanhChinhChung>> LoadToanBoXaPhuongVietNam();
     }
 }

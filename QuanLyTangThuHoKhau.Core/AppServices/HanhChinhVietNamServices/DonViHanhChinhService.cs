@@ -32,5 +32,14 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices
 
             return null;
         }
+
+        public async Task<List<DonViHanhChinhChung>> LoadToanBoXaPhuongVietNam()
+        {
+            var toanBoDonViHanhChinhCapTinhThanh = await LoadCacDonViHanhChinhVietNam();
+            var toanBoDonViHanhChinhCapXaPhuong = toanBoDonViHanhChinhCapTinhThanh.SelectMany(x =>
+                x.CacDonViHanhChinhCapDuoi.SelectMany(y => y.CacDonViHanhChinhCapDuoi)).ToList();
+
+            return toanBoDonViHanhChinhCapXaPhuong;
+        }
     }
 }

@@ -24,12 +24,15 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types
 
         public DonViHanhChinhChung Export()
         {
+            var tenDonViDuCap = name;
+
             var donViHanhChinhTinhThanh = new DonViHanhChinhTinhThanh()
             {
                 MaDonVi = level1_id,
                 TenDonVi = name,
+                TenDonViDuCap = tenDonViDuCap,
                 TenLoaiCapDonVi = type,
-                CacDonViHanhChinhCapDuoi = level2s.Select(x => x.Export()).ToList()
+                CacDonViHanhChinhCapDuoi = level2s.Select(x => x.Export(tenDonViDuCap)).ToList()
             };
             return donViHanhChinhTinhThanh;
         }
@@ -42,14 +45,17 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types
         public string type { get; set; }
         public List<DVHCVNJsonFileLV3DataType> level3s { get; set; }
 
-        public DonViHanhChinhChung Export()
+        public DonViHanhChinhChung Export(string tenDonViHanhChinhCapTren)
         {
+            var tenDonViDuCap = $"{tenDonViHanhChinhCapTren}, {name}";
+
             var donViHanhChinhQuanHuyen = new DonViHanhChinhQuanHuyen()
             {
                 MaDonVi = level2_id,
                 TenDonVi = name,
                 TenLoaiCapDonVi = type,
-                CacDonViHanhChinhCapDuoi = level3s.Select(x => x.Export()).ToList()
+                TenDonViDuCap = tenDonViDuCap,
+                CacDonViHanhChinhCapDuoi = level3s.Select(x => x.Export(tenDonViDuCap)).ToList()
             };
             return donViHanhChinhQuanHuyen;
         }
@@ -61,12 +67,15 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types
         public string name { get; set; }
         public string type { get; set; }
 
-        public DonViHanhChinhChung Export()
+        public DonViHanhChinhChung Export(string tenDonViHanhChinhCapTren)
         {
+            var tenDonViDuCap = $"{tenDonViHanhChinhCapTren}, {name}";
+
             var donViHanhChinhPhuongXa = new DonViHanhChinhPhuongXa()
             {
                 MaDonVi = level3_id,
                 TenDonVi = name,
+                TenDonViDuCap = tenDonViDuCap,
                 TenLoaiCapDonVi = type,
             };
             return donViHanhChinhPhuongXa;

@@ -87,6 +87,8 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
 
         public async Task XoaThonXomDaCo(int idThonXomDaCo)
         {
+            //Kiem tra co ton tai nhung tui/tap ho so lien quan den thon do khong
+
             await Task.Run(() =>
             {
                 _dataService.ThonXomRepository.Delete(idThonXomDaCo);
