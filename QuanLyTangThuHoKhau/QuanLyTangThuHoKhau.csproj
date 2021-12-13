@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Components\QuanLyTangThuHoKhau.QuanLyTapHSCT\QuanLyTangThuHoKhau.QuanLyTapHSCT.csproj" />
     <ProjectReference Include="..\Components\QuanLyTangThuHoKhau.QuanLyThonXom\QuanLyTangThuHoKhau.QuanLyThonXom.csproj" />
+    <ProjectReference Include="..\Components\QuanLyTangThuHoKhau.QuanLyTuiHSCT\QuanLyTangThuHoKhau.QuanLyTuiHSCT.csproj" />
     <ProjectReference Include="..\QuanLyTangThuHoKhau.Core\QuanLyTangThuHoKhau.Core.csproj" />
   </ItemGroup>
 

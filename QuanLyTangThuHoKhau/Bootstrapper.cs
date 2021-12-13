@@ -6,8 +6,10 @@ using Prism.Modularity;
 using Prism.Regions;
 using Prism.Unity;
 using QuanLyTangThuHoKhau.Core;
+using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT;
 using QuanLyTangThuHoKhau.QuanLyThonXom;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT;
 
 namespace QuanLyTangThuHoKhau
 {
@@ -18,6 +20,8 @@ namespace QuanLyTangThuHoKhau
             // containerRegistry.RegisterSingleton<IApplicationCommands, ApplicationCommands>();
             //
             // containerRegistry.RegisterSingleton<IBusyMonitor, BusyMonitor>();
+
+            containerRegistry.RegisterSingleton<IDonViHanhChinhService, DonViHanhChinhService>();
 
         }
 
@@ -31,7 +35,7 @@ namespace QuanLyTangThuHoKhau
             moduleCatalog.AddModule<CoreModule>();
             moduleCatalog.AddModule<QuanLyThonXomModule>();
             moduleCatalog.AddModule<QuanLyTapHSCTModule>();
-            // moduleCatalog.AddModule<XuLyThongTinTheModule>();
+            moduleCatalog.AddModule<QuanLyTuiHSCTModule>();
             // moduleCatalog.AddModule<QuetTheModule>();
             // moduleCatalog.AddModule<NhanTheModule>();
             // moduleCatalog.AddModule<CaiDatModule>();

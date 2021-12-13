@@ -7,8 +7,11 @@
         mc:Ignorable="d"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        xmlns:qltx="clr-namespace:QuanLyTangThuHoKhau.QuanLyThonXom;assembly=QuanLyTangThuHoKhau.QuanLyThonXom"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True">
     <Grid>
-
+        <qltx:QuanLyThonXomRootView></qltx:QuanLyThonXomRootView>
     </Grid>
 </Window>

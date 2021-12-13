@@ -12,7 +12,7 @@ namespace QuanLyTangThuHoKhau.Core
             // containerRegistry.RegisterSingleton<ILiteDbDataService, LiteDbDataService>();
             // containerRegistry.RegisterSingleton<IQRCodeScanner, ZebraQRCodeScanner>();
             //
-            containerRegistry.RegisterSingleton<IDonViHanhChinhService, DonViHanhChinhService>();
+            // containerRegistry.RegisterSingleton<IDonViHanhChinhService, DonViHanhChinhService>();
             // containerRegistry.RegisterSingleton<IDefaultDiaGioiContainer, DefaultDiaGioiContainer>();
         }
 

@@ -13,16 +13,21 @@
     <ScrollViewer>
         <ui:SimpleStackPanel>
             <ui:AutoSuggestBox
-                x:Name="Control2"
+                Text="{Binding TenXaPhuongCanTim}"
+                ItemsSource="{Binding CacXaPhuongDuocGoiY}"
                 PlaceholderText="Type a control name"
                 QueryIcon="Find"
-                QuerySubmitted="Control2_QuerySubmitted"
-                SuggestionChosen="Control2_SuggestionChosen"
                 Width="300"
                 HorizontalAlignment="Left">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding Path=DonViHanhChinhPhuongXaSelectorTextChangedCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="QuerySubmitted">
+                        <i:InvokeCommandAction Command="{Binding Path=DonViHanhChinhPhuongXaSelectorQuerySubmittedCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="SuggestionChosen">
+                        <i:InvokeCommandAction Command="{Binding Path=DonViHanhChinhPhuongXaSelectorSuggestionChosenCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ui:AutoSuggestBox>

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +9,11 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices
 {
     public class DonViHanhChinhService: IDonViHanhChinhService
     {
+        public DonViHanhChinhService()
+        {
+            
+        }
+
         public async Task<List<DonViHanhChinhChung>> LoadCacDonViHanhChinhVietNam()
         {
             var filePath = @"Assets/HanhChinhVietNam/dvhcvn.json";
