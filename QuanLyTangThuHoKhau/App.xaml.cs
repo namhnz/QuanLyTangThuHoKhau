@@ -28,14 +28,14 @@ namespace QuanLyTangThuHoKhau
         private void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
         {
             //Thay doi Logging level de log tat ca moi thu: https://stackoverflow.com/questions/8926409/log4net-hierarchy-and-logging-levels
-            Log.Error($"Da co loi xay ra: {e.ExceptionObject.ToString()}");
+            Log.Error(e.ExceptionObject);
             MessageBox.Show("Đã có lỗi xảy ra");
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             log4net.Config.XmlConfigurator.Configure();
-            Log.Info("Quan ly tra the khoi chay");
+            Log.Info("Phan mem quan ly tang thu ho khau khoi chay");
             base.OnStartup(e);
 
             var bootstrapper = new Bootstrapper();

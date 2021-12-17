@@ -10,7 +10,8 @@
         Title="MainWindow" Height="450" Width="800"
         xmlns:qltx="clr-namespace:QuanLyTangThuHoKhau.QuanLyThonXom;assembly=QuanLyTangThuHoKhau.QuanLyThonXom"
         xmlns:prism="http://prismlibrary.com/"
-        prism:ViewModelLocator.AutoWireViewModel="True">
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        WindowState="Maximized">
     <Grid>
         <qltx:QuanLyThonXomRootView></qltx:QuanLyThonXomRootView>
     </Grid>

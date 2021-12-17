@@ -47,7 +47,7 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types
 
         public DonViHanhChinhChung Export(string tenDonViHanhChinhCapTren)
         {
-            var tenDonViDuCap = $"{tenDonViHanhChinhCapTren}, {name}";
+            var tenDonViDuCap = $"{name}, {tenDonViHanhChinhCapTren}";
 
             var donViHanhChinhQuanHuyen = new DonViHanhChinhQuanHuyen()
             {
@@ -69,7 +69,7 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types
 
         public DonViHanhChinhChung Export(string tenDonViHanhChinhCapTren)
         {
-            var tenDonViDuCap = $"{tenDonViHanhChinhCapTren}, {name}";
+            var tenDonViDuCap = $"{name}, {tenDonViHanhChinhCapTren}";
 
             var donViHanhChinhPhuongXa = new DonViHanhChinhPhuongXa()
             {

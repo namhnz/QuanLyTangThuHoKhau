@@ -1,21 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
+using log4net;
 using ModernWpf.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types;
+using QuanLyTangThuHoKhau.Core.Models;
+using QuanLyTangThuHoKhau.Core.Ultis;
+using QuanLyTangThuHoKhau.QuanLyThonXom.Exceptions;
 
 namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 {
     public class KhoiTaoDanhSachThonXomViewModel: BindableBase
     {
-        private readonly IDonViHanhChinhService _dvhcService;
+        private static readonly ILog Log =
+            LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        private readonly IDonViHanhChinhService _dvhcService;
 
         public KhoiTaoDanhSachThonXomViewModel(IDonViHanhChinhService dvhcService)
         {
@@ -26,40 +34,16 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
             InitData();
         }
 
-        private List<string> _toanBoXaPhuongVietNam;
+        private List<DonViHanhChinhChung> _toanBoXaPhuongVietNam;
 
-        private string _tenXaPhuongCanTim;
-
-        public string TenXaPhuongCanTim
+        private DonViHanhChinhChung _donViXaPhuongDaChon;
+        
+        public void XacDinhDonViXaPhuongDaChon(DonViHanhChinhChung donviXaPhuongDaChon)
         {
-            get => _tenXaPhuongCanTim;
-            set => SetProperty(ref _tenXaPhuongCanTim, value);
+            _donViXaPhuongDaChon = donviXaPhuongDaChon;
         }
 
-        private string[] _cacXaPhuongDuocGoiY;
-
-        public string[] CacXaPhuongDuocGoiY
-        {
-            get => _cacXaPhuongDuocGoiY;
-            set => SetProperty(ref _cacXaPhuongDuocGoiY, value);
-        }
-
-        public ICommand DonViHanhChinhPhuongXaSelectorTextChangedCommand { get; private set; }
-
-        private void DonViHanhChinhPhuongXaSelectorTextChanged(AutoSuggestBoxTextChangedEventArgs args)
-        {
-            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
-            {
-                var suggestions = TimKiemCacXaPhuongTheoDieuKien(TenXaPhuongCanTim);
-
-                if (suggestions.Length > 0)
-                    CacXaPhuongDuocGoiY = suggestions;
-                else
-                    CacXaPhuongDuocGoiY = new string[] { "Không tìm thấy xã, phường nào" };
-            }
-        }
-
-        private string[] TimKiemCacXaPhuongTheoDieuKien(string query)
+        public List<DonViHanhChinhChung> TimKiemCacXaPhuongTheoDieuKien(string query)
         {
             var querySplit = query.Split(' ');
             var suggestions = _toanBoXaPhuongVietNam.Where(
@@ -72,7 +56,7 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
                     foreach (string queryToken in querySplit)
                     {
                         // Check if token is not in string 
-                        if (item.IndexOf(queryToken, StringComparison.CurrentCultureIgnoreCase) < 0)
+                        if (item.TenDonViDuCap.IndexOf(queryToken, StringComparison.CurrentCultureIgnoreCase) < 0)
                         {
                             // Token is not in string, so we ignore this item. 
                             flag = false;
@@ -80,58 +64,113 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
                     }
                     return flag;
                 });
-            return suggestions.OrderByDescending(i => i.StartsWith(query, StringComparison.CurrentCultureIgnoreCase)).ToArray();
+            return suggestions
+                .OrderByDescending(i => i.TenDonViDuCap.StartsWith(query, StringComparison.CurrentCultureIgnoreCase))
+                .ThenBy(x => x.TenDonViDuCap).ToList();
         }
-
-        public ICommand DonViHanhChinhPhuongXaSelectorQuerySubmittedCommand { get; private set; }
-
-        private void DonViHanhChinhPhuongXaSelectorQuerySubmitted(AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            if (args.ChosenSuggestion != null && args.ChosenSuggestion is string)
-            {
-                //User selected an item, take an action
-                // SelectControl(args.ChosenSuggestion as ControlInfoDataItem);
-                MessageBox.Show("12345");
-            }
-            else if (!string.IsNullOrEmpty(args.QueryText))
-            {
-                //Do a fuzzy search based on the text
-                var suggestions = TimKiemCacXaPhuongTheoDieuKien(TenXaPhuongCanTim);
-                if (suggestions.Length > 0)
-                {
-                    // SelectControl(suggestions.FirstOrDefault());
-                    MessageBox.Show("12345");
-                }
-            }
-        }
-
-        public ICommand DonViHanhChinhPhuongXaSelectorSuggestionChosenCommand { get; private set; }
-
-        private void DonViHanhChinhPhuongXaSelectorSuggestionChosen(AutoSuggestBoxSuggestionChosenEventArgs args)
-        {
-            if (args.SelectedItem is string tenXaPhuongDuocChon && tenXaPhuongDuocChon != "Không tìm thấy xã, phường nào")
-            {
-                TenXaPhuongCanTim = tenXaPhuongDuocChon;
-            }
-        }
-
+        
         private void InitCommands()
         {
-            DonViHanhChinhPhuongXaSelectorTextChangedCommand =
-                new DelegateCommand<AutoSuggestBoxTextChangedEventArgs>(DonViHanhChinhPhuongXaSelectorTextChanged);
+            //1
 
-            DonViHanhChinhPhuongXaSelectorQuerySubmittedCommand =
-                new DelegateCommand<AutoSuggestBoxQuerySubmittedEventArgs>(
-                    DonViHanhChinhPhuongXaSelectorQuerySubmitted);
 
-            DonViHanhChinhPhuongXaSelectorSuggestionChosenCommand =
-                new DelegateCommand<AutoSuggestBoxSuggestionChosenEventArgs>(
-                    DonViHanhChinhPhuongXaSelectorSuggestionChosen);
+            //2
+            DeleteThonXomItemCommand = new DelegateCommand<ThonXom>(DeleteThonXomItem);
+            ThemThonXomItemCommand = new DelegateCommand<string>(ThemThonXomItem);
         }
 
         private async Task InitData()
         {
-            _toanBoXaPhuongVietNam = (await _dvhcService.LoadToanBoXaPhuongVietNam()).Select(x => x.ToString()).ToList();
+            CacThonXomThuocXaPhuongDaChon = new ObservableCollection<ThonXom>();
+
+            _cacThonXomThuocXaPhuongDaChonCollectionLock = new object();
+            BindingOperations.EnableCollectionSynchronization(_cacThonXomThuocXaPhuongDaChon, _cacThonXomThuocXaPhuongDaChonCollectionLock);
+
+            _toanBoXaPhuongVietNam = (await _dvhcService.LoadToanBoXaPhuongVietNam()).ToList();
         }
+
+
+        #region Quan ly cac thon, xom
+
+        //Cap nhat ObservableCollection tu thread khac ngoai UI thread
+        private object _cacThonXomThuocXaPhuongDaChonCollectionLock;
+
+        //Danh sach the view model dung de hien thi
+        private ObservableCollection<ThonXom> _cacThonXomThuocXaPhuongDaChon;
+
+        public ObservableCollection<ThonXom> CacThonXomThuocXaPhuongDaChon
+        {
+            get => _cacThonXomThuocXaPhuongDaChon;
+            set => SetProperty(ref _cacThonXomThuocXaPhuongDaChon, value);
+        }
+
+        public ICommand DeleteThonXomItemCommand { get; private set; }
+
+        private void DeleteThonXomItem(ThonXom thonXomItem)
+        {
+            var xoaThonXomItemKhoiDanhSachConfirmResult = MessageBox.Show("Bạn có muốn xoá thôn, xóm này khỏi danh sách các thôn, xóm đã nhập không?", "Xoá thôn, xóm",
+                MessageBoxButton.YesNo);
+
+            if (xoaThonXomItemKhoiDanhSachConfirmResult == MessageBoxResult.Yes)
+            {
+                lock (_cacThonXomThuocXaPhuongDaChonCollectionLock)
+                {
+                    CacThonXomThuocXaPhuongDaChon.Remove(thonXomItem);
+                }
+            }
+        }
+
+        public ICommand ThemThonXomItemCommand { get; private set; }
+
+        private void ThemThonXomItem(string tenThonXomItem)
+        {
+            try
+            {
+                tenThonXomItem = tenThonXomItem.Trim().EnsureStringHasSingleSpace();
+
+                if (string.IsNullOrEmpty(tenThonXomItem))
+                {
+                    MessageBox.Show("Tên thôn, xóm thêm mới không đúng");
+                    return;
+                }
+
+                if (_donViXaPhuongDaChon == null || _donViXaPhuongDaChon.LoaiCapDonVi != CapDonViHanhChinh.PhuongXa)
+                {
+                    MessageBox.Show("Lựa chọn đơn vị hành chính của thôn, xóm thêm mới không phải cấp xã, phường");
+                    return;
+                }
+
+                var thonXomItemMoi = new ThonXom()
+                {
+                    TenThonXom = tenThonXomItem,
+                    DonViHanhChinhPhuongXa = _donViXaPhuongDaChon
+                };
+
+                //Them thon, xom moi vao danh sach
+                var isThonXomItemMoiDaDuocThemVaoDanhSach =
+                    CacThonXomThuocXaPhuongDaChon.Any(x => x.TenThonXom == tenThonXomItem);
+                if (isThonXomItemMoiDaDuocThemVaoDanhSach)
+                {
+                    MessageBox.Show("Thôn, xóm này đã được thêm vào danh sách các thôn, xóm thuộc xã, phường đã chọn");
+                }
+                else
+                {
+                    lock (_cacThonXomThuocXaPhuongDaChonCollectionLock)
+                    {
+                        CacThonXomThuocXaPhuongDaChon.Add(thonXomItemMoi);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+                MessageBox.Show("Đã có lỗi xảy ra khi thêm thôn, xóm mới");
+            }
+
+
+
+        }
+
+        #endregion
     }
 }

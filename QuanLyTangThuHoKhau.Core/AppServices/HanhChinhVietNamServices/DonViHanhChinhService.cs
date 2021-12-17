@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,6 +43,11 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices
             var toanBoDonViHanhChinhCapTinhThanh = await LoadCacDonViHanhChinhVietNam();
             var toanBoDonViHanhChinhCapXaPhuong = toanBoDonViHanhChinhCapTinhThanh.SelectMany(x =>
                 x.CacDonViHanhChinhCapDuoi.SelectMany(y => y.CacDonViHanhChinhCapDuoi)).ToList();
+
+            // foreach (var xaPhuong in toanBoDonViHanhChinhCapXaPhuong)
+            // {
+            //     Debug.WriteLine(xaPhuong);
+            // }
 
             return toanBoDonViHanhChinhCapXaPhuong;
         }
