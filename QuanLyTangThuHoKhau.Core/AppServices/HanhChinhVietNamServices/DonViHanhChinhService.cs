@@ -15,8 +15,16 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices
             
         }
 
+        private List<DonViHanhChinhChung> _toanBoDonViHanhChinhCapTinhThanhCache;
+        private List<DonViHanhChinhChung> _toanBoDonViHanhChinhCapXaPhuongCache;
+
         public async Task<List<DonViHanhChinhChung>> LoadCacDonViHanhChinhVietNam()
         {
+            if (_toanBoDonViHanhChinhCapTinhThanhCache != null)
+            {
+                return _toanBoDonViHanhChinhCapTinhThanhCache;
+            }
+
             var filePath = @"Assets/HanhChinhVietNam/dvhcvn.json";
 
             if (File.Exists(filePath))
@@ -30,6 +38,7 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices
                 if (jsonDataFile != null)
                 {
                     var toanBoDonViHanhChinhCapTinhThanh = jsonDataFile.ExportContent();
+                    _toanBoDonViHanhChinhCapTinhThanhCache = toanBoDonViHanhChinhCapTinhThanh;
 
                     return toanBoDonViHanhChinhCapTinhThanh;
                 }
@@ -40,6 +49,11 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices
 
         public async Task<List<DonViHanhChinhChung>> LoadToanBoXaPhuongVietNam()
         {
+            if (_toanBoDonViHanhChinhCapXaPhuongCache != null)
+            {
+                return _toanBoDonViHanhChinhCapXaPhuongCache;
+            }
+
             var toanBoDonViHanhChinhCapTinhThanh = await LoadCacDonViHanhChinhVietNam();
             var toanBoDonViHanhChinhCapXaPhuong = toanBoDonViHanhChinhCapTinhThanh.SelectMany(x =>
                 x.CacDonViHanhChinhCapDuoi.SelectMany(y => y.CacDonViHanhChinhCapDuoi)).ToList();

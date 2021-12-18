@@ -1,0 +1,87 @@
+﻿<UserControl x:Class="QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views.KhoiTaoCacTapHSCTView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:local="clr-namespace:QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <UserControl.Resources>
+        <DataTemplate x:Key="TapHSCTDataTemplate">
+            <StackPanel Orientation="Horizontal"
+                Background="{DynamicResource SystemControlBackgroundAccentBrush}"
+                Margin="10">
+                <TextBlock
+                    Padding="10"
+                    Text="{Binding ThuTuTapHSCT, StringFormat='{}Tập {0}'}"
+                    Foreground="{DynamicResource SystemControlForegroundChromeWhiteBrush}"
+                    />
+                <Border Background="{DynamicResource SystemControlBackgroundChromeBlackLowBrush}"
+                        BorderThickness="0">
+                    <TextBlock
+                        Padding="10"
+                        Foreground="{DynamicResource SystemControlForegroundChromeWhiteBrush}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}Số HSCT từ {0:000000} đến {1:000000}">
+                                <Binding Path="SoHSCTBatDau" />
+                                <Binding Path="SoHSCTKetThuc" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Border>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ThonXomKemTheoTapHSCTTemplate">
+            <StackPanel>
+                <TextBlock
+                    Text="{Binding ThonXom.TenThonXom, Mode=OneTime}"
+                    Padding="8"
+                    Style="{StaticResource TitleTextBlockStyle}" />
+                <ui:ItemsRepeater
+                    x:Name="innerRepeater"
+                    ItemsSource="{Binding CacTapHSCTGoc}"
+                    ItemTemplate="{StaticResource TapHSCTDataTemplate}">
+                    <ui:ItemsRepeater.Layout>
+                        <ui:StackLayout Orientation="Horizontal" />
+                    </ui:ItemsRepeater.Layout>
+                </ui:ItemsRepeater>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+    <ui:SimpleStackPanel Width="800">
+        <TextBlock
+            Text="Thiết lập các tập hồ sơ"
+            Style="{StaticResource TitleTextBlockStyle}"
+            FontSize="28"
+            Margin="0,8,0,12" />
+        <GroupBox Header="Thêm tập HSCT">
+            <StackPanel>
+                <Button Content="Thêm"
+                        Style="{DynamicResource AccentButtonStyle}"></Button>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Hồ sơ của các thôn, xóm">
+            <StackPanel>
+                <ui:ItemsRepeater
+                    VerticalAlignment="Top"
+                    ItemsSource="{Binding CacThonXomKemTheoTapHSCTViewModel}"
+                    ItemTemplate="{StaticResource ThonXomKemTheoTapHSCTTemplate}">
+
+                    <ui:ItemsRepeater.Layout>
+                        <ui:StackLayout Orientation="Vertical" />
+                    </ui:ItemsRepeater.Layout>
+
+                </ui:ItemsRepeater>
+            </StackPanel>
+        </GroupBox>
+        
+        <Button 
+            Content="Chuyển bước tiếp theo"></Button>
+    </ui:SimpleStackPanel>
+</UserControl>

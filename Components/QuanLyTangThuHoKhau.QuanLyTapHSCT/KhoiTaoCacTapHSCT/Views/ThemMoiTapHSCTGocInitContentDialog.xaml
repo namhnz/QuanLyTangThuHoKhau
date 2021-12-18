@@ -1,0 +1,54 @@
+﻿<ui:ContentDialog x:Class="QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views.ThemMoiTapHSCTGocInitContentDialog"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                  xmlns:ui="http://schemas.modernwpf.com/2019"
+                  xmlns:local="clr-namespace:QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views"
+                  mc:Ignorable="d" 
+                  d:DesignHeight="756"
+                  d:DesignWidth="548"
+                  x:Name="theMoiTapHSCTGocInitContentDialog"
+                  Style="{StaticResource ScrollableContentDialogStyle}"
+                  Title="Thêm tập HSCT gốc"
+                  PrimaryButtonText="Thêm"
+                  CloseButtonText="Đóng"
+                  DefaultButton="Primary"
+                  PrimaryButtonClick="OnPrimaryButtonClick"
+                  CloseButtonClick="OnCloseButtonClick"
+                  Closed="OnClosed">
+    <ui:SimpleStackPanel Spacing="12">
+        <ComboBox
+            ui:ControlHelper.Header="Tập HSCT thuộc thôn, xóm:"
+            ItemsSource="{Binding Source={x:Type ui:ContentDialogButton}, Converter={StaticResource EnumValuesConverter}}"
+            SelectedItem="{Binding ElementName=dialog, Path=DefaultButton}" />
+        <ui:NumberBox
+            x:Name="SoTapHSCTNumberBox"
+            Header="Thứ tự tập HSCT:"
+            Value="1"
+            SpinButtonPlacementMode="Compact"
+            SmallChange="1"/>
+        <ui:NumberBox
+            x:Name="SoHSCTBatDauNumberBox"
+            Header="Số HSCT bắt đầu từ:"
+            Value="1"
+            SpinButtonPlacementMode="Compact"
+            SmallChange="10"
+            LargeChange="100"/>
+        <ui:NumberBox
+            x:Name="SoHSCTKetThucNumberBox"
+            Header="Số HSCT kết thúc tại:"
+            Value="1"
+            SpinButtonPlacementMode="Compact"
+            SmallChange="10"
+            LargeChange="100"/>
+        <StackPanel>
+            <TextBlock
+                x:Name="ErrorText"
+                Style="{StaticResource BodyTextBlockStyle}"
+                Foreground="{DynamicResource SystemControlErrorTextForegroundBrush}"
+                Margin="0,8,0,0"
+                Visibility="Collapsed" />
+        </StackPanel>
+    </ui:SimpleStackPanel>
+</ui:ContentDialog>
