@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using ModernWpf.Controls;
 
 namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views
@@ -29,5 +28,6 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views
             ErrorText.Text = string.Empty;
             ErrorText.Visibility = Visibility.Collapsed;
         }
+        
     }
 }

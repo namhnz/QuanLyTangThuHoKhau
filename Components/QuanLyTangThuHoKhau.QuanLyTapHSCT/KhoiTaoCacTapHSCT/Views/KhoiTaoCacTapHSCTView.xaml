@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:local="clr-namespace:QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views"
+             
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:prism="http://prismlibrary.com/"
@@ -63,7 +64,8 @@
         <GroupBox Header="Thêm tập HSCT">
             <StackPanel>
                 <Button Content="Thêm"
-                        Style="{DynamicResource AccentButtonStyle}"></Button>
+                        Style="{DynamicResource AccentButtonStyle}"
+                        Command="{Binding ShowThemMoiTapHsctGocInitCustomContentDialogCommand}"></Button>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Hồ sơ của các thôn, xóm">

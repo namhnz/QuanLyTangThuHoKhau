@@ -1,17 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Navigation;
+using System.Windows.Input;
+using CustomMVVMDialogs;
+using ModernWpf.Controls;
 using Prism.Mvvm;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Types;
+using Prism.Commands;
+using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views;
 
 namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
 {
-    public class KhoiTaoCacTapHSCTViewModel: BindableBase
+    public class KhoiTaoCacTapHSCTViewModel : BindableBase
     {
+        private readonly IDialogService _dialogService;
         private IDonViHanhChinhService _dvhcService;
 
         private List<ThonXomKemTheoTapHSCTViewModel> _cacThonXomKemTheoTapHSCTViewModel;
@@ -22,12 +27,14 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
             set => SetProperty(ref _cacThonXomKemTheoTapHSCTViewModel, value);
         }
 
-        public KhoiTaoCacTapHSCTViewModel(IDonViHanhChinhService dvhcService)
+        public KhoiTaoCacTapHSCTViewModel(IDialogService dialogService, IDonViHanhChinhService dvhcService)
         {
+            _dialogService = dialogService;
             _dvhcService = dvhcService;
 
-            InitSampleData();
+            InitCommands();
 
+            InitSampleData();
         }
 
         private async void InitSampleData()
@@ -63,6 +70,32 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
                         tapHSCTGoc3
                     }));
             }
+        }
+
+        public ICommand ShowThemMoiTapHsctGocInitCustomContentDialogCommand { get; private set; }
+
+        private async void ShowThemMoiTapHSCTGocInitCustomContentDialog()
+        {
+            var dialogViewModel = new ThemMoiTapHSCTGocInitCustomContentDialogViewModel();
+
+            var dialogResult =
+                await _dialogService.ShowCustomContentDialogAsync<ThemMoiTapHSCTGocInitCustomContentDialog>(
+                    dialogViewModel);
+
+            if (dialogResult == ContentDialogResult.Primary)
+            {
+                Debug.WriteLine("primary");
+            }
+            else
+            {
+                Debug.WriteLine("secondary or none");
+            }
+        }
+
+        private void InitCommands()
+        {
+            ShowThemMoiTapHsctGocInitCustomContentDialogCommand =
+                new DelegateCommand(ShowThemMoiTapHSCTGocInitCustomContentDialog);
         }
     }
 }

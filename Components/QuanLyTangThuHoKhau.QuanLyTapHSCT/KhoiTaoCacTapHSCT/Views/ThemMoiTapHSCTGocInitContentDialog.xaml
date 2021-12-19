@@ -5,6 +5,7 @@
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                   xmlns:ui="http://schemas.modernwpf.com/2019"
                   xmlns:local="clr-namespace:QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views"
+                  
                   mc:Ignorable="d" 
                   d:DesignHeight="756"
                   d:DesignWidth="548"
@@ -19,9 +20,7 @@
                   Closed="OnClosed">
     <ui:SimpleStackPanel Spacing="12">
         <ComboBox
-            ui:ControlHelper.Header="Tập HSCT thuộc thôn, xóm:"
-            ItemsSource="{Binding Source={x:Type ui:ContentDialogButton}, Converter={StaticResource EnumValuesConverter}}"
-            SelectedItem="{Binding ElementName=dialog, Path=DefaultButton}" />
+            ui:ControlHelper.Header="Tập HSCT thuộc thôn, xóm:"/>
         <ui:NumberBox
             x:Name="SoTapHSCTNumberBox"
             Header="Thứ tự tập HSCT:"

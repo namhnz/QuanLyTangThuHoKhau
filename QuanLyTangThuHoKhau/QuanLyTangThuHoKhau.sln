@@ -13,7 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuanLyTangThuHoKhau.QuanLyT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuanLyTangThuHoKhau.QuanLyTapHSCT", "..\Components\QuanLyTangThuHoKhau.QuanLyTapHSCT\QuanLyTangThuHoKhau.QuanLyTapHSCT.csproj", "{9081FC0B-AC8E-4406-A343-53EF669E09CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuanLyTangThuHoKhau.QuanLyTuiHSCT", "..\Components\QuanLyTangThuHoKhau.QuanLyTuiHSCT\QuanLyTangThuHoKhau.QuanLyTuiHSCT.csproj", "{3D1E3A2E-5D12-4072-8928-46FED188A029}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuanLyTangThuHoKhau.QuanLyTuiHSCT", "..\Components\QuanLyTangThuHoKhau.QuanLyTuiHSCT\QuanLyTangThuHoKhau.QuanLyTuiHSCT.csproj", "{3D1E3A2E-5D12-4072-8928-46FED188A029}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{F85C7806-D168-4736-88B5-4B0CCE256E06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomMVVMDialogs", "..\Libs\CustomMVVMDialogs\CustomMVVMDialogs.csproj", "{AAD0B71E-C002-47CD-A983-9405F139718B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +45,10 @@ Global
 		{3D1E3A2E-5D12-4072-8928-46FED188A029}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D1E3A2E-5D12-4072-8928-46FED188A029}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D1E3A2E-5D12-4072-8928-46FED188A029}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAD0B71E-C002-47CD-A983-9405F139718B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAD0B71E-C002-47CD-A983-9405F139718B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAD0B71E-C002-47CD-A983-9405F139718B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAD0B71E-C002-47CD-A983-9405F139718B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +57,7 @@ Global
 		{41DAFD0D-2950-44C0-9530-C9BF152627AA} = {BBB1732A-5E04-4F07-ADBA-7EBB6B92AA74}
 		{9081FC0B-AC8E-4406-A343-53EF669E09CA} = {BBB1732A-5E04-4F07-ADBA-7EBB6B92AA74}
 		{3D1E3A2E-5D12-4072-8928-46FED188A029} = {BBB1732A-5E04-4F07-ADBA-7EBB6B92AA74}
+		{AAD0B71E-C002-47CD-A983-9405F139718B} = {F85C7806-D168-4736-88B5-4B0CCE256E06}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5F233EE2-197D-4423-9098-C67C04391BAE}

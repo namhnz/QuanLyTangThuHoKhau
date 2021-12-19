@@ -1,9 +1,7 @@
-﻿using System.ComponentModel;
-using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows;
+using CustomMVVMDialogs;
 using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
 using Prism.Unity;
 using QuanLyTangThuHoKhau.Core;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices;
@@ -20,6 +18,8 @@ namespace QuanLyTangThuHoKhau
             // containerRegistry.RegisterSingleton<IApplicationCommands, ApplicationCommands>();
             //
             // containerRegistry.RegisterSingleton<IBusyMonitor, BusyMonitor>();
+
+            containerRegistry.RegisterSingleton<IDialogService, DialogService>();
 
             containerRegistry.RegisterSingleton<IDonViHanhChinhService, DonViHanhChinhService>();
 
