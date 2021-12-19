@@ -15,6 +15,7 @@ using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.Core.Ultis;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Exceptions;
+using QuanLyTangThuHoKhau.QuanLyThonXom.Services;
 
 namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 {
@@ -24,10 +25,12 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IDonViHanhChinhService _dvhcService;
+        private readonly IThonXomCRUDService _thonXomService;
 
-        public KhoiTaoDanhSachThonXomViewModel(IDonViHanhChinhService dvhcService)
+        public KhoiTaoDanhSachThonXomViewModel(IDonViHanhChinhService dvhcService, IThonXomCRUDService thonXomService)
         {
             _dvhcService = dvhcService;
+            _thonXomService = thonXomService;
 
             InitCommands();
 

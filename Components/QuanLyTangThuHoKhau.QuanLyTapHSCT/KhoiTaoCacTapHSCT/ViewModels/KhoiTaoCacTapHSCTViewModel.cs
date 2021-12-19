@@ -1,23 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using CustomMVVMDialogs;
+using log4net;
 using ModernWpf.Controls;
 using Prism.Mvvm;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Types;
 using Prism.Commands;
+using QuanLyTangThuHoKhau.Core.Exceptions;
+using QuanLyTangThuHoKhau.QuanLyTapHSCT.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views;
 
 namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
 {
     public class KhoiTaoCacTapHSCTViewModel : BindableBase
     {
+        private static readonly ILog Log =
+            LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private readonly IDialogService _dialogService;
-        private IDonViHanhChinhService _dvhcService;
+        private readonly IDonViHanhChinhService _dvhcService;
+        //private IThonXomCRUDService _thonXomService;
+        //private ITapHSCTCRUDService _tapHSCTService;
 
         private List<ThonXomKemTheoTapHSCTViewModel> _cacThonXomKemTheoTapHSCTViewModel;
 
@@ -27,10 +36,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
             set => SetProperty(ref _cacThonXomKemTheoTapHSCTViewModel, value);
         }
 
-        public KhoiTaoCacTapHSCTViewModel(IDialogService dialogService, IDonViHanhChinhService dvhcService)
+        public KhoiTaoCacTapHSCTViewModel(IDialogService dialogService, IDonViHanhChinhService dvhcService/*, IThonXomCRUDService thonXomService*//*, ITapHSCTCRUDService tapHSCTService*/)
         {
             _dialogService = dialogService;
             _dvhcService = dvhcService;
+            //_thonXomService = thonXomService;
+            //_tapHSCTService = tapHSCTService;
 
             InitCommands();
 
@@ -55,19 +66,19 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
             CacThonXomKemTheoTapHSCTViewModel = new List<ThonXomKemTheoTapHSCTViewModel>();
             foreach (var thonXom in cacThonXomKhoiTao)
             {
-                var tapHSCTGoc1 = new TapHSCTGocInitModel() { ThonXom = thonXom, ThuTuTapHSCT = 1 };
-                tapHSCTGoc1.KhoiTaoCacHSCT(1, 255);
-                var tapHSCTGoc2 = new TapHSCTGocInitModel() { ThonXom = thonXom, ThuTuTapHSCT = 2 };
-                tapHSCTGoc2.KhoiTaoCacHSCT(256, 320);
-                var tapHSCTGoc3 = new TapHSCTGocInitModel() { ThonXom = thonXom, ThuTuTapHSCT = 3 };
-                tapHSCTGoc3.KhoiTaoCacHSCT(320, 330);
+                var tapHSCTGoc1 = new TapHSCTGocInitModel();
+                tapHSCTGoc1.KhoiTaoCacGiaTriCuaTapHSCT(thonXom, 1, 1, 255);
+                // var tapHSCTGoc2 = new TapHSCTGocInitModel();
+                // tapHSCTGoc2.KhoiTaoCacGiaTriCuaTapHSCT(thonXom, 2, 256, 320);
+                // var tapHSCTGoc3 = new TapHSCTGocInitModel();
+                // tapHSCTGoc3.KhoiTaoCacGiaTriCuaTapHSCT(thonXom, 1, 321, 330);
 
                 CacThonXomKemTheoTapHSCTViewModel.Add(
                     new ThonXomKemTheoTapHSCTViewModel(thonXom, new ObservableCollection<TapHSCTGocInitModel>()
                     {
                         tapHSCTGoc1,
-                        tapHSCTGoc2,
-                        tapHSCTGoc3
+                        // tapHSCTGoc2,
+                        // tapHSCTGoc3
                     }));
             }
         }
@@ -76,7 +87,11 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
 
         private async void ShowThemMoiTapHSCTGocInitCustomContentDialog()
         {
+            var cacThonXomChuaCacTapHSCT = CacThonXomKemTheoTapHSCTViewModel.Select(x => x.ThonXom).ToList();
+
             var dialogViewModel = new ThemMoiTapHSCTGocInitCustomContentDialogViewModel();
+
+            dialogViewModel.CacThonXomChuaCacTapHSCT = cacThonXomChuaCacTapHSCT;
 
             var dialogResult =
                 await _dialogService.ShowCustomContentDialogAsync<ThemMoiTapHSCTGocInitCustomContentDialog>(
@@ -84,11 +99,39 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
 
             if (dialogResult == ContentDialogResult.Primary)
             {
-                Debug.WriteLine("primary");
+                // Debug.WriteLine("primary");
+                try
+                {
+                    //Them tap ho so moi vao xom
+
+                    var tapHSCTgocMoi = new TapHSCTGocInitModel();
+                    tapHSCTgocMoi.KhoiTaoCacGiaTriCuaTapHSCT(dialogViewModel.SelectedThonXomChuaTapHSCT,
+                        (uint)dialogViewModel.SoTapHSCT, (uint)dialogViewModel.SoHSCTBatDau, (uint)dialogViewModel.SoHSCTKetThuc);
+
+                    CacThonXomKemTheoTapHSCTViewModel.First(
+                            x => x.ThonXom.TenThonXom == dialogViewModel.SelectedThonXomChuaTapHSCT.TenThonXom)
+                        .CacTapHSCTGoc.Add(tapHSCTgocMoi);
+
+                    MessageBox.Show("Thêm tập hồ sơ gốc mới vào thôn, xóm thành công");
+                }
+                catch (Exception ex)
+                {
+                    if (ex is ChuaChonThonXomChuaTapHSCTException or KhoangSoHSCTKhongDungException or
+                        ThuTuTapHSCTKhongDungException)
+                    {
+                        var exBase = (BaseException)ex;
+                        MessageBox.Show(exBase.ErrorMessage);
+                    }
+                    else
+                    {
+                        Log.Error(ex);
+                        MessageBox.Show("Đã có lỗi xảy ra khi thêm tập hồ sơ gốc mới");
+                    }
+                }
             }
             else
             {
-                Debug.WriteLine("secondary or none");
+                // Debug.WriteLine("secondary or none");
             }
         }
 

@@ -14,8 +14,18 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Types
             LoaiTapHSCT = LoaiTapHSCT.LoaiTapHSCTGoc;
         }
 
-        public void KhoiTaoCacHSCT(uint soHSCTBatDau, uint soHSCTKetThuc)
+        public void KhoiTaoCacGiaTriCuaTapHSCT(ThonXom thonXomChuaTapHSCT, uint soTapHSCT, uint soHSCTBatDau, uint soHSCTKetThuc)
         {
+            if (thonXomChuaTapHSCT == null)
+            {
+                throw new ChuaChonThonXomChuaTapHSCTException()
+                {
+                    ErrorMessage = "Chưa chọn thôn, xóm chứa tập hồ sơ"
+                };
+            }
+
+            ThuTuTapHSCT = (int)soTapHSCT;
+
             if (soHSCTBatDau > soHSCTKetThuc)
             {
                 throw new KhoangSoHSCTKhongDungException()
