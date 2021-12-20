@@ -55,7 +55,7 @@
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
-    <ui:SimpleStackPanel Width="800">
+    <ui:SimpleStackPanel>
         <TextBlock
             Text="Thiết lập các tập hồ sơ"
             Style="{StaticResource TitleTextBlockStyle}"

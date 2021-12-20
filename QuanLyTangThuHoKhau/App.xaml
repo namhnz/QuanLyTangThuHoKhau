@@ -2,13 +2,18 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:QuanLyTangThuHoKhau"
-             xmlns:ui="http://schemas.modernwpf.com/2019">
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:ultis="clr-namespace:QuanLyTangThuHoKhau.Core.Ultis;assembly=QuanLyTangThuHoKhau.Core">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemeResources />
                 <ui:XamlControlsResources />
             </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="ScrollViewer" BasedOn="{StaticResource DefaultScrollViewerStyle}">
+                <Setter Property="ultis:AutoPanningMode.IsEnabled" Value="True" />
+            </Style>
 
             <Style x:Key="ScrollableContentDialogStyle" TargetType="ui:ContentDialog">
                 <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
