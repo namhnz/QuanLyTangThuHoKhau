@@ -112,12 +112,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             {
                 //Lay so ho so moi nhat
                 var tuiHSCTCuoiCung = _dataService.TuiHSCTRepository.FindTuiHSCTMoiNhat();
-                uint soHSCTMoiNhat;
+                int soHSCTMoiNhat;
 
-                soHSCTMoiNhat = tuiHSCTCuoiCung == null ? (uint)1 : tuiHSCTCuoiCung.HSCT.SoHSCT + 1;
+                soHSCTMoiNhat = tuiHSCTCuoiCung == null ? 1 : tuiHSCTCuoiCung.HSCT.SoHSCT + 1;
 
                 //Tao ho so moi
-                return new HSCT(soHSCTMoiNhat, thonXom, chuHo);
+                return new HSCT((uint)soHSCTMoiNhat, thonXom, chuHo);
             });
 
             return hsctMoi;

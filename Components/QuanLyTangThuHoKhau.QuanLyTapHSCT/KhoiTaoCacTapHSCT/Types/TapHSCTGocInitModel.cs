@@ -1,10 +1,11 @@
-﻿using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
+﻿using System;
+using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Exceptions;
 
 namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Types
 {
-    public class TapHSCTGocInitModel: TapHSCT
+    public class TapHSCTGocInitModel: TapHSCT, ICloneable
     {
         public int SoHSCTBatDau { get; private set; }
         public int SoHSCTKetThuc { get; private set; }
@@ -14,7 +15,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Types
             LoaiTapHSCT = LoaiTapHSCT.LoaiTapHSCTGoc;
         }
 
-        public void KhoiTaoCacGiaTriCuaTapHSCT(ThonXom thonXomChuaTapHSCT, uint soTapHSCT, uint soHSCTBatDau, uint soHSCTKetThuc)
+        public void KhoiTaoCacGiaTriCuaTapHSCT(ThonXom thonXomChuaTapHSCT, uint thuTuTapHSCT, uint soHSCTBatDau, uint soHSCTKetThuc)
         {
             if (thonXomChuaTapHSCT == null)
             {
@@ -23,8 +24,25 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Types
                     ErrorMessage = "Chưa chọn thôn, xóm chứa tập hồ sơ"
                 };
             }
+            ThonXom = thonXomChuaTapHSCT;
 
-            ThuTuTapHSCT = (int)soTapHSCT;
+            if (thuTuTapHSCT == 0)
+            {
+                throw new ThuTuTapHSCTKhongDungException()
+                {
+                    ErrorMessage = "Thứ tự của tập hồ sơ phải lớn hơn 0"
+                };
+            }
+            ThuTuTapHSCT = (int)thuTuTapHSCT;
+
+            if (soHSCTBatDau == 0)
+            {
+                throw new KhoangSoHSCTKhongDungException()
+                {
+                    ErrorMessage =
+                        "Số hồ sơ bắt đầu phải lớn hơn 0"
+                };
+            }
 
             if (soHSCTBatDau > soHSCTKetThuc)
             {
@@ -37,6 +55,33 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Types
             SoHSCTBatDau = (int)soHSCTBatDau;
             SoHSCTKetThuc = (int)soHSCTKetThuc;
         }
-        
+
+        public void CapNhatKhoangSoHSCT(uint soHSCTBatDau, uint soHSCTKetThuc)
+        {
+            if (soHSCTBatDau == 0)
+            {
+                throw new KhoangSoHSCTKhongDungException()
+                {
+                    ErrorMessage =
+                        "Số hồ sơ bắt đầu phải lớn hơn 0"
+                };
+            }
+
+            if (soHSCTBatDau > soHSCTKetThuc)
+            {
+                throw new KhoangSoHSCTKhongDungException()
+                {
+                    ErrorMessage = "Số hồ sơ bắt đầu không được lớn hơn số kết thúc trong tập hồ sơ"
+                };
+            }
+
+            SoHSCTBatDau = (int)soHSCTBatDau;
+            SoHSCTKetThuc = (int)soHSCTKetThuc;
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 }

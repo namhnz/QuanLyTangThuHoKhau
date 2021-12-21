@@ -14,7 +14,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\QuanLyTangThuHoKhau.Core\QuanLyTangThuHoKhau.Core.csproj" />
+    <ProjectReference Include="..\QuanLyTangThuHoKhau.QuanLyTapHSCT\QuanLyTangThuHoKhau.QuanLyTapHSCT.csproj" />
     <ProjectReference Include="..\QuanLyTangThuHoKhau.QuanLyThonXom\QuanLyTangThuHoKhau.QuanLyThonXom.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="KhoiTaoCacTuiHSCT\ViewModels\" />
   </ItemGroup>
 
 </Project>

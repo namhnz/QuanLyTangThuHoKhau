@@ -10,11 +10,13 @@
         Title="MainWindow" Height="450" Width="800"
         xmlns:qltx="clr-namespace:QuanLyTangThuHoKhau.QuanLyThonXom;assembly=QuanLyTangThuHoKhau.QuanLyThonXom"
         xmlns:qlthsct="clr-namespace:QuanLyTangThuHoKhau.QuanLyTapHSCT;assembly=QuanLyTangThuHoKhau.QuanLyTapHSCT"
+        xmlns:qltuihsct="clr-namespace:QuanLyTangThuHoKhau.QuanLyTuiHSCT;assembly=QuanLyTangThuHoKhau.QuanLyTuiHSCT"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         WindowState="Maximized">
     <Grid>
         <!-- <qltx:QuanLyThonXomRootView></qltx:QuanLyThonXomRootView> -->
         <qlthsct:QuanLyTapHSCTRootView></qlthsct:QuanLyTapHSCTRootView>
+        <!-- <qltuihsct:QuanLyTuiHSCTRootView></qltuihsct:QuanLyTuiHSCTRootView> -->
     </Grid>
 </Window>

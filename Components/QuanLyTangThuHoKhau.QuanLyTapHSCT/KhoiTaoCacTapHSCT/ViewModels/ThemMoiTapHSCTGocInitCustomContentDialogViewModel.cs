@@ -6,12 +6,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
 {
     public class ThemMoiTapHSCTGocInitCustomContentDialogViewModel : BindableBase
     {
-        private int _soTapHSCT;
+        private int _thuTuTapHSCT;
 
-        public int SoTapHSCT
+        public int ThuTuTapHSCT
         {
-            get { return _soTapHSCT; }
-            set { SetProperty(ref _soTapHSCT, value); }
+            get { return _thuTuTapHSCT; }
+            set { SetProperty(ref _thuTuTapHSCT, value); }
         }
 
         private int _soHSCTBatDau;
