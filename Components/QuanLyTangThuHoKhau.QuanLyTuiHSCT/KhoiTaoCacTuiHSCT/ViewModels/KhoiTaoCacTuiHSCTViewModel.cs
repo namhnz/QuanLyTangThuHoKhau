@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using log4net;
@@ -12,8 +11,10 @@ using Prism.Regions;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.Models;
+using QuanLyTangThuHoKhau.Core.Settings;
 using QuanLyTangThuHoKhau.Core.Types.KhoiTaoDuLieuBanDau;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Types;
+using QuanLyTraThe.Core.Constants.Settings;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 {
@@ -24,15 +25,17 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 
         private readonly IDonViHanhChinhService _dvhcService;
         private readonly IRegionManager _regionManager;
+        private readonly ISettingsManager _settingsManager;
 
         private List<ThonXom> _danhSachThonXom;
         private List<TapHSCTGocInitModel> _toanBoTapHSCTGoc;
         private List<TuiHSCT> _toanBoTuiHSCTBanDau;
 
-        public KhoiTaoCacTuiHSCTViewModel(IDonViHanhChinhService dvhcService, IRegionManager regionManager)
+        public KhoiTaoCacTuiHSCTViewModel(IDonViHanhChinhService dvhcService, IRegionManager regionManager, ISettingsManager settingsManager)
         {
             _dvhcService = dvhcService;
             _regionManager = regionManager;
+            _settingsManager = settingsManager;
 
             InitCommands();
             // InitData();
@@ -156,8 +159,16 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 
         private void HoanThanhKhoiTaoDuLieuBanDau()
         {
-            _regionManager.RequestNavigate(KhoiTaoDuLieuBanDauRegionNames.KHOI_TAO_DU_LIEU_BAN_DAU_ROOT_REGION,
-                "KhoiTaoCacTuiHSCTView");
+            // _regionManager.RequestNavigate(KhoiTaoDuLieuBanDauRegionNames.KHOI_TAO_DU_LIEU_BAN_DAU_ROOT_REGION,
+            //     "KhoiTaoCacTuiHSCTView");
+
+            CapNhatCaiDatBoQuaBuocKhoiTaoDuLieuBanDau();
+        }
+
+        private void CapNhatCaiDatBoQuaBuocKhoiTaoDuLieuBanDau()
+        {
+            _settingsManager.AddSetting(KhoiTaoDuLieuBanDauSettingKeys.APP_DA_KHOI_TAO_DU_LIEU_BAN_DAU, true);
+            _settingsManager.SaveSettings();
         }
 
         public ICommand QuayVeBuocTaoCacTapHSCTGocCommand { get; private set; }

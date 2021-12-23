@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="KhoiTaoCacThonXom\ViewModels\KhoiTaoDanhSachThonXomViewModel.cs~RF674977.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\QuanLyTangThuHoKhau.Core\QuanLyTangThuHoKhau.Core.csproj" />
   </ItemGroup>
 

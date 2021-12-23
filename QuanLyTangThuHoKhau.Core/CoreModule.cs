@@ -1,6 +1,7 @@
 ﻿using Prism.Ioc;
 using Prism.Modularity;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices;
+using QuanLyTangThuHoKhau.Core.Settings;
 
 namespace QuanLyTangThuHoKhau.Core
 {
@@ -8,7 +9,7 @@ namespace QuanLyTangThuHoKhau.Core
     {
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            // containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
+            containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
             // containerRegistry.RegisterSingleton<ILiteDbDataService, LiteDbDataService>();
             // containerRegistry.RegisterSingleton<IQRCodeScanner, ZebraQRCodeScanner>();
             //
