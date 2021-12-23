@@ -1,5 +1,6 @@
 ﻿using Prism.Ioc;
 using Prism.Modularity;
+using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Services;
 
 namespace QuanLyTangThuHoKhau.QuanLyTapHSCT
@@ -25,7 +26,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT
             // containerRegistry.RegisterForNavigation<XuLyThongTinTheMainView>();
             // containerRegistry.RegisterForNavigation<XemNoiDungTextFileOverlayView>();
             //
-            // containerRegistry.RegisterForNavigation<DanhSachAnalyzedTheCCCDsView>();
+            containerRegistry.RegisterForNavigation<KhoiTaoCacTapHSCTView>();
             // containerRegistry.RegisterForNavigation<DanhSachLoiTheCCCDsView>();
         }
 

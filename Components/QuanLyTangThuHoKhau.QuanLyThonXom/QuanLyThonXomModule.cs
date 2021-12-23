@@ -1,6 +1,6 @@
 ﻿using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
+using QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.Views;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Services;
 
 namespace QuanLyTangThuHoKhau.QuanLyThonXom
@@ -26,8 +26,8 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom
             // containerRegistry.RegisterForNavigation<XuLyThongTinTheMainView>();
             // containerRegistry.RegisterForNavigation<XemNoiDungTextFileOverlayView>();
             //
-            // containerRegistry.RegisterForNavigation<DanhSachAnalyzedTheCCCDsView>();
-            // containerRegistry.RegisterForNavigation<DanhSachLoiTheCCCDsView>();
+            containerRegistry.RegisterForNavigation<KhoiTaoDanhSachThonXomView>();
+            // containerRegistry.RegisterForNavigation<KhoiTaoCacTapHSCTView>();
         }
 
         public void OnInitialized(IContainerProvider containerProvider)

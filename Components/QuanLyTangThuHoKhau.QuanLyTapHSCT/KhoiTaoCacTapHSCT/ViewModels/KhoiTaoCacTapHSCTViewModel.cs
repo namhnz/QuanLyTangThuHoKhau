@@ -1,25 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using CustomMVVMDialogs;
 using log4net;
 using ModernWpf.Controls;
+using Newtonsoft.Json;
 using Prism.Mvvm;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Types;
 using Prism.Commands;
+using Prism.Regions;
 using QuanLyTangThuHoKhau.Core.Exceptions;
+using QuanLyTangThuHoKhau.Core.Types.KhoiTaoDuLieuBanDau;
 using QuanLyTangThuHoKhau.Core.Ultis;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views;
 
 namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
 {
-    public class KhoiTaoCacTapHSCTViewModel : BindableBase
+    public class KhoiTaoCacTapHSCTViewModel : BindableBase, INavigationAware
     {
         private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -27,65 +31,70 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
         private readonly IDialogService _dialogService;
 
         private readonly IDonViHanhChinhService _dvhcService;
-        //private IThonXomCRUDService _thonXomService;
-        //private ITapHSCTCRUDService _tapHSCTService;
 
-        private List<ThonXomKemTheoTapHSCTViewModel> _cacThonXomKemTheoTapHSCTViewModel;
+        private ObservableCollection<ThonXomKemTheoTapHSCTViewModel> _cacThonXomKemTheoTapHSCTViewModel;
+        private readonly IRegionManager _regionManager;
 
-        public List<ThonXomKemTheoTapHSCTViewModel> CacThonXomKemTheoTapHSCTViewModel
+        public ObservableCollection<ThonXomKemTheoTapHSCTViewModel> CacThonXomKemTheoTapHSCTViewModel
         {
             get => _cacThonXomKemTheoTapHSCTViewModel;
             set => SetProperty(ref _cacThonXomKemTheoTapHSCTViewModel, value);
         }
 
         public KhoiTaoCacTapHSCTViewModel(IDialogService dialogService,
-            IDonViHanhChinhService dvhcService /*, IThonXomCRUDService thonXomService*/
-            /*, ITapHSCTCRUDService tapHSCTService*/)
+            IDonViHanhChinhService dvhcService, IRegionManager regionManager)
         {
             _dialogService = dialogService;
             _dvhcService = dvhcService;
-            //_thonXomService = thonXomService;
-            //_tapHSCTService = tapHSCTService;
+            _regionManager = regionManager;
 
             InitCommands();
 
-            InitSampleData();
+            // InitSampleData();
+            InitData();
         }
 
-        private async void InitSampleData()
+        private void InitData()
         {
-            var xaPhuongHienDangQuanLy =
-                (await _dvhcService.LoadToanBoXaPhuongVietNam()).First(x => x.TenDonVi.Contains("Quỳnh Hoa"));
+            CacThonXomKemTheoTapHSCTViewModel = new ObservableCollection<ThonXomKemTheoTapHSCTViewModel>();
 
-            var cacThonXomKhoiTao = new List<ThonXom>();
-            for (int i = 0; i < 6; i++)
-            {
-                cacThonXomKhoiTao.Add(new ThonXom()
-                {
-                    TenThonXom = $"Thôn {i + 1}",
-                    DonViHanhChinhPhuongXa = xaPhuongHienDangQuanLy
-                });
-            }
-
-            CacThonXomKemTheoTapHSCTViewModel = new List<ThonXomKemTheoTapHSCTViewModel>();
-            foreach (var thonXom in cacThonXomKhoiTao)
-            {
-                var tapHSCTGoc1 = new TapHSCTGocInitModel();
-                tapHSCTGoc1.KhoiTaoCacGiaTriCuaTapHSCT(thonXom, 1, 1, 255);
-                // var tapHSCTGoc2 = new TapHSCTGocInitModel();
-                // tapHSCTGoc2.KhoiTaoCacGiaTriCuaTapHSCT(thonXom, 2, 256, 320);
-                // var tapHSCTGoc3 = new TapHSCTGocInitModel();
-                // tapHSCTGoc3.KhoiTaoCacGiaTriCuaTapHSCT(thonXom, 1, 321, 330);
-
-                CacThonXomKemTheoTapHSCTViewModel.Add(
-                    new ThonXomKemTheoTapHSCTViewModel(thonXom, new ObservableCollection<TapHSCTGocInitModel>()
-                    {
-                        tapHSCTGoc1,
-                        // tapHSCTGoc2,
-                        // tapHSCTGoc3
-                    }));
-            }
+            _danhSachThonXomGoc = new List<ThonXom>();
         }
+
+        // private async void InitSampleData()
+        // {
+        //     var xaPhuongHienDangQuanLy =
+        //         (await _dvhcService.LoadToanBoXaPhuongVietNam()).First(x => x.TenDonVi.Contains("Quỳnh Hoa"));
+        //
+        //     var cacThonXomKhoiTao = new List<ThonXom>();
+        //     for (int i = 0; i < 6; i++)
+        //     {
+        //         cacThonXomKhoiTao.Add(new ThonXom()
+        //         {
+        //             TenThonXom = $"Thôn {i + 1}",
+        //             DonViHanhChinhPhuongXa = xaPhuongHienDangQuanLy
+        //         });
+        //     }
+        //
+        //     CacThonXomKemTheoTapHSCTViewModel = new List<ThonXomKemTheoTapHSCTViewModel>();
+        //     foreach (var thonXom in cacThonXomKhoiTao)
+        //     {
+        //         var tapHSCTGoc1 = new TapHSCTGocInitModel();
+        //         tapHSCTGoc1.KhoiTaoCacGiaTriCuaTapHSCT(thonXom, 1, 1, 255);
+        //         // var tapHSCTGoc2 = new TapHSCTGocInitModel();
+        //         // tapHSCTGoc2.KhoiTaoCacGiaTriCuaTapHSCT(thonXom, 2, 256, 320);
+        //         // var tapHSCTGoc3 = new TapHSCTGocInitModel();
+        //         // tapHSCTGoc3.KhoiTaoCacGiaTriCuaTapHSCT(thonXom, 1, 321, 330);
+        //
+        //         CacThonXomKemTheoTapHSCTViewModel.Add(
+        //             new ThonXomKemTheoTapHSCTViewModel(thonXom, new ObservableCollection<TapHSCTGocInitModel>()
+        //             {
+        //                 tapHSCTGoc1,
+        //                 // tapHSCTGoc2,
+        //                 // tapHSCTGoc3
+        //             }));
+        //     }
+        // }
 
         public ICommand ShowThemMoiTapHSCTGocInitCustomContentDialogCommand { get; private set; }
 
@@ -162,16 +171,19 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
             }
 
             //Kiem tra khoang so ho so
-            var soHSCTLonNhatToanXaPhuong = CacThonXomKemTheoTapHSCTViewModel.SelectMany(x => x.CacTapHSCTGoc)
-                .Max(x => x.SoHSCTKetThuc);
-
-            if (tapHSCTMoi.SoHSCTBatDau <= soHSCTLonNhatToanXaPhuong)
+            if (CacThonXomKemTheoTapHSCTViewModel.SelectMany(x => x.CacTapHSCTGoc).Any())
             {
-                throw new KhoangSoHSCTKhongDungException()
+                var soHSCTLonNhatToanXaPhuong = CacThonXomKemTheoTapHSCTViewModel.SelectMany(x => x.CacTapHSCTGoc)
+                    .Max(x => x.SoHSCTKetThuc);
+
+                if (tapHSCTMoi.SoHSCTBatDau <= soHSCTLonNhatToanXaPhuong)
                 {
-                    ErrorMessage =
-                        "Số hồ sơ bắt đầu của tập mới phải lớn hơn số hồ sơ kết thúc của các tập hồ sơ trước đó"
-                };
+                    throw new KhoangSoHSCTKhongDungException()
+                    {
+                        ErrorMessage =
+                            "Số hồ sơ bắt đầu của tập mới phải lớn hơn số hồ sơ kết thúc của các tập hồ sơ trước đó"
+                    };
+                }
             }
         }
 
@@ -317,6 +329,33 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
             }
         }
 
+        #region Dieu huong truoc, sau
+
+        public ICommand ChuyenBuocKhoiTaoCacTuiHSCTCommand { get; private set; }
+
+        private void ChuyenBuocKhoiTaoCacTuiHSCT()
+        {
+            var navigationParameters = new NavigationParameters();
+            navigationParameters.Add("DanhSachThonXomThuocXaPhuongDangQuanLy",
+                CacThonXomKemTheoTapHSCTViewModel.Select(x => x.ThonXom).ToList());
+            navigationParameters.Add("ToanBoTapHSCTGoc",
+                CacThonXomKemTheoTapHSCTViewModel.SelectMany(x => x.CacTapHSCTGoc).ToList());
+
+            _regionManager.RequestNavigate(KhoiTaoDuLieuBanDauRegionNames.KHOI_TAO_DU_LIEU_BAN_DAU_ROOT_REGION,
+                "KhoiTaoCacTuiHSCTView", navigationParameters);
+        }
+
+        public ICommand QuayVeBuocKhoiTaoDanhSachThonXomCommand { get; private set; }
+
+        private void QuayVeBuocKhoiTaoDanhSachThonXom()
+        {
+            _regionManager.RequestNavigate(KhoiTaoDuLieuBanDauRegionNames.KHOI_TAO_DU_LIEU_BAN_DAU_ROOT_REGION,
+                "KhoiTaoDanhSachThonXomView");
+        }
+
+        #endregion
+
+
         private void InitCommands()
         {
             ShowThemMoiTapHSCTGocInitCustomContentDialogCommand =
@@ -326,6 +365,77 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
                 new DelegateCommand<TapHSCTGocInitModel>(ShowChinhSuaTapHSCTGocInitCustomContentDialog);
 
             XoaTapHSCTGocInitCommand = new DelegateCommand<TapHSCTGocInitModel>(XoaTapHSCTGocInit);
+
+            //Khoi tao command dieu huong truoc, sau
+            QuayVeBuocKhoiTaoDanhSachThonXomCommand = new DelegateCommand(QuayVeBuocKhoiTaoDanhSachThonXom);
+            ChuyenBuocKhoiTaoCacTuiHSCTCommand = new DelegateCommand(ChuyenBuocKhoiTaoCacTuiHSCT);
         }
+
+        #region Thuc thi INavigationAware
+
+        private List<ThonXom> _danhSachThonXomGoc;
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            // Debug.WriteLine("1");
+            var navigationParameters = navigationContext.Parameters;
+
+            var sourceViewName = navigationParameters.GetNavigationSource();
+
+            //Truong hop duoc dieu huong tu view khoi tao thon, xom
+            if (!string.IsNullOrEmpty(sourceViewName) && sourceViewName == "KhoiTaoDanhSachThonXomView")
+            {
+                var danhSachThonXomMoi = (List<ThonXom>)navigationParameters["DanhSachThonXom"];
+
+                // Debug.WriteLine(JsonConvert.SerializeObject(danhSachThonXomMoi));
+
+                var duLieuThonXomCu = string.Join(string.Empty, _danhSachThonXomGoc.Select(x => x.TenThonXom));
+                var duLieuThonXomMoi = string.Join(string.Empty, danhSachThonXomMoi.Select(x => x.TenThonXom));
+
+                if (duLieuThonXomMoi != duLieuThonXomCu)
+                {
+                    foreach (var thonXomGoc in _danhSachThonXomGoc)
+                    {
+                        //Truong hop thon, xom goc khong co trong danh sach thon, xom moi thi xoa di
+                        if (!danhSachThonXomMoi.Select(x => x.TenThonXom).Contains(thonXomGoc.TenThonXom))
+                        {
+                            var thonXomCanXoa = CacThonXomKemTheoTapHSCTViewModel.First(x =>
+                                x.ThonXom.TenThonXom == thonXomGoc.TenThonXom);
+
+                            CacThonXomKemTheoTapHSCTViewModel.Remove(thonXomCanXoa);
+                        }
+                    }
+
+                    foreach (var thonXomMoi in danhSachThonXomMoi)
+                    {
+                        //Truong hop thon, xom moi khong co trong danh sach thon, xom goc thi them vao
+                        if (!_danhSachThonXomGoc.Select(x => x.TenThonXom).Contains(thonXomMoi.TenThonXom))
+                        {
+                            var thonXomMoiKemTheoTapHSCTGoc = new ThonXomKemTheoTapHSCTViewModel(thonXomMoi,
+                                new ObservableCollection<TapHSCTGocInitModel>());
+
+                            CacThonXomKemTheoTapHSCTViewModel.Add(thonXomMoiKemTheoTapHSCTGoc);
+                        }
+                    }
+                }
+
+                _danhSachThonXomGoc = new List<ThonXom>(danhSachThonXomMoi);
+
+                // Debug.WriteLine(JsonConvert.SerializeObject(CacThonXomKemTheoTapHSCTViewModel));
+            }
+
+            //Truong hop duoc dieu huong tu view khac
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+        }
+
+        #endregion
     }
 }

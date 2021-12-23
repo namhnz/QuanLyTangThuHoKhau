@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="QuanLyTangThuHoKhau.KhoiTaoDuLieuBanDau.Views.KhoiTaoDuLieuBanDauRootView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:QuanLyTangThuHoKhau.KhoiTaoDuLieuBanDau.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:ktdlbdConst="clr-namespace:QuanLyTangThuHoKhau.Core.Types.KhoiTaoDuLieuBanDau;assembly=QuanLyTangThuHoKhau.Core">
+    <ScrollViewer>
+        <ContentControl prism:RegionManager.RegionName="{x:Static ktdlbdConst:KhoiTaoDuLieuBanDauRegionNames.KHOI_TAO_DU_LIEU_BAN_DAU_ROOT_REGION}" />
+    </ScrollViewer>
+</UserControl>

@@ -13,10 +13,12 @@
         xmlns:qltuihsct="clr-namespace:QuanLyTangThuHoKhau.QuanLyTuiHSCT;assembly=QuanLyTangThuHoKhau.QuanLyTuiHSCT"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        WindowState="Maximized">
+        WindowState="Maximized"
+        xmlns:ktdlbdViews="clr-namespace:QuanLyTangThuHoKhau.KhoiTaoDuLieuBanDau.Views">
     <Grid>
         <!-- <qltx:QuanLyThonXomRootView></qltx:QuanLyThonXomRootView> -->
-        <qlthsct:QuanLyTapHSCTRootView></qlthsct:QuanLyTapHSCTRootView>
+        <!-- <qlthsct:QuanLyTapHSCTRootView></qlthsct:QuanLyTapHSCTRootView> -->
         <!-- <qltuihsct:QuanLyTuiHSCTRootView></qltuihsct:QuanLyTuiHSCTRootView> -->
+        <ktdlbdViews:KhoiTaoDuLieuBanDauRootView></ktdlbdViews:KhoiTaoDuLieuBanDauRootView>
     </Grid>
 </Window>

@@ -8,83 +8,83 @@
              d:DesignHeight="600" d:DesignWidth="800"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:prism="http://prismlibrary.com/"
-             prism:ViewModelLocator.AutoWireViewModel="True"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
+             prism:ViewModelLocator.AutoWireViewModel="True">
     <UserControl.Resources>
         <Style x:Key="BoxHeaderStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
             <Setter Property="Margin" Value="0,0,0,4" />
         </Style>
     </UserControl.Resources>
-    <ScrollViewer>
-        <ui:SimpleStackPanel Width="800">
-            <TextBlock
-                Text="Thiết lập đơn vị hành chính"
-                Style="{StaticResource TitleTextBlockStyle}"
-                FontSize="28"
-                Margin="0,8,0,12" />
-            <GroupBox Header="Cấp xã, phường">
-                <StackPanel>
-                    <TextBlock
-                        Text="Xã, phường đang đang quản lý"
-                        Style="{StaticResource BoxHeaderStyle}"/>
-                    <ui:AutoSuggestBox
-                        x:Name="ChonXaPhuongQuanLyAutoSuggestionBox"
-                        PlaceholderText="Gõ tên xã, phường và chọn trong danh sách gợi ý"
-                        QueryIcon="Find"
-                        Width="400"
-                        HorizontalAlignment="Left"
-                        TextChanged="ChonXaPhuongQuanLyAutoSuggestionBox_OnTextChanged"
-                        SuggestionChosen="ChonXaPhuongQuanLyAutoSuggestionBox_SuggestionChosen"
-                        QuerySubmitted="ChonXaPhuongQuanLyAutoSuggestionBox_QuerySubmitted"
-                    >
-                        <ui:AutoSuggestBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel />
-                            </ItemsPanelTemplate>
-                        </ui:AutoSuggestBox.ItemsPanel>
-                    </ui:AutoSuggestBox>
-                </StackPanel>
-            </GroupBox>
-            <GroupBox Header="Cấp thôn, xóm">
-                <StackPanel>
-                    <TextBlock
-                        Text="Các thôn, xóm thuộc xã, phường"
-                        Style="{StaticResource BoxHeaderStyle}"/>
-                    <ListBox
-                        x:Name="CacThonXomThuocXaPhuongListBox"
-                        ItemsSource="{Binding CacThonXomThuocXaPhuongDaChon}"
-                        Height="164">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding TenThonXom}" 
-                                               Margin="0 0 20 0"
-                                               VerticalAlignment="Center"/>
-                                    <Button Content="Xoá" 
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Path=DataContext.DeleteThonXomItemCommand}" 
-                                            CommandParameter="{Binding }" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    <ui:SimpleStackPanel Orientation="Horizontal"
-                                         Spacing="4">
-                        <TextBox
-                            MinWidth="450"
-                            x:Name="TenThonXomItemMoiTextBox"
-                            ui:ControlHelper.Header="Thêm thôn, xóm mới:"
-                            ui:ControlHelper.PlaceholderText="Chỉ nhập tên thôn, xóm, không nhập thêm tên xã, phường" 
-                        />
-                        <Button Content="Thêm mới"
-                                VerticalAlignment="Bottom"
-                                Style="{DynamicResource AccentButtonStyle}"
-                                Command="{Binding ThemThonXomItemCommand}"
-                                CommandParameter="{Binding Text, ElementName=TenThonXomItemMoiTextBox}"></Button>
-                    </ui:SimpleStackPanel>
-                </StackPanel>
-            </GroupBox>
-            <Button 
-                Content="Chuyển bước tiếp theo"></Button>
-        </ui:SimpleStackPanel>
-    </ScrollViewer>
+
+    <ui:SimpleStackPanel>
+        <TextBlock
+            Text="Thiết lập đơn vị hành chính"
+            Style="{StaticResource TitleTextBlockStyle}"
+            FontSize="28"
+            Margin="0,8,0,12" />
+        <GroupBox Header="Cấp xã, phường">
+            <StackPanel>
+                <TextBlock
+                    Text="Xã, phường đang đang quản lý"
+                    Style="{StaticResource BoxHeaderStyle}" />
+                <ui:AutoSuggestBox
+                    x:Name="ChonXaPhuongQuanLyAutoSuggestionBox"
+                    PlaceholderText="Gõ tên xã, phường và chọn trong danh sách gợi ý"
+                    QueryIcon="Find"
+                    MinWidth="450"
+                    HorizontalAlignment="Left"
+                    TextChanged="ChonXaPhuongQuanLyAutoSuggestionBox_OnTextChanged"
+                    SuggestionChosen="ChonXaPhuongQuanLyAutoSuggestionBox_SuggestionChosen"
+                    QuerySubmitted="ChonXaPhuongQuanLyAutoSuggestionBox_QuerySubmitted">
+                    <ui:AutoSuggestBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </ui:AutoSuggestBox.ItemsPanel>
+                </ui:AutoSuggestBox>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Cấp thôn, xóm">
+            <StackPanel>
+                <TextBlock
+                    Text="Danh sách thôn, xóm thuộc xã, phường"
+                    Style="{StaticResource BoxHeaderStyle}" />
+                <ListBox
+                    x:Name="CacThonXomThuocXaPhuongListBox"
+                    ItemsSource="{Binding CacThonXomThuocXaPhuongDaChon}"
+                    Height="200">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding TenThonXom}"
+                                           Margin="0 0 20 0"
+                                           VerticalAlignment="Center" />
+                                <Button Content="Xoá"
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Path=DataContext.DeleteThonXomItemCommand}"
+                                        CommandParameter="{Binding }" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <ui:SimpleStackPanel Orientation="Horizontal"
+                                     Spacing="4">
+                    <TextBox
+                        MinWidth="450"
+                        x:Name="TenThonXomItemMoiTextBox"
+                        ui:ControlHelper.Header="Thêm thôn, xóm mới:"
+                        ui:ControlHelper.PlaceholderText="Chỉ nhập tên thôn, xóm, không nhập thêm tên xã, phường" />
+                    <Button Content="Thêm mới"
+                            VerticalAlignment="Bottom"
+                            Command="{Binding ThemThonXomItemCommand}"
+                            CommandParameter="{Binding Text, ElementName=TenThonXomItemMoiTextBox}">
+                    </Button>
+                </ui:SimpleStackPanel>
+            </StackPanel>
+        </GroupBox>
+        <Button
+            Content="Tiếp theo"
+            Command="{Binding ChuyenBuocKhoiTaoCacTapHSCTGocCommand}"
+            Style="{DynamicResource AccentButtonStyle}">
+        </Button>
+    </ui:SimpleStackPanel>
+
 </UserControl>

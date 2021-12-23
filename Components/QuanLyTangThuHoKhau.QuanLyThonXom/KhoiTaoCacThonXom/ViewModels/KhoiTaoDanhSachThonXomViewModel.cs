@@ -2,35 +2,37 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using log4net;
-using ModernWpf.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Regions;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types;
 using QuanLyTangThuHoKhau.Core.Models;
+using QuanLyTangThuHoKhau.Core.Types.KhoiTaoDuLieuBanDau;
 using QuanLyTangThuHoKhau.Core.Ultis;
-using QuanLyTangThuHoKhau.QuanLyThonXom.Exceptions;
-using QuanLyTangThuHoKhau.QuanLyThonXom.Services;
 
 namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 {
-    public class KhoiTaoDanhSachThonXomViewModel: BindableBase
+    public class KhoiTaoDanhSachThonXomViewModel : BindableBase
     {
         private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly IDonViHanhChinhService _dvhcService;
-        private readonly IThonXomCRUDService _thonXomService;
+        private readonly IRegionManager _regionManager;
 
-        public KhoiTaoDanhSachThonXomViewModel(IDonViHanhChinhService dvhcService, IThonXomCRUDService thonXomService)
+        private readonly IDonViHanhChinhService _dvhcService;
+        // private readonly IThonXomCRUDService _thonXomService;
+
+        public KhoiTaoDanhSachThonXomViewModel(IDonViHanhChinhService dvhcService,
+            IRegionManager regionManager /*, IThonXomCRUDService thonXomService*/)
         {
             _dvhcService = dvhcService;
-            _thonXomService = thonXomService;
+            _regionManager = regionManager;
+            // _thonXomService = thonXomService;
 
             InitCommands();
 
@@ -40,7 +42,7 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
         private List<DonViHanhChinhChung> _toanBoXaPhuongVietNam;
 
         private DonViHanhChinhChung _donViXaPhuongDaChon;
-        
+
         public void XacDinhDonViXaPhuongDaChon(DonViHanhChinhChung donviXaPhuongDaChon)
         {
             _donViXaPhuongDaChon = donviXaPhuongDaChon;
@@ -65,13 +67,14 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
                             flag = false;
                         }
                     }
+
                     return flag;
                 });
             return suggestions
                 .OrderByDescending(i => i.TenDonViDuCap.StartsWith(query, StringComparison.CurrentCultureIgnoreCase))
                 .ThenBy(x => x.TenDonViDuCap).ToList();
         }
-        
+
         private void InitCommands()
         {
             //1
@@ -80,14 +83,18 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
             //2
             DeleteThonXomItemCommand = new DelegateCommand<ThonXom>(DeleteThonXomItem);
             ThemThonXomItemCommand = new DelegateCommand<string>(ThemThonXomItem);
+
+            //3
+            ChuyenBuocKhoiTaoCacTapHSCTGocCommand = new DelegateCommand(ChuyenBuocKhoiTaoCacTapHSCTGoc);
         }
 
-        private async Task InitData()
+        private async void InitData()
         {
             CacThonXomThuocXaPhuongDaChon = new ObservableCollection<ThonXom>();
 
             _cacThonXomThuocXaPhuongDaChonCollectionLock = new object();
-            BindingOperations.EnableCollectionSynchronization(_cacThonXomThuocXaPhuongDaChon, _cacThonXomThuocXaPhuongDaChonCollectionLock);
+            BindingOperations.EnableCollectionSynchronization(_cacThonXomThuocXaPhuongDaChon,
+                _cacThonXomThuocXaPhuongDaChonCollectionLock);
 
             _toanBoXaPhuongVietNam = (await _dvhcService.LoadToanBoXaPhuongVietNam()).ToList();
         }
@@ -111,7 +118,8 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 
         private void DeleteThonXomItem(ThonXom thonXomItem)
         {
-            var xoaThonXomItemKhoiDanhSachConfirmResult = MessageBox.Show("Bạn có muốn xoá thôn, xóm này khỏi danh sách các thôn, xóm đã nhập không?", "Xoá thôn, xóm",
+            var xoaThonXomItemKhoiDanhSachConfirmResult = MessageBox.Show(
+                "Bạn có muốn xoá thôn, xóm này khỏi danh sách các thôn, xóm đã nhập không?", "Xoá thôn, xóm",
                 MessageBoxButton.YesNo);
 
             if (xoaThonXomItemKhoiDanhSachConfirmResult == MessageBoxResult.Yes)
@@ -169,11 +177,21 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
                 Log.Error(ex);
                 MessageBox.Show("Đã có lỗi xảy ra khi thêm thôn, xóm mới");
             }
-
-
-
         }
 
         #endregion
+
+        public ICommand ChuyenBuocKhoiTaoCacTapHSCTGocCommand { get; private set; }
+
+        private void ChuyenBuocKhoiTaoCacTapHSCTGoc()
+        {
+            var navigationParameters = new NavigationParameters();
+            navigationParameters.AddNavigationSource(this);
+
+            navigationParameters.Add("DanhSachThonXom", CacThonXomThuocXaPhuongDaChon.ToList());
+
+            _regionManager.RequestNavigate(KhoiTaoDuLieuBanDauRegionNames.KHOI_TAO_DU_LIEU_BAN_DAU_ROOT_REGION,
+                "KhoiTaoCacTapHSCTView", navigationParameters);
+        }
     }
 }

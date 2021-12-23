@@ -24,4 +24,8 @@
     <ProjectReference Include="..\QuanLyTangThuHoKhau.Core\QuanLyTangThuHoKhau.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="KhoiTaoDuLieuBanDau\ViewModels\" />
+  </ItemGroup>
+
 </Project>

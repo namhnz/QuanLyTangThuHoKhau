@@ -14,8 +14,7 @@
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
-                        Background="{DynamicResource SystemControlBackgroundAccentBrush}"
-                        >
+                        Background="{DynamicResource SystemControlBackgroundAccentBrush}">
                 <TextBlock
                     Padding="10"
                     Text="{Binding ThuTuTapHSCT, StringFormat='{}Tập {0}'}"
@@ -35,7 +34,7 @@
                         </TextBlock.Text>
                     </TextBlock>
                 </Border>
-                
+
             </StackPanel>
         </DataTemplate>
 
@@ -68,8 +67,8 @@
                                 </MenuItem.Icon>
                             </MenuItem>
                         </ContextMenu>
-                        <Style TargetType="{x:Type ListBoxItem}"  BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                            <Setter Property="ContextMenu" Value="{StaticResource ModifyListBoxItemContextMenu}"/>
+                        <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                            <Setter Property="ContextMenu" Value="{StaticResource ModifyListBoxItemContextMenu}" />
                         </Style>
                     </ListBox.Resources>
                     <ListBox.ItemsPanel>
@@ -116,11 +115,13 @@
         <ui:SimpleStackPanel Spacing="5"
                              Orientation="Horizontal">
             <Button
-                Content="Quay lại">
+                Content="Quay lại"
+                Command="{Binding QuayVeBuocKhoiTaoDanhSachThonXomCommand}">
             </Button>
             <Button
                 Content="Tiếp theo"
-                Style="{DynamicResource AccentButtonStyle}">
+                Style="{DynamicResource AccentButtonStyle}"
+                Command="{Binding ChuyenBuocKhoiTaoCacTuiHSCTCommand}">
             </Button>
         </ui:SimpleStackPanel>
     </ui:SimpleStackPanel>
