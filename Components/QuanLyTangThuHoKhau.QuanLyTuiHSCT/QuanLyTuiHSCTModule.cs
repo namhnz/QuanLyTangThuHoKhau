@@ -2,6 +2,7 @@
 using Prism.Modularity;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.Views;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.Views;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT
@@ -28,7 +29,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT
             // containerRegistry.RegisterForNavigation<XemNoiDungTextFileOverlayView>();
             //
             containerRegistry.RegisterForNavigation<KhoiTaoCacTuiHSCTView>();
-            // containerRegistry.RegisterForNavigation<DanhSachLoiTheCCCDsView>();
+            containerRegistry.RegisterForNavigation<TimKiemTuiHSCTView>();
+            containerRegistry.RegisterForNavigation<ThemMoiTuiHSCTView>();
         }
 
         public void OnInitialized(IContainerProvider containerProvider)

@@ -6,7 +6,11 @@
              xmlns:local="clr-namespace:QuanLyTangThuHoKhau.QuanLyDuLieu.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             xmlns:ui="http://schemas.modernwpf.com/2019">
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:qldlTypes="clr-namespace:QuanLyTangThuHoKhau.QuanLyDuLieu.Types"
+             xmlns:qldlCoreTypes="clr-namespace:QuanLyTangThuHoKhau.Core.Types.QuanLyDuLieu;assembly=QuanLyTangThuHoKhau.Core"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True">
 
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
@@ -124,15 +128,15 @@
             Background="{DynamicResource NavigationViewExpandedPaneBackground}">
             
             <ui:ListView
-                x:Name="PagesList"
+                x:Name="ViewNavigationListView"
                 DockPanel.Dock="Top"
-                DisplayMemberPath="Title"
-                SelectedValuePath="PageType"
+                DisplayMemberPath="NavigationTitle"
+                SelectedValuePath="ViewType"
                 SelectedIndex="0"
-                SelectionChanged="PagesList_SelectionChanged">
-                <!-- <ui:ListView.ItemsSource> -->
-                <!--     <local:ControlPagesData /> -->
-                <!-- </ui:ListView.ItemsSource> -->
+                SelectionChanged="ViewNavigationListView_SelectionChanged">
+                <ui:ListView.ItemsSource>
+                    <qldlTypes:ViewNavigationListData />
+                </ui:ListView.ItemsSource>
             </ui:ListView>
         </DockPanel>
 
@@ -142,5 +146,11 @@
         <!--     Grid.Column="1" -->
         <!--     Navigating="RootFrame_Navigating" -->
         <!--     Navigated="RootFrame_Navigated" /> -->
+        <ContentControl
+            Grid.Row="1"
+            Grid.Column="1"
+            prism:RegionManager.RegionName="{x:Static qldlCoreTypes:QuanLyDuLieuRegionNames.QUAN_LY_DU_LIEU_ROOT_REGION}"
+                        x:Name="QuanLyDuLieuRootContentPresenterContentControl">
+        </ContentControl>
     </Grid>
 </UserControl>

@@ -14,11 +14,36 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         WindowState="Maximized"
-        xmlns:ktdlbdViews="clr-namespace:QuanLyTangThuHoKhau.KhoiTaoDuLieuBanDau.Views">
-    <Grid>
-        <!-- <qltx:QuanLyThonXomRootView></qltx:QuanLyThonXomRootView> -->
-        <!-- <qlthsct:QuanLyTapHSCTRootView></qlthsct:QuanLyTapHSCTRootView> -->
-        <!-- <qltuihsct:QuanLyTuiHSCTRootView></qltuihsct:QuanLyTuiHSCTRootView> -->
-        <ktdlbdViews:KhoiTaoDuLieuBanDauRootView></ktdlbdViews:KhoiTaoDuLieuBanDauRootView>
-    </Grid>
+        xmlns:ktdlbdViews="clr-namespace:QuanLyTangThuHoKhau.KhoiTaoDuLieuBanDau.Views"
+        xmlns:qldlViews="clr-namespace:QuanLyTangThuHoKhau.QuanLyDuLieu.Views"
+        x:Name="RootMainWindow">
+    <Window.Resources>
+        <DataTemplate x:Key="HienThiKhoiTaoDuLieuBanDauTrenMainWindowDataTemplate"
+                      DataType="{x:Type ContentControl}">
+            <ktdlbdViews:KhoiTaoDuLieuBanDauRootView></ktdlbdViews:KhoiTaoDuLieuBanDauRootView>
+        </DataTemplate>
+        <DataTemplate x:Key="HienThiQuanLyDuLieuTrenMainWindowDataTemplate"
+                      DataType="{x:Type ContentControl}">
+            <qldlViews:QuanLyDuLieuRootView></qldlViews:QuanLyDuLieuRootView>
+        </DataTemplate>
+    </Window.Resources>
+    <ScrollViewer>
+        <ContentControl>
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Setter Property="ContentTemplate"
+                            Value="{StaticResource HienThiKhoiTaoDuLieuBanDauTrenMainWindowDataTemplate}">
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger
+                            Binding="{Binding DataContext.AppDaKhoiTaoDuLieuBanDau, ElementName=RootMainWindow}"
+                            Value="True">
+                            <Setter Property="ContentTemplate"
+                                    Value="{StaticResource HienThiQuanLyDuLieuTrenMainWindowDataTemplate}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+    </ScrollViewer>
 </Window>

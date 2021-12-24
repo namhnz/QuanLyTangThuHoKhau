@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ModernWpf;
-using ModernWpf.Controls;
-using Frame = System.Windows.Controls.Frame;
+using Prism.Ioc;
+using Prism.Regions;
+using QuanLyTangThuHoKhau.Core.Types.QuanLyDuLieu;
+using QuanLyTangThuHoKhau.QuanLyDuLieu.Types;
+using Unity;
 
 namespace QuanLyTangThuHoKhau.QuanLyDuLieu.Views
 {
@@ -31,10 +21,12 @@ namespace QuanLyTangThuHoKhau.QuanLyDuLieu.Views
             private set => _current.Value = value;
         }
 
+        // private IRegionManager _regionManager;
+
        private static readonly ThreadLocal<QuanLyDuLieuRootView> _current = new ThreadLocal<QuanLyDuLieuRootView>();
 
         private bool _ignoreSelectionChange;
-        private readonly ControlPagesData _controlPagesData = new ControlPagesData();
+        private readonly ViewNavigationListData _controlPagesData = new ViewNavigationListData();
         private Type _startPage;
 
         public QuanLyDuLieuRootView()
@@ -43,38 +35,43 @@ namespace QuanLyTangThuHoKhau.QuanLyDuLieu.Views
 
             Current = this;
 
+            // _regionManager = ContainerLocator.Current.Resolve<IRegionManager>();
+            // _regionManager = ContainerLocator.Container.Resolve<IRegionManager>();
+            
             SetStartPage();
             if (_startPage != null)
             {
-                PagesList.SelectedItem =
-                    PagesList.Items.OfType<ControlInfoDataItem>().FirstOrDefault(x => x.PageType == _startPage);
+                ViewNavigationListView.SelectedItem =
+                    ViewNavigationListView.Items.OfType<ViewInfoNavigationItem>()
+                        .FirstOrDefault(x => x.ViewType == _startPage);
             }
 
             NavigateToSelectedPage();
 
-            
         }
 
         partial void SetStartPage();
 
-        private void ContextMenu_Loaded(object sender, RoutedEventArgs e)
-        {
-            //Debug.WriteLine(nameof(ContextMenu_Loaded));
-            var menu = (ContextMenu)sender;
-            var tabItem = (TabItem)menu.PlacementTarget;
-            var content = (FrameworkElement)tabItem.Content;
-        }
+        // private void ContextMenu_Loaded(object sender, RoutedEventArgs e)
+        // {
+        //     //Debug.WriteLine(nameof(ContextMenu_Loaded));
+        //     var menu = (ContextMenu)sender;
+        //     var tabItem = (TabItem)menu.PlacementTarget;
+        //     var content = (FrameworkElement)tabItem.Content;
+        // }
         
         
         private void NavigateToSelectedPage()
         {
-            if (PagesList.SelectedValue is Type type)
+            if (ViewNavigationListView.SelectedValue is Type type)
             {
-                RootFrame?.Navigate(type);
+                var regionManager = ContainerLocator.Current.Resolve<IRegionManager>();
+
+                regionManager.RequestNavigate(QuanLyDuLieuRegionNames.QUAN_LY_DU_LIEU_ROOT_REGION, type.Name);
             }
         }
 
-        private void PagesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ViewNavigationListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!_ignoreSelectionChange)
             {
@@ -95,7 +92,7 @@ namespace QuanLyTangThuHoKhau.QuanLyDuLieu.Views
         //     Debug.Assert(!RootFrame.CanGoForward);
         //
         //     _ignoreSelectionChange = true;
-        //     PagesList.SelectedValue = RootFrame.CurrentSourcePageType;
+        //     ViewNavigationListView.SelectedValue = RootFrame.CurrentSourcePageType;
         //     _ignoreSelectionChange = false;
         // }
     }

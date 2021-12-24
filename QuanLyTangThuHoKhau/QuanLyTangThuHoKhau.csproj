@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <Folder Include="KhoiTaoDuLieuBanDau\ViewModels\" />
+    <Folder Include="QuanLyDuLieu\Types\" />
     <Folder Include="QuanLyDuLieu\ViewModels\" />
   </ItemGroup>
 

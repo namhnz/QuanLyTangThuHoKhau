@@ -5,6 +5,9 @@ using Prism.Modularity;
 using Prism.Unity;
 using QuanLyTangThuHoKhau.Core;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices;
+using QuanLyTangThuHoKhau.Core.Settings;
+using QuanLyTangThuHoKhau.KhoiTaoDuLieuBanDau.Views;
+using QuanLyTangThuHoKhau.QuanLyDuLieu.Views;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT;
 using QuanLyTangThuHoKhau.QuanLyThonXom;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT;
@@ -20,9 +23,12 @@ namespace QuanLyTangThuHoKhau
             // containerRegistry.RegisterSingleton<IBusyMonitor, BusyMonitor>();
 
             containerRegistry.RegisterSingleton<IDialogService, DialogService>();
-
+            containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
             containerRegistry.RegisterSingleton<IDonViHanhChinhService, DonViHanhChinhService>();
 
+            //Khoi tao cac view de dieu huong
+            containerRegistry.RegisterForNavigation<KhoiTaoDuLieuBanDauRootView>();
+            containerRegistry.RegisterForNavigation<QuanLyDuLieuRootView>();
         }
 
         override protected DependencyObject CreateShell()

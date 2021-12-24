@@ -9,7 +9,7 @@ namespace QuanLyTangThuHoKhau.Core
     {
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
+            // containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
             // containerRegistry.RegisterSingleton<ILiteDbDataService, LiteDbDataService>();
             // containerRegistry.RegisterSingleton<IQRCodeScanner, ZebraQRCodeScanner>();
             //

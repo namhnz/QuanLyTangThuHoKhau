@@ -9,7 +9,5 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:ktdlbdConst="clr-namespace:QuanLyTangThuHoKhau.Core.Types.KhoiTaoDuLieuBanDau;assembly=QuanLyTangThuHoKhau.Core">
-    <ScrollViewer>
-        <ContentControl prism:RegionManager.RegionName="{x:Static ktdlbdConst:KhoiTaoDuLieuBanDauRegionNames.KHOI_TAO_DU_LIEU_BAN_DAU_ROOT_REGION}" />
-    </ScrollViewer>
+    <ContentControl prism:RegionManager.RegionName="{x:Static ktdlbdConst:KhoiTaoDuLieuBanDauRegionNames.KHOI_TAO_DU_LIEU_BAN_DAU_ROOT_REGION}" />
 </UserControl>
