@@ -47,7 +47,10 @@ namespace QuanLyTangThuHoKhau.QuanLyDuLieu.Views
             }
 
             NavigateToSelectedPage();
-
+            //https://github.com/PrismLibrary/Prism/issues/1805#issuecomment-495690608
+            // var regionManager = ContainerLocator.Current.Resolve<IRegionManager>();
+            // RegionManager.SetRegionManager(this, regionManager);
+            // regionManager.RegisterViewWithRegion(QuanLyDuLieuRegionNames.QUAN_LY_DU_LIEU_ROOT_REGION, _startPage);
         }
 
         partial void SetStartPage();

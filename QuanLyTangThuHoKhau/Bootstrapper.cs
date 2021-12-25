@@ -29,6 +29,7 @@ namespace QuanLyTangThuHoKhau
             //Khoi tao cac view de dieu huong
             containerRegistry.RegisterForNavigation<KhoiTaoDuLieuBanDauRootView>();
             containerRegistry.RegisterForNavigation<QuanLyDuLieuRootView>();
+            
         }
 
         override protected DependencyObject CreateShell()

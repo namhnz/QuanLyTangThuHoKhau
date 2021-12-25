@@ -14,36 +14,37 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         WindowState="Maximized"
+        xmlns:coreTypes="clr-namespace:QuanLyTangThuHoKhau.Core.Types;assembly=QuanLyTangThuHoKhau.Core"
         xmlns:ktdlbdViews="clr-namespace:QuanLyTangThuHoKhau.KhoiTaoDuLieuBanDau.Views"
         xmlns:qldlViews="clr-namespace:QuanLyTangThuHoKhau.QuanLyDuLieu.Views"
         x:Name="RootMainWindow">
-    <Window.Resources>
-        <DataTemplate x:Key="HienThiKhoiTaoDuLieuBanDauTrenMainWindowDataTemplate"
-                      DataType="{x:Type ContentControl}">
-            <ktdlbdViews:KhoiTaoDuLieuBanDauRootView></ktdlbdViews:KhoiTaoDuLieuBanDauRootView>
-        </DataTemplate>
-        <DataTemplate x:Key="HienThiQuanLyDuLieuTrenMainWindowDataTemplate"
-                      DataType="{x:Type ContentControl}">
-            <qldlViews:QuanLyDuLieuRootView></qldlViews:QuanLyDuLieuRootView>
-        </DataTemplate>
-    </Window.Resources>
+    <!-- <Window.Resources> -->
+    <!--     <DataTemplate x:Key="HienThiKhoiTaoDuLieuBanDauTrenMainWindowDataTemplate" -->
+    <!--                   DataType="{x:Type ContentControl}"> -->
+    <!--         <ktdlbdViews:KhoiTaoDuLieuBanDauRootView></ktdlbdViews:KhoiTaoDuLieuBanDauRootView> -->
+    <!--     </DataTemplate> -->
+    <!--     <DataTemplate x:Key="HienThiQuanLyDuLieuTrenMainWindowDataTemplate" -->
+    <!--                   DataType="{x:Type ContentControl}"> -->
+    <!--         <qldlViews:QuanLyDuLieuRootView></qldlViews:QuanLyDuLieuRootView> -->
+    <!--     </DataTemplate> -->
+    <!-- </Window.Resources> -->
     <ScrollViewer>
-        <ContentControl>
-            <ContentControl.Style>
-                <Style TargetType="{x:Type ContentControl}">
-                    <Setter Property="ContentTemplate"
-                            Value="{StaticResource HienThiKhoiTaoDuLieuBanDauTrenMainWindowDataTemplate}">
-                    </Setter>
-                    <Style.Triggers>
-                        <DataTrigger
-                            Binding="{Binding DataContext.AppDaKhoiTaoDuLieuBanDau, ElementName=RootMainWindow}"
-                            Value="True">
-                            <Setter Property="ContentTemplate"
-                                    Value="{StaticResource HienThiQuanLyDuLieuTrenMainWindowDataTemplate}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
+        <ContentControl prism:RegionManager.RegionName="{x:Static coreTypes:MainWindowRegionNames.MAIN_WINDOW_ROOT_REGION}">
+            <!-- <ContentControl.Style> -->
+            <!--     <Style TargetType="{x:Type ContentControl}"> -->
+            <!--         <Setter Property="ContentTemplate" -->
+            <!--                 Value="{StaticResource HienThiKhoiTaoDuLieuBanDauTrenMainWindowDataTemplate}"> -->
+            <!--         </Setter> -->
+            <!--         <Style.Triggers> -->
+            <!--             <DataTrigger -->
+            <!--                 Binding="{Binding DataContext.AppDaKhoiTaoDuLieuBanDau, ElementName=RootMainWindow}" -->
+            <!--                 Value="True"> -->
+            <!--                 <Setter Property="ContentTemplate" -->
+            <!--                         Value="{StaticResource HienThiQuanLyDuLieuTrenMainWindowDataTemplate}" /> -->
+            <!--             </DataTrigger> -->
+            <!--         </Style.Triggers> -->
+            <!--     </Style> -->
+            <!-- </ContentControl.Style> -->
         </ContentControl>
     </ScrollViewer>
 </Window>
