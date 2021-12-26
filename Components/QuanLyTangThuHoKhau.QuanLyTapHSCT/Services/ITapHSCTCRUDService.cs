@@ -9,6 +9,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
     {
         public Task<List<TapHSCT>> LietKeToanBoTapHSCT();
         public Task<List<TapHSCT>> LietKeToanBoTapHSCTTheoThonXom(ThonXom thonXom);
+        public Task<TapHSCT> LayTapHSCTBoSungCuaThonXom(ThonXom thonXom);
         public Task ThemTapHSCTMoi(int thuTuTapHSCT, LoaiTapHSCT loaiTapHSCT, ThonXom thonXom);
 
         public Task XoaTapHSCTDaCo(int idTapHSCTDaCo);

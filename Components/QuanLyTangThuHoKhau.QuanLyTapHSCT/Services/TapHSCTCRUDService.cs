@@ -50,6 +50,34 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
             return cacTapHSCTTheoThonXom;
         }
 
+        public async Task<TapHSCT> LayTapHSCTBoSungCuaThonXom(ThonXom thonXom)
+        {
+            if (thonXom == null)
+            {
+                throw new ChuaChonThonXomChuaTapHSCTException()
+                {
+                    ErrorMessage = "Chưa chọn thôn, xóm để lấy các tập hồ sơ"
+                };
+            }
+
+            var thonXomDaCo = _dataService.ThonXomRepository.FindOne(thonXom.Id);
+            if (thonXomDaCo == null)
+            {
+                throw new ChuaChonThonXomChuaTapHSCTException()
+                {
+                    ErrorMessage = "Thôn, xóm đã chọn không tồn tại"
+                };
+            }
+
+            var toanBoTapHSCT = await LietKeToanBoTapHSCT();
+
+            var tapHSCTBoSungCuaThonXom = toanBoTapHSCT
+                .Where(x => x.ThonXom.Id == thonXom.Id)
+                .First(x => x.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTBoSung);
+
+            return tapHSCTBoSungCuaThonXom;
+        }
+
         public async Task ThemTapHSCTMoi(int thuTuTapHSCT, LoaiTapHSCT loaiTapHSCT, ThonXom thonXom)
         {
             if (thuTuTapHSCT <= 0)
