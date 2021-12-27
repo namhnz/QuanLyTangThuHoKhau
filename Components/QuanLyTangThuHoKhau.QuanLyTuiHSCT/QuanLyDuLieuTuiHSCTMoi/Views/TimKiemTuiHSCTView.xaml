@@ -7,14 +7,38 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
              prism:ViewModelLocator.AutoWireViewModel="True">
     <UserControl.Resources>
         <Style x:Key="BoxHeaderStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
             <Setter Property="Margin" Value="0,0,0,4" />
         </Style>
     </UserControl.Resources>
-    <Grid>
-        <TextBlock Text="TimKiemTuiHSCTView"
-                   Style="{StaticResource BoxHeaderStyle}" ></TextBlock>
-    </Grid>
+    <ui:SimpleStackPanel>
+        <ui:SimpleStackPanel Orientation="Horizontal">
+            <TextBox
+                x:Name="SoHSCTRutGonCanTimTextBox"
+                ui:ControlHelper.Header="Số HSCT"
+                ui:ControlHelper.PlaceholderText="Chỉ nhập phần đuôi của dãy số HSCT"
+                Text="{Binding HoTenChuHo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Content="Tìm kiếm"
+                    Command="{Binding TimKiemThongTinHSCTCommand}"
+                    CommandParameter="{Binding Path=Text, ElementName=SoHSCTRutGonCanTimTextBox}"></Button>
+        </ui:SimpleStackPanel>
+
+        <TextBlock d:Text="Số HSCT: 17152-000342"
+                   Text="{Binding KetQuaSoHSCTDayDu, StringFormat='{}Số HSCT: {0}'}"></TextBlock>
+        <TextBlock d:Text="Địa chỉ: Thôn 1, xã Quỳnh Hoa, huyện Quỳnh Lưu, tỉnh Nghệ An"
+                   Text="{Binding KetQuaDiaChiHoThuongTru, StringFormat='{}Địa chỉ: {0}'}"></TextBlock>
+        <TextBlock d:Text="Tập HSCT: Tập 1"
+                   Text="{Binding KetQuaThuTuTapHSCT, StringFormat='{}Tập HSCT: {0}'}"></TextBlock>
+        <TextBlock d:Text="Vị trí túi HSCT: 71"
+                   Text="{Binding KetQuaViTriTuiHSCT, StringFormat='{}Vị trí túi HSCT: {0}'}"></TextBlock>
+        <Separator></Separator>
+        <TextBlock Text="Thông tin thêm"></TextBlock>
+        <TextBlock d:Text="Họ tên chủ hộ: Vũ Văn Dũng"
+                   Text="{Binding KetQuaHoTenChuHo, StringFormat='{}Họ tên chủ hộ: {0}'}"></TextBlock>
+        <TextBlock d:Text="Ngày đăng ký: 27/12/2021"
+                   Text="{Binding KetQuaNgayDangKy, StringFormat='{}Ngày đăng ký: {0}'}"></TextBlock>
+    </ui:SimpleStackPanel>
 </UserControl>
