@@ -25,6 +25,8 @@
                     Command="{Binding TimKiemThongTinHSCTCommand}"
                     CommandParameter="{Binding Path=Text, ElementName=SoHSCTRutGonCanTimTextBox}"></Button>
         </ui:SimpleStackPanel>
+        <TextBlock d:Text="Số HSCT nhập vào không đúng"
+                   Text="{Binding ErrorText}"></TextBlock>
 
         <TextBlock d:Text="Số HSCT: 17152-000342"
                    Text="{Binding KetQuaSoHSCTDayDu, StringFormat='{}Số HSCT: {0}'}"></TextBlock>

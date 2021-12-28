@@ -1,12 +1,21 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
+using log4net;
 using Prism.Commands;
 using Prism.Mvvm;
+using QuanLyTangThuHoKhau.Core.Exceptions;
+using QuanLyTangThuHoKhau.Core.Models;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions.TimKiemTuiHSCTExceptions;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.ViewModels
 {
-    public class TimKiemTuiHSCTViewModel: BindableBase
+    public class TimKiemTuiHSCTViewModel : BindableBase
     {
+        private static readonly ILog Log =
+            LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         #region Tim kiem
 
         private int _soHSCTRutGonCanTim;
@@ -71,13 +80,59 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.ViewModels
 
         #endregion
 
+        #region Hien thi loi
+
+        private string _errorText;
+
+        public string ErrorText
+        {
+            get => _errorText;
+            set => SetProperty(ref _errorText, value);
+        }
+
+        #endregion
+
         #region Khoi tao
 
         public ICommand TimKiemThongTinHSCTCommand { get; private set; }
 
         private void TimKiemThongTinHSCT(int soHSCTRutGonCanTim)
         {
+            try
+            {
+                //Kiem tra dieu kien
+                if (soHSCTRutGonCanTim <= 0)
+                {
+                    throw new SoHSCTKhongDungException()
+                    {
+                        ErrorMessage = "Số HSCT cần tìm không đúng"
+                    };
+                }
 
+                //Lay thong tin ho so
+                TuiHSCT ketQuaTuiHSCT;
+                TapHSCT ketQuaTapHSCT;
+
+                //Hien thi cac gia tri
+                KetQuaSoHSCTDayDu = ketQuaTuiHSCT.HSCT.MaHSCTDayDu;
+                KetQuaDiaChiHoThuongTru = ketQuaTapHSCT.ThonXom.ToString();
+                KetQuaThuTuTapHSCT = ketQuaTapHSCT.ThuTuTapHSCT;
+                KetQuaViTriTuiHSCT = ketQuaTuiHSCT.ViTriTui;
+                KetQuaHoTenChuHo = ketQuaTuiHSCT.HSCT.ChuHo;
+                KetQuaNgayDangKy = ketQuaTuiHSCT.HSCT.NgayDangKy;
+            }
+            catch (Exception ex)
+            {
+                if (ex is SoHSCTKhongDungException)
+                {
+                    ErrorText = ((BaseException)ex).ErrorMessage;
+                }
+                else
+                {
+                    Log.Error(ex);
+                    MessageBox.Show("Đã có lỗi xảy ra khi tìm kiếm thông tin hộ thường trú");
+                }
+            }
         }
 
         private void InitCommands()
@@ -89,7 +144,6 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.ViewModels
 
         public TimKiemTuiHSCTViewModel()
         {
-            
         }
     }
 }

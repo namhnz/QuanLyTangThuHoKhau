@@ -1,22 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
-using QuanLyTangThuHoKhau.Core.DbDataSerivces;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 {
-    public class TuiHSCTCRUDService : ITuiHSCTCRUDService
+    public class TuiHSCTCRUDServiceSampleData
     {
-        private readonly ILiteDbDataService _dataService;
-
-        public TuiHSCTCRUDService(ILiteDbDataService dataService)
-        {
-            _dataService = dataService;
-        }
 
         #region Lay danh sach tui ho so
 
@@ -39,13 +31,11 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
                 };
             }
 
-            // var cacTapHSCTCuaThonXom =
-            //     _dataService.TapHSCTRepository.FindAll().Where(x => x.ThonXom.Id == thonXom.Id).ToList();
+            var cacTapHSCTCuaThonXom =
+                _dataService.TapHSCTRepository.FindAll().Where(x => x.ThonXom.Id == thonXom.Id).ToList();
 
-            var toanBoTuiHSCT = await Task.Run(() => _dataService.TuiHSCTRepository.FindAll().ToList());
-            var toanBoTuiHSCTCuaThonXom = toanBoTuiHSCT.Where(x => x.TapHSCT.ThonXom.TenThonXom == thonXom.TenThonXom).ToList();
-
-            return toanBoTuiHSCTCuaThonXom;
+            var toanBoThonXom = await Task.Run(() => _dataService.TuiHSCTRepository.FindAll().ToList());
+            return toanBoThonXom;
         }
 
         #endregion
@@ -78,7 +68,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
             // Lay vi tri tui ho so moi
             var viTriTuiHSCTMoi = _dataService.TuiHSCTRepository.FindAll().Count(x => x.TapHSCT.Id == tapHSCT.Id) + 1;
-            
+
             // Tao tui ho so moi
             var tuiHSCTMoi = new TuiHSCT()
             {

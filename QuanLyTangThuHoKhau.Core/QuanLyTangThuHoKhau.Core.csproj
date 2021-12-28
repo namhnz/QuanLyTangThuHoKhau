@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <Folder Include="Exceptions\SourceClassOfCallingExceptions\" />
+    <Folder Include="AppServices\SampleDataServices\" />
     <Folder Include="Types\QuanLyDuLieu\" />
   </ItemGroup>
 
