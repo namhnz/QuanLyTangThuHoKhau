@@ -13,8 +13,10 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT
         {
             // containerRegistry.Register<QRCodeStringToTheCCCDConverter>();
             // containerRegistry.Register<ICacTheCCCDsToExcelFileExporter, CacTheCCCDsToExcelFileExporter>();
-            containerRegistry.RegisterSingleton<ITuiHSCTCRUDService, TuiHSCTCRUDService>();
+            // containerRegistry.RegisterSingleton<ITuiHSCTCRUDService, TuiHSCTCRUDService>();
             //
+            containerRegistry.RegisterSingleton<ITuiHSCTCRUDService, TuiHSCTCRUDServiceSampleData>();
+
             // containerRegistry.RegisterSingleton<ICommandBarCompositeCommands, CommandBarCompositeCommands>();
             // containerRegistry.RegisterSingleton<ICommandBarUIState, CommandBarUIState>();
             //

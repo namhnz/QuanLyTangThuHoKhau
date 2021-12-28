@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
@@ -41,7 +42,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
 
         #region Them tui ho so moi
-        public async Task ThemTuiHSCTMoi(TapHSCT tapHSCT, int viTriTui, string chuHo = "")
+        public async Task ThemTuiHSCTMoi(TapHSCT tapHSCT, int viTriTui, DateTime? ngayDangKy, string chuHo = "")
         {
             if (tapHSCT == null)
             {
@@ -52,7 +53,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             }
 
             //Kiem tra tap ho so ton tai
-            var tapHSCTDaCo = _dataService.TapHSCTRepository.FindOne(tapHSCT.Id);
+            var tapHSCTDaCo = TapHSCTSampleData.ToanBoHSCT().FirstOrDefault(x => x.Id == tapHSCT.Id);
             if (tapHSCTDaCo == null)
             {
                 throw new TapHSCTChuaTuiHSCTMoiKhongDungException()
@@ -63,10 +64,10 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
             // Tao ho so moi
             var thonXomThemHSCTMoi = tapHSCT.ThonXom;
-            var hsctMoi = await TaoHSCTMoi(thonXomThemHSCTMoi, chuHo);
+            var hsctMoi = await TaoHSCTMoi(thonXomThemHSCTMoi, DateTime.Now, chuHo);
 
             // Lay vi tri tui ho so moi
-            var viTriTuiHSCTMoi = _dataService.TuiHSCTRepository.FindAll().Count(x => x.TapHSCT.Id == tapHSCT.Id) + 1;
+            var viTriTuiHSCTMoi = TuiHSCTSampleData.ToanBoTuiHSCT().Count(x => x.TapHSCT.Id == tapHSCT.Id) + 1;
 
             // Tao tui ho so moi
             var tuiHSCTMoi = new TuiHSCT()
@@ -76,10 +77,10 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
                 ViTriTui = viTriTuiHSCTMoi
             };
 
-            await Task.Run(() => { _dataService.TuiHSCTRepository.Insert(tuiHSCTMoi); });
+            await Task.Run(() => { TuiHSCTSampleData.ThemTuiHSCTMoi(tuiHSCTMoi); });
         }
 
-        private async Task<HSCT> TaoHSCTMoi(ThonXom thonXom, string chuHo = "")
+        private async Task<HSCT> TaoHSCTMoi(ThonXom thonXom, DateTime? ngayDangKy, string chuHo = "")
         {
             //Kiem tra thon xom da chon xem ton tai hay khong
             if (thonXom == null)
@@ -90,7 +91,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
                 };
             }
 
-            var thonXomDaCo = _dataService.ThonXomRepository.FindOne(thonXom.Id);
+            var thonXomDaCo = ThonXomSampleData.ToanBoThonXom().FirstOrDefault(x => x.Id == thonXom.Id);
             if (thonXomDaCo == null)
             {
                 throw new ThonXomKhongTonTaiException()
@@ -102,13 +103,11 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             var hsctMoi = await Task.Run(() =>
             {
                 //Lay so ho so moi nhat
-                var tuiHSCTCuoiCung = _dataService.TuiHSCTRepository.FindTuiHSCTMoiNhat();
-                int soHSCTMoiNhat;
-
-                soHSCTMoiNhat = tuiHSCTCuoiCung == null ? 1 : tuiHSCTCuoiCung.HSCT.SoHSCT + 1;
+                var soHSCTCuoiCung = TuiHSCTSampleData.ToanBoTuiHSCT().Max(x => x.HSCT.SoHSCT);
+                int soHSCTMoiNhat = soHSCTCuoiCung + 1;
 
                 //Tao ho so moi
-                return new HSCT((uint)soHSCTMoiNhat, thonXom, chuHo);
+                return new HSCT((uint)soHSCTMoiNhat, thonXom, ngayDangKy, chuHo);
             });
 
             return hsctMoi;
@@ -132,7 +131,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
             await Task.Run(() =>
             {
-                var tuiHSCTDoiTenChuHo = _dataService.TuiHSCTRepository.FindOne(idTuiHSCT);
+                var tuiHSCTDoiTenChuHo = TuiHSCTSampleData.ToanBoTuiHSCT().FirstOrDefault(x => x.Id == idTuiHSCT);
 
                 if (tuiHSCTDoiTenChuHo == null)
                 {
@@ -144,7 +143,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
                 tuiHSCTDoiTenChuHo.HSCT.ChuHo = chuHoMoi;
 
-                _dataService.TuiHSCTRepository.Update(tuiHSCTDoiTenChuHo);
+                TuiHSCTSampleData.ChinhSuaTuiHSCT(tuiHSCTDoiTenChuHo);
             });
         }
 
@@ -154,7 +153,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
         public async Task XoaTuiHSCT(int idTuiHSCT)
         {
-            await Task.Run(() => { _dataService.TuiHSCTRepository.Delete(idTuiHSCT); });
+            await Task.Run(() => { TuiHSCTSampleData.XoaTuiHSCT(idTuiHSCT); });
         }
 
         #endregion

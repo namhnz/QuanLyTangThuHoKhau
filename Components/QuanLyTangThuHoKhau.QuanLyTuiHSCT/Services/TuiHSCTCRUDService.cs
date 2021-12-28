@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
@@ -52,7 +53,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
 
         #region Them tui ho so moi
-        public async Task ThemTuiHSCTMoi(TapHSCT tapHSCT, int viTriTui, string chuHo = "")
+        public async Task ThemTuiHSCTMoi(TapHSCT tapHSCT, int viTriTui, DateTime? ngayDangKy, string chuHo = "")
         {
             if (tapHSCT == null)
             {

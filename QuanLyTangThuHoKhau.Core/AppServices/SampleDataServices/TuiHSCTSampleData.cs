@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Newtonsoft.Json;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.Models;
@@ -35,7 +36,7 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.SampleDataServices
             {
                 var thang = randThang.Next(1, 12);
 
-                var thang31Ngay = new List<int>() { 1,3,5,7,8,10,12 };
+                var thang31Ngay = new List<int>() { 1, 3, 5, 7, 8, 10, 12 };
                 var thang30Ngay = new List<int>() { 4, 6, 9, 11 };
                 var thang28Ngay = new List<int>() { 2 };
 
@@ -44,10 +45,12 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.SampleDataServices
                 {
                     ngay = randNgay.Next(1, 28);
                 }
+
                 if (thang30Ngay.Contains(thang))
                 {
                     ngay = randNgay.Next(1, 30);
                 }
+
                 if (thang31Ngay.Contains(thang))
                 {
                     ngay = randNgay.Next(1, 31);
@@ -57,10 +60,7 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.SampleDataServices
             };
 
             var randSoLuongTuiHSCT = new Random();
-            Func<int> taoSoLuongTuiHSCTNgauNhien = () =>
-            {
-                return randSoLuongTuiHSCT.Next(50, 80);
-            };
+            Func<int> taoSoLuongTuiHSCTNgauNhien = () => { return randSoLuongTuiHSCT.Next(50, 80); };
 
             _toanBoTuiHSCT = new List<TuiHSCT>();
 
@@ -86,7 +86,7 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.SampleDataServices
                     _toanBoTuiHSCT.Add(tuiHSCT);
                 }
             }
-            
+
             //Log toan bo du lieu
             Debug.WriteLine(JsonConvert.SerializeObject(_toanBoTuiHSCT));
         }
@@ -94,6 +94,37 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.SampleDataServices
         public static List<TuiHSCT> ToanBoTuiHSCT()
         {
             return SampleData._toanBoTuiHSCT;
+        }
+
+        public static bool ThemTuiHSCTMoi(TuiHSCT tuiHSCTMoi)
+        {
+            var idTuiHSCTMoi = SampleData._toanBoTuiHSCT.Max(x => x.Id);
+            tuiHSCTMoi.Id = idTuiHSCTMoi + 1;
+
+            SampleData._toanBoTuiHSCT.Add(tuiHSCTMoi);
+            return true;
+        }
+
+        public static bool ChinhSuaTuiHSCT(TuiHSCT tuiHSCTChinhSua)
+        {
+            var idTuiHSCTChinhSua = SampleData._toanBoTuiHSCT.FindIndex(x => x.Id == tuiHSCTChinhSua.Id);
+            if (idTuiHSCTChinhSua < 0)
+            {
+                return false;
+            }
+
+            SampleData._toanBoTuiHSCT[idTuiHSCTChinhSua] = tuiHSCTChinhSua;
+            return true;
+        }
+
+        public static bool XoaTuiHSCT(int idTuiHSCTCanXoa)
+        {
+            if (idTuiHSCTCanXoa < 0 || idTuiHSCTCanXoa>=SampleData._toanBoTuiHSCT.Count)
+            {
+                return false;
+            }
+            SampleData._toanBoTuiHSCT.RemoveAt(idTuiHSCTCanXoa);
+            return true;
         }
     }
 }
