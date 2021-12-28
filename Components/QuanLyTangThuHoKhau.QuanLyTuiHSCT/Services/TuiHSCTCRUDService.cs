@@ -75,7 +75,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
             // Tao ho so moi
             var thonXomThemHSCTMoi = tapHSCT.ThonXom;
-            var hsctMoi = await TaoHSCTMoi(thonXomThemHSCTMoi, chuHo);
+            var hsctMoi = await TaoHSCTMoi(thonXomThemHSCTMoi, ngayDangKy, chuHo);
 
             // Lay vi tri tui ho so moi
             var viTriTuiHSCTMoi = _dataService.TuiHSCTRepository.FindAll().Count(x => x.TapHSCT.Id == tapHSCT.Id) + 1;
@@ -91,7 +91,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             await Task.Run(() => { _dataService.TuiHSCTRepository.Insert(tuiHSCTMoi); });
         }
 
-        private async Task<HSCT> TaoHSCTMoi(ThonXom thonXom, string chuHo = "")
+        private async Task<HSCT> TaoHSCTMoi(ThonXom thonXom, DateTime? ngayDangKy, string chuHo = "")
         {
             //Kiem tra thon xom da chon xem ton tai hay khong
             if (thonXom == null)
@@ -120,7 +120,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
                 soHSCTMoiNhat = tuiHSCTCuoiCung == null ? 1 : tuiHSCTCuoiCung.HSCT.SoHSCT + 1;
 
                 //Tao ho so moi
-                return new HSCT((uint)soHSCTMoiNhat, thonXom, chuHo);
+                return new HSCT((uint)soHSCTMoiNhat, thonXom, ngayDangKy, chuHo);
             });
 
             return hsctMoi;

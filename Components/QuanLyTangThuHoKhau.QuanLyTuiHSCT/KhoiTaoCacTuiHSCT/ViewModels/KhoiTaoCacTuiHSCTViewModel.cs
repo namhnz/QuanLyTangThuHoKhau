@@ -50,7 +50,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
             {
                 var soHSCT = i;
 
-                var hsct = new HSCT((uint)soHSCT, thonXomChuaTapHSCT);
+                var hsct = new HSCT((uint)soHSCT, thonXomChuaTapHSCT, null);
 
                 var tuiHSCTMoi = new TuiHSCT()
                 {

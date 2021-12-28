@@ -70,9 +70,9 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.ViewModels
             set => SetProperty(ref _ketQuaHoTenChuHo, value);
         }
 
-        private DateTime _ketQuaNgayDangKy;
+        private DateTime? _ketQuaNgayDangKy;
 
-        public DateTime KetQuaNgayDangKy
+        public DateTime? KetQuaNgayDangKy
         {
             get => _ketQuaNgayDangKy;
             set => SetProperty(ref _ketQuaNgayDangKy, value);
