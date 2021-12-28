@@ -8,14 +8,15 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types
         public int SoHSCT { get; set; }
         public string ChuHo { get; set; }
         public string MaHSCTDayDu { get; private set; }
-        public DateTime NgayDangKy { get; set; }
+        public DateTime? NgayDangKy { get; set; }
 
-        public HSCT(uint soHSCT, ThonXom thonXom, DateTime ngayDangKy, string chuHo = "")
+        public HSCT(uint soHSCT, ThonXom thonXom, DateTime? ngayDangKy, string chuHo = "")
         {
             SoHSCT = (int)soHSCT;
             NgayDangKy = ngayDangKy;
             ChuHo = chuHo;
             MaHSCTDayDu = $"{thonXom.DonViHanhChinhPhuongXa.MaDonVi}-{soHSCT:D6}";
+            NgayDangKy = ngayDangKy;
         }
     }
 }

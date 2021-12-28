@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
+using QuanLyTangThuHoKhau.Core.AppServices.SampleDataServices;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 {
-    public class TuiHSCTCRUDServiceSampleData
+    public class TuiHSCTCRUDServiceSampleData: ITuiHSCTCRUDService
     {
 
         #region Lay danh sach tui ho so
@@ -22,7 +24,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
                 };
             }
 
-            var thonXomDaCo = _dataService.ThonXomRepository.FindOne(thonXom.Id);
+            var thonXomDaCo = ThonXomSampleData.ToanBoThonXom().FirstOrDefault(x => x.Id == thonXom.Id);
             if (thonXomDaCo == null)
             {
                 throw new ThonXomKhongTonTaiException()
@@ -30,12 +32,9 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
                     ErrorMessage = "Thôn, xóm đã chọn không tồn tại"
                 };
             }
-
-            var cacTapHSCTCuaThonXom =
-                _dataService.TapHSCTRepository.FindAll().Where(x => x.ThonXom.Id == thonXom.Id).ToList();
-
-            var toanBoThonXom = await Task.Run(() => _dataService.TuiHSCTRepository.FindAll().ToList());
-            return toanBoThonXom;
+            
+            var toanBoTuiHSCTCuaThonXom = await Task.Run(() => TuiHSCTSampleData.ToanBoTuiHSCT().Where(x => x.TapHSCT.ThonXom.Id == thonXom.Id).ToList());
+            return toanBoTuiHSCTCuaThonXom;
         }
 
         #endregion
