@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using QuanLyTangThuHoKhau.Core.Settings.Constants;
@@ -12,6 +13,9 @@ namespace QuanLyTangThuHoKhau.Core.Settings
     //Fix loi class ReaderWriterLock: https://stackoverflow.com/questions/9904142/c-sharp-readerwriterlockslim-best-practice-to-avoid-recursion
     public class SettingsManager : ISettingsManager
     {
+        private static readonly ILog Log =
+            LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private string SettingsPath { get; }
         private ReaderWriterLockSlim rwLock { get; }
 
@@ -142,6 +146,8 @@ namespace QuanLyTangThuHoKhau.Core.Settings
             }
             catch (Exception ex)
             {
+                Log.Error(ex);
+
                 try
                 {
                     rwLock.EnterReadLock();
@@ -159,6 +165,7 @@ namespace QuanLyTangThuHoKhau.Core.Settings
                 }
                 catch (Exception ex2)
                 {
+                    Log.Error(ex2);
                     return false;
                 }
             }

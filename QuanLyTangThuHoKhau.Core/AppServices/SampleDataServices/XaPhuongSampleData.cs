@@ -12,7 +12,7 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.SampleDataServices
 
         public XaPhuongSampleData()
         {
-            var _xaQuynhHoa = new DonViHanhChinhPhuongXa()
+            _xaQuynhHoa = new DonViHanhChinhPhuongXa()
             {
                 CacDonViHanhChinhCapDuoi = null,
                 MaDonVi = "17152",
@@ -22,7 +22,7 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.SampleDataServices
                 TenLoaiCapDonVi = "Xã"
             };
 
-            var _huyenQuynhLuu = new DonViHanhChinhQuanHuyen()
+            _huyenQuynhLuu = new DonViHanhChinhQuanHuyen()
             {
                 CacDonViHanhChinhCapDuoi = new List<DonViHanhChinhChung>()
                 {
@@ -35,7 +35,7 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.SampleDataServices
                 TenLoaiCapDonVi = "Huyện"
             };
 
-            var _tinhNgheAn = new DonViHanhChinhTinhThanh()
+            _tinhNgheAn = new DonViHanhChinhTinhThanh()
             {
                 CacDonViHanhChinhCapDuoi = new List<DonViHanhChinhChung>()
                 {

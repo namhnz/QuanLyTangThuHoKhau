@@ -58,6 +58,8 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices
             var toanBoDonViHanhChinhCapXaPhuong = toanBoDonViHanhChinhCapTinhThanh.SelectMany(x =>
                 x.CacDonViHanhChinhCapDuoi.SelectMany(y => y.CacDonViHanhChinhCapDuoi)).ToList();
 
+            _toanBoDonViHanhChinhCapXaPhuongCache = toanBoDonViHanhChinhCapXaPhuong;
+
             // foreach (var xaPhuong in toanBoDonViHanhChinhCapXaPhuong)
             // {
             //     Debug.WriteLine(xaPhuong);
