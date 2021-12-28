@@ -11,7 +11,10 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom
         {
             // containerRegistry.Register<QRCodeStringToTheCCCDConverter>();
             // containerRegistry.Register<ICacTheCCCDsToExcelFileExporter, CacTheCCCDsToExcelFileExporter>();
-            containerRegistry.RegisterSingleton<IThonXomCRUDService, ThonXomCRUDService>();
+            // containerRegistry.RegisterSingleton<IThonXomCRUDService, ThonXomCRUDService>();
+            containerRegistry.RegisterSingleton<IThonXomCRUDService, ThonXomCRUDServiceSampleData>();
+
+
             //
             // containerRegistry.RegisterSingleton<ICommandBarCompositeCommands, CommandBarCompositeCommands>();
             // containerRegistry.RegisterSingleton<ICommandBarUIState, CommandBarUIState>();

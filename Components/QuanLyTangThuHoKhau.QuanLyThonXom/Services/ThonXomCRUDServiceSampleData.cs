@@ -9,7 +9,7 @@ using QuanLyTangThuHoKhau.QuanLyThonXom.Exceptions;
 
 namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
 {
-    public class ThonXomCRUDServiceSampleDataSampleData: IThonXomCRUDService
+    public class ThonXomCRUDServiceSampleData: IThonXomCRUDService
     {
 
         public async Task<List<ThonXom>> LietKeToanBoThonXom()

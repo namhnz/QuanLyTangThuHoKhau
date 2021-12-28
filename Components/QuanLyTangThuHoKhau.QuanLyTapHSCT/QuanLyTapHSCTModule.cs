@@ -11,7 +11,9 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT
         {
             // containerRegistry.Register<QRCodeStringToTheCCCDConverter>();
             // containerRegistry.Register<ICacTheCCCDsToExcelFileExporter, CacTheCCCDsToExcelFileExporter>();
-            containerRegistry.RegisterSingleton<ITapHSCTCRUDService, TapHSCTCRUDService>();
+            // containerRegistry.RegisterSingleton<ITapHSCTCRUDService, TapHSCTCRUDService>();
+
+            containerRegistry.RegisterSingleton<ITapHSCTCRUDService, TapHSCTCRUDServiceSampleData>();
             //
             // containerRegistry.RegisterSingleton<ICommandBarCompositeCommands, CommandBarCompositeCommands>();
             // containerRegistry.RegisterSingleton<ICommandBarUIState, CommandBarUIState>();
