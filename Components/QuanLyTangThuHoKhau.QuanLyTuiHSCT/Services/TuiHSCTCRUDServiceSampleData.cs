@@ -12,6 +12,10 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 {
     public class TuiHSCTCRUDServiceSampleData: ITuiHSCTCRUDService
     {
+        public TuiHSCTCRUDServiceSampleData()
+        {
+            
+        }
 
         #region Lay danh sach tui ho so
 

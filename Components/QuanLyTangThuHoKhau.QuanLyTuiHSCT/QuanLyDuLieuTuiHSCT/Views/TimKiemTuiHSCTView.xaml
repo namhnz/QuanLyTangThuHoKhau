@@ -17,16 +17,18 @@
         <ui:SimpleStackPanel Orientation="Horizontal"
                              Spacing="5">
             <ui:NumberBox
+                Width="350"
                 Header="Số HSCT"
                 ui:ControlHelper.PlaceholderText="Chỉ nhập phần đuôi của dãy số HSCT"
                 SpinButtonPlacementMode="Inline"
                 Value="{Binding SoHSCTRutGonCanTim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Button Content="Tìm kiếm"
-                    Command="{Binding DataContext.TimKiemThongTinHSCTCommand}"
+                    Command="{Binding TimKiemThongTinHSCTCommand}"
                     VerticalAlignment="Bottom"></Button>
         </ui:SimpleStackPanel>
         <TextBlock d:Text="Số HSCT nhập vào không đúng"
-                   Text="{Binding ErrorText}"></TextBlock>
+                   Text="{Binding ErrorText}"
+                   Foreground="{StaticResource SystemControlErrorTextForegroundBrush}"></TextBlock>
 
         <TextBlock d:Text="Số HSCT: 17152-000342"
                    Text="{Binding KetQuaSoHSCTDayDu, StringFormat='{}Số HSCT: {0}'}"></TextBlock>
@@ -41,6 +43,6 @@
         <TextBlock d:Text="Họ tên chủ hộ: Vũ Văn Dũng"
                    Text="{Binding KetQuaHoTenChuHo, StringFormat='{}Họ tên chủ hộ: {0}'}"></TextBlock>
         <TextBlock d:Text="Ngày đăng ký: 27/12/2021"
-                   Text="{Binding KetQuaNgayDangKy, StringFormat='{}Ngày đăng ký: {0}'}"></TextBlock>
+                   Text="{Binding KetQuaNgayDangKy, StringFormat='{}Ngày đăng ký: {0:dd/MM/yyyy}'}"></TextBlock>
     </ui:SimpleStackPanel>
 </UserControl>

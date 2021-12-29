@@ -13,11 +13,12 @@
         xmlns:qltuihsct="clr-namespace:QuanLyTangThuHoKhau.QuanLyTuiHSCT;assembly=QuanLyTangThuHoKhau.QuanLyTuiHSCT"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        WindowState="Maximized"
+        WindowState="Normal"
         xmlns:coreTypes="clr-namespace:QuanLyTangThuHoKhau.Core.Types;assembly=QuanLyTangThuHoKhau.Core"
         xmlns:ktdlbdViews="clr-namespace:QuanLyTangThuHoKhau.KhoiTaoDuLieuBanDau.Views"
-        xmlns:qldlViews="clr-namespace:QuanLyTangThuHoKhau.QuanLyDuLieu.Views"
-        x:Name="RootMainWindow">
+        x:Name="RootMainWindow"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
+    
     <!-- <Window.Resources> -->
     <!--     <DataTemplate x:Key="HienThiKhoiTaoDuLieuBanDauTrenMainWindowDataTemplate" -->
     <!--                   DataType="{x:Type ContentControl}"> -->
@@ -47,4 +48,9 @@
             <!-- </ContentControl.Style> -->
         </ContentControl>
     </ScrollViewer>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding ThayDoiViewTheoCaiDatCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 </Window>

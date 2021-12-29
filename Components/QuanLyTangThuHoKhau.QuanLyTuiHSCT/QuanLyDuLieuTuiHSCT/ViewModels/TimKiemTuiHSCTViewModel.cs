@@ -20,6 +20,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
         public TimKiemTuiHSCTViewModel(ITuiHSCTCRUDService tuiHSCTService)
         {
             _tuiHSCTService = tuiHSCTService;
+            InitCommands();
         }
 
         #region Tim kiem
@@ -124,6 +125,10 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                         ErrorMessage = "Không tim thấy hộ thường trú nào có số HSCT như trên"
                     };
                 }
+                else
+                {
+                    ErrorText = null;
+                }
 
                 var ketQuaTapHSCT = ketQuaTuiHSCT.TapHSCT;
 
@@ -155,10 +160,6 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
         }
 
         #endregion
-
-        public TimKiemTuiHSCTViewModel()
-        {
-            InitCommands();
-        }
+        
     }
 }

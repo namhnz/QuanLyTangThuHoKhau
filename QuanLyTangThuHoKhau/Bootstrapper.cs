@@ -7,8 +7,8 @@ using QuanLyTangThuHoKhau.Core;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices;
 using QuanLyTangThuHoKhau.Core.Settings;
 using QuanLyTangThuHoKhau.KhoiTaoDuLieuBanDau.Views;
-using QuanLyTangThuHoKhau.QuanLyDuLieu.Views;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT;
+using QuanLyTangThuHoKhau.QuanLyThaoTacDuLieu.Views;
 using QuanLyTangThuHoKhau.QuanLyThonXom;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services;
@@ -29,7 +29,7 @@ namespace QuanLyTangThuHoKhau
 
             //Khoi tao cac view de dieu huong
             containerRegistry.RegisterForNavigation<KhoiTaoDuLieuBanDauRootView>();
-            containerRegistry.RegisterForNavigation<QuanLyDuLieuRootView>();
+            containerRegistry.RegisterForNavigation<QuanLyThaoTacDuLieuRootView>();
 
             containerRegistry.RegisterSingleton<ITuiHSCTCRUDService, TuiHSCTCRUDServiceSampleData>();
 

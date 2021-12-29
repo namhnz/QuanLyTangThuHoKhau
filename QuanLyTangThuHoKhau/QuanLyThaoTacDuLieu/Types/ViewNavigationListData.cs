@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views;
 
-namespace QuanLyTangThuHoKhau.QuanLyDuLieu.Types
+namespace QuanLyTangThuHoKhau.QuanLyThaoTacDuLieu.Types
 {
     public class ViewNavigationListData: List<ViewInfoNavigationItem>
     {

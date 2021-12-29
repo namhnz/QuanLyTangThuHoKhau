@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Linq;
+using System.Windows.Input;
+using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 using QuanLyTangThuHoKhau.Core.Types.QuanLyDuLieu;
-using QuanLyTangThuHoKhau.QuanLyDuLieu.Types;
+using QuanLyTangThuHoKhau.QuanLyThaoTacDuLieu.Types;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views;
 
-namespace QuanLyTangThuHoKhau.QuanLyDuLieu.ViewModels
+namespace QuanLyTangThuHoKhau.QuanLyThaoTacDuLieu.ViewModels
 {
-    public class QuanLyDuLieuRootViewModel : BindableBase
+    public class QuanLyThaoTacDuLieuRootViewModel : BindableBase
     {
         private readonly IRegionManager _regionManager;
 
         private Type _startView;
-        private bool _ignoreDoiViewHienThi;
+        // private bool _ignoreDoiViewHienThi;
 
-        public QuanLyDuLieuRootViewModel(IRegionManager regionManager)
+        public QuanLyThaoTacDuLieuRootViewModel(IRegionManager regionManager)
         {
             _regionManager = regionManager;
 
             InitData();
+            InitCommands();
         }
 
         #region Khoi tao
@@ -29,15 +32,33 @@ namespace QuanLyTangThuHoKhau.QuanLyDuLieu.ViewModels
             _startView = typeof(TimKiemTuiHSCTView);
 
             CacChucNangViewList = new ViewNavigationListData();
-            _ignoreDoiViewHienThi = true;
-            SelectedViewHienThi = CacChucNangViewList.FirstOrDefault(x => x.ViewType == _startView)?.ViewType;
+            
+        }
 
-            // _regionManager.RegisterViewWithRegion(QuanLyDuLieuRegionNames.QUAN_LY_DU_LIEU_ROOT_REGION, _startView);
-            _regionManager.RegisterViewWithRegion(QuanLyDuLieuRegionNames.QUAN_LY_DU_LIEU_ROOT_REGION, typeof(TimKiemTuiHSCTView));
-            _ignoreDoiViewHienThi = false;
+        private void InitCommands()
+        {
+            HienThiStartViewCommand = new DelegateCommand(HienThiStartView);
         }
 
         #endregion
+
+        #region Hien thi view dau tien
+
+        public ICommand HienThiStartViewCommand { get; private set; }
+
+        public void HienThiStartView()
+        {
+            // _ignoreDoiViewHienThi = true;
+            SelectedViewHienThi = CacChucNangViewList.FirstOrDefault(x => x.ViewType == _startView)?.ViewType;
+
+            // _regionManager.RequestNavigate(QuanLyDuLieuRegionNames.QUAN_LY_DU_LIEU_ROOT_REGION, _startView.Name);
+            // _regionManager.RegisterViewWithRegion(QuanLyDuLieuRegionNames.QUAN_LY_DU_LIEU_ROOT_REGION, _startView);
+            // _regionManager.RegisterViewWithRegion(QuanLyDuLieuRegionNames.QUAN_LY_DU_LIEU_ROOT_REGION, typeof(TimKiemTuiHSCTView));
+            // _ignoreDoiViewHienThi = false;
+        }
+
+        #endregion
+
 
         #region Dieu huong view
 
@@ -56,7 +77,7 @@ namespace QuanLyTangThuHoKhau.QuanLyDuLieu.ViewModels
             get => _selectedViewHienThi;
             set
             {
-                if (_selectedViewHienThi != value && !_ignoreDoiViewHienThi)
+                if (_selectedViewHienThi != value/* && !_ignoreDoiViewHienThi*/)
                 {
                     DoiViewHienThi(value.Name);
                 }
@@ -73,5 +94,6 @@ namespace QuanLyTangThuHoKhau.QuanLyDuLieu.ViewModels
         }
 
         #endregion
+
     }
 }

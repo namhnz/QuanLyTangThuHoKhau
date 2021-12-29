@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QuanLyTangThuHoKhau.QuanLyDuLieu.Types
+namespace QuanLyTangThuHoKhau.QuanLyThaoTacDuLieu.Types
 {
     public class ViewInfoNavigationItem
     {

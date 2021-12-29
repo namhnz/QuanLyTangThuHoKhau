@@ -18,9 +18,9 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
         private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public ThemMoiTuiHSCTViewModel(ITapHSCTCRUDService tapHsctService)
+        public ThemMoiTuiHSCTViewModel(ITapHSCTCRUDService tapHSCTService)
         {
-            _tapHSCTService = tapHsctService;
+            _tapHSCTService = tapHSCTService;
         }
 
         private List<ThonXom> _danhSachThonXom;

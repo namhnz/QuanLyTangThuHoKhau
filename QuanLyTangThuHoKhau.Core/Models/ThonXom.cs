@@ -8,5 +8,10 @@ namespace QuanLyTangThuHoKhau.Core.Models
         [BsonId] public int Id { get; set; }
         public string TenThonXom { get; set; }
         public DonViHanhChinhChung DonViHanhChinhPhuongXa { get; set; }
+
+        public override string ToString()
+        {
+            return $"{TenThonXom}, {DonViHanhChinhPhuongXa.TenDonViDuCap}";
+        }
     }
 }

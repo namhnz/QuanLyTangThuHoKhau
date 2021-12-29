@@ -1,17 +1,16 @@
-﻿<UserControl x:Class="QuanLyTangThuHoKhau.QuanLyDuLieu.Views.QuanLyDuLieuRootView"
+﻿<UserControl x:Class="QuanLyTangThuHoKhau.QuanLyThaoTacDuLieu.Views.QuanLyThaoTacDuLieuRootView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:QuanLyTangThuHoKhau.QuanLyDuLieu.Views"
+             xmlns:local="clr-namespace:QuanLyTangThuHoKhau.QuanLyThaoTacDuLieu.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             xmlns:ui="http://schemas.modernwpf.com/2019"
-             xmlns:qldlTypes="clr-namespace:QuanLyTangThuHoKhau.QuanLyDuLieu.Types"
-             xmlns:qldlCoreTypes="clr-namespace:QuanLyTangThuHoKhau.Core.Types.QuanLyDuLieu;assembly=QuanLyTangThuHoKhau.Core"
              xmlns:prism="http://prismlibrary.com/"
-             prism:ViewModelLocator.AutoWireViewModel="True">
-
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:qldlCoreTypes="clr-namespace:QuanLyTangThuHoKhau.Core.Types.QuanLyDuLieu;assembly=QuanLyTangThuHoKhau.Core">
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -21,13 +20,13 @@
             <ColumnDefinition Width="200" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-
+    
         <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-
+    
             <Menu>
                 <MenuItem Header="Theme">
                     <!-- <ui:RadioMenuItem -->
@@ -120,9 +119,9 @@
                 <!--         Click="NewWindow" /> -->
                 <!-- </MenuItem> -->
             </Menu>
-
+    
         </Grid>
-
+    
         <DockPanel
             Grid.Row="1"
             Background="{DynamicResource NavigationViewExpandedPaneBackground}">
@@ -135,9 +134,8 @@
                 SelectedValue="{Binding SelectedViewHienThi}"
                 ItemsSource="{Binding CacChucNangViewList}">
             </ui:ListView>
-            <TextBlock Text="123456"></TextBlock>
         </DockPanel>
-
+    
         <!-- <sc:SampleFrame -->
         <!--     x:Name="rootFrame" -->
         <!--     Grid.Row="1" -->
@@ -151,4 +149,9 @@
                         x:Name="QuanLyDuLieuRootContentPresenterContentControl">
         </ContentControl>
     </Grid>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding HienThiStartViewCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 </UserControl>
