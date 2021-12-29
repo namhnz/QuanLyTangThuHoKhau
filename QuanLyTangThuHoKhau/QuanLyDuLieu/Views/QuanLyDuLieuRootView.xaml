@@ -126,17 +126,14 @@
         <DockPanel
             Grid.Row="1"
             Background="{DynamicResource NavigationViewExpandedPaneBackground}">
-            
+
             <ui:ListView
                 x:Name="ViewNavigationListView"
                 DockPanel.Dock="Top"
                 DisplayMemberPath="NavigationTitle"
                 SelectedValuePath="ViewType"
-                SelectedIndex="0"
-                SelectionChanged="ViewNavigationListView_SelectionChanged">
-                <ui:ListView.ItemsSource>
-                    <qldlTypes:ViewNavigationListData />
-                </ui:ListView.ItemsSource>
+                SelectedValue="{Binding SelectedViewHienThi, Mode=TwoWay}"
+                ItemsSource="{Binding CacChucNangViewList}">
             </ui:ListView>
         </DockPanel>
 

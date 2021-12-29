@@ -31,6 +31,13 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos
                 .Find(x => x.Id == id).FirstOrDefault();
         }
 
+        public TuiHSCT FindOneTheoSoHSCT(int soHSCTCanTim)
+        {
+            return _liteDb.GetCollection<TuiHSCT>(DataReposNames.CAC_TUI_HSCT)
+                .Include(x => x.TapHSCT)
+                .Find(x => x.HSCT.SoHSCT == soHSCTCanTim).FirstOrDefault();
+        }
+
         public TuiHSCT FindTuiHSCTMoiNhat()
         {
             return _liteDb.GetCollection<TuiHSCT>(DataReposNames.CAC_TUI_HSCT)

@@ -10,7 +10,7 @@ using QuanLyTraThe.Core.Constants.Settings;
 
 namespace QuanLyTangThuHoKhau
 {
-    public class MainWindowViewModel: BindableBase
+    public class MainWindowViewModel : BindableBase
     {
         private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -25,38 +25,21 @@ namespace QuanLyTangThuHoKhau
 
             InitData();
         }
-
-        private bool _appDaKhoiTaoDuLieuBanDau;
         
-        public bool AppDaKhoiTaoDuLieuBanDau
-        {
-            get => _appDaKhoiTaoDuLieuBanDau;
-            set => SetProperty(ref _appDaKhoiTaoDuLieuBanDau, value);
-        }
-
         private void InitData()
         {
-            bool appDataKhoiTaoDuLieuBanDau;
-
             var getSettingDaKhoiTaoDuLieuBanDauResult = _settingsManager.GetSetting(
-                KhoiTaoDuLieuBanDauSettingKeys.APP_DA_KHOI_TAO_DU_LIEU_BAN_DAU, out appDataKhoiTaoDuLieuBanDau);
-
-            
+                KhoiTaoDuLieuBanDauSettingKeys.APP_DA_KHOI_TAO_DU_LIEU_BAN_DAU, out bool appDataKhoiTaoDuLieuBanDau);
 
             if (getSettingDaKhoiTaoDuLieuBanDauResult)
             {
-                AppDaKhoiTaoDuLieuBanDau = appDataKhoiTaoDuLieuBanDau;
                 if (appDataKhoiTaoDuLieuBanDau)
                 {
-                    // _regionManager.RequestNavigate(MainWindowRegionNames.MAIN_WINDOW_ROOT_REGION,
-                    //     nameof(QuanLyDuLieuRootView));
                     _regionManager.RegisterViewWithRegion<QuanLyDuLieuRootView>(MainWindowRegionNames
                         .MAIN_WINDOW_ROOT_REGION);
                 }
                 else
                 {
-                    // _regionManager.RequestNavigate(MainWindowRegionNames.MAIN_WINDOW_ROOT_REGION,
-                    //     nameof(KhoiTaoDuLieuBanDauRootView));
                     _regionManager.RegisterViewWithRegion<KhoiTaoDuLieuBanDauRootView>(MainWindowRegionNames
                         .MAIN_WINDOW_ROOT_REGION);
                 }

@@ -19,8 +19,7 @@
             <TextBox
                 x:Name="SoHSCTRutGonCanTimTextBox"
                 ui:ControlHelper.Header="Số HSCT"
-                ui:ControlHelper.PlaceholderText="Chỉ nhập phần đuôi của dãy số HSCT"
-                Text="{Binding HoTenChuHo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                ui:ControlHelper.PlaceholderText="Chỉ nhập phần đuôi của dãy số HSCT"/>
             <Button Content="Tìm kiếm"
                     Command="{Binding TimKiemThongTinHSCTCommand}"
                     CommandParameter="{Binding Path=Text, ElementName=SoHSCTRutGonCanTimTextBox}"></Button>

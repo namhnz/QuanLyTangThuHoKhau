@@ -11,6 +11,8 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos
 
         public TuiHSCT FindOne(int id);
 
+        public TuiHSCT FindOneTheoSoHSCT(int soHSCTCanTim);
+
         public TuiHSCT FindTuiHSCTMoiNhat();
 
         #endregion

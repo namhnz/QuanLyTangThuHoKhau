@@ -8,23 +8,24 @@ using Prism.Mvvm;
 using QuanLyTangThuHoKhau.Core.Exceptions;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions.TimKiemTuiHSCTExceptions;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.ViewModels
 {
     public class TimKiemTuiHSCTViewModel : BindableBase
     {
+        private readonly ITuiHSCTCRUDService _tuiHSCTService;
+
         private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        #region Tim kiem
-
-        private int _soHSCTRutGonCanTim;
-
-        public int SoHSCTRutGonCanTim
+        public TimKiemTuiHSCTViewModel(ITuiHSCTCRUDService tuiHSCTService)
         {
-            get => _soHSCTRutGonCanTim;
-            set => SetProperty(ref _soHSCTRutGonCanTim, value);
+            _tuiHSCTService = tuiHSCTService;
         }
+
+        #region Tim kiem
+        
 
         #endregion
 
@@ -96,7 +97,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.ViewModels
 
         public ICommand TimKiemThongTinHSCTCommand { get; private set; }
 
-        private void TimKiemThongTinHSCT(int soHSCTRutGonCanTim)
+        private async void TimKiemThongTinHSCT(int soHSCTRutGonCanTim)
         {
             try
             {
@@ -110,8 +111,16 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.ViewModels
                 }
 
                 //Lay thong tin ho so
-                TuiHSCT ketQuaTuiHSCT;
-                TapHSCT ketQuaTapHSCT;
+                var ketQuaTuiHSCT = await _tuiHSCTService.TimKiemTuiHSCTTheoSoHSCT(soHSCTRutGonCanTim);
+                if (ketQuaTuiHSCT == null)
+                {
+                    throw new SoHSCTKhongDungException()
+                    {
+                        ErrorMessage = "Không tim thấy hộ thường trú nào có số HSCT như trên"
+                    };
+                }
+
+                var ketQuaTapHSCT = ketQuaTuiHSCT.TapHSCT;
 
                 //Hien thi cac gia tri
                 KetQuaSoHSCTDayDu = ketQuaTuiHSCT.HSCT.MaHSCTDayDu;
@@ -144,6 +153,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.ViewModels
 
         public TimKiemTuiHSCTViewModel()
         {
+            InitCommands();
         }
     }
 }

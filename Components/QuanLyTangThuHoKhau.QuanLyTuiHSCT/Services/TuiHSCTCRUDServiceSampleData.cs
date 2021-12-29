@@ -38,6 +38,14 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             return toanBoTuiHSCTCuaThonXom;
         }
 
+        public async Task<TuiHSCT> TimKiemTuiHSCTTheoSoHSCT(int soHSCTCanTim)
+        {
+            var tuiHSCTCanTim = await Task.Run(() =>
+                TuiHSCTSampleData.ToanBoTuiHSCT().FirstOrDefault(x => x.HSCT.SoHSCT == soHSCTCanTim));
+
+            return tuiHSCTCanTim;
+        }
+
         #endregion
 
 

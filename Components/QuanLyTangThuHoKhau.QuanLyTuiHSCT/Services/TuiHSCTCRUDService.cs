@@ -44,15 +44,24 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             //     _dataService.TapHSCTRepository.FindAll().Where(x => x.ThonXom.Id == thonXom.Id).ToList();
 
             var toanBoTuiHSCT = await Task.Run(() => _dataService.TuiHSCTRepository.FindAll().ToList());
-            var toanBoTuiHSCTCuaThonXom = toanBoTuiHSCT.Where(x => x.TapHSCT.ThonXom.TenThonXom == thonXom.TenThonXom).ToList();
+            var toanBoTuiHSCTCuaThonXom =
+                toanBoTuiHSCT.Where(x => x.TapHSCT.ThonXom.TenThonXom == thonXom.TenThonXom).ToList();
 
             return toanBoTuiHSCTCuaThonXom;
+        }
+
+        public async Task<TuiHSCT> TimKiemTuiHSCTTheoSoHSCT(int soHSCTCanTim)
+        {
+            var tuiHSCTCanTim = await Task.Run(() => _dataService.TuiHSCTRepository.FindOneTheoSoHSCT(soHSCTCanTim));
+
+            return tuiHSCTCanTim;
         }
 
         #endregion
 
 
         #region Them tui ho so moi
+
         public async Task ThemTuiHSCTMoi(TapHSCT tapHSCT, int viTriTui, DateTime? ngayDangKy, string chuHo = "")
         {
             if (tapHSCT == null)
@@ -79,7 +88,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
             // Lay vi tri tui ho so moi
             var viTriTuiHSCTMoi = _dataService.TuiHSCTRepository.FindAll().Count(x => x.TapHSCT.Id == tapHSCT.Id) + 1;
-            
+
             // Tao tui ho so moi
             var tuiHSCTMoi = new TuiHSCT()
             {
