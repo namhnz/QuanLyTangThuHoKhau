@@ -9,7 +9,9 @@ using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.Exceptions;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Services;
+using QuanLyTangThuHoKhau.QuanLyThonXom.Services;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 {
@@ -18,9 +20,15 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
         private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public ThemMoiTuiHSCTViewModel(ITapHSCTCRUDService tapHSCTService)
+        public ThemMoiTuiHSCTViewModel(IThonXomCRUDService thonXomService,ITapHSCTCRUDService tapHSCTService, ITuiHSCTCRUDService tuiHSCTService)
         {
+            _thonXomService = thonXomService;
             _tapHSCTService = tapHSCTService;
+            _tuiHSCTService = tuiHSCTService;
+
+            InitData();
+            InitCommands();
+
         }
 
         private List<ThonXom> _danhSachThonXom;
@@ -65,9 +73,9 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
         #region Cac phu thuoc
 
+        private readonly IThonXomCRUDService _thonXomService;
         private readonly ITapHSCTCRUDService _tapHSCTService;
-
-        
+        private readonly ITuiHSCTCRUDService _tuiHSCTService;
 
         #endregion
 
@@ -76,6 +84,11 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
         private void InitCommands()
         {
             ThemMoiTuiHSCTCommand = new DelegateCommand(ThemMoiTuiHSCT);
+        }
+
+        private async void InitData()
+        {
+            DanhSachThonXom = await _thonXomService.LietKeToanBoThonXom();
         }
 
         #endregion
@@ -91,7 +104,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                 KiemTraThongTinCuaTuiHSCT();
 
                 //Lay so HSCT lon nhat tu du lieu da co
-                int soHSCTMoi = 1;
+                int soHSCTMoi = await _tuiHSCTService.TaoSoHSCTMoi();
 
                 var hsctMoi = new HSCT((uint)soHSCTMoi, SelectedThonXomChuaTuiHSCT, NgayDangKy, HoTenChuHo);
 

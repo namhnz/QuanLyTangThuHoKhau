@@ -62,6 +62,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
         #region Them tui ho so moi
 
+        public async Task<int> TaoSoHSCTMoi()
+        {
+            var tuiHSCTMoiNhat = await Task.Run(() => _dataService.TuiHSCTRepository.FindTuiHSCTMoiNhat());
+            return tuiHSCTMoiNhat.HSCT.SoHSCT + 1;
+        }
+
         public async Task ThemTuiHSCTMoi(TapHSCT tapHSCT, int viTriTui, DateTime? ngayDangKy, string chuHo = "")
         {
             if (tapHSCT == null)

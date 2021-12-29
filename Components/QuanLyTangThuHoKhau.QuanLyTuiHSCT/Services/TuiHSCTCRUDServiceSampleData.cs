@@ -50,6 +50,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             return tuiHSCTCanTim;
         }
 
+        public async Task<int> TaoSoHSCTMoi()
+        {
+            var soHSCTLonNhat = await Task.Run(() => TuiHSCTSampleData.ToanBoTuiHSCT().Max(x => x.HSCT.SoHSCT));
+            return soHSCTLonNhat + 1;
+        }
+
         #endregion
 
 
