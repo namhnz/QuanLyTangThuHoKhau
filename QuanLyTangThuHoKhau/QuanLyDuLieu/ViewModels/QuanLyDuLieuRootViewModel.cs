@@ -4,7 +4,7 @@ using Prism.Mvvm;
 using Prism.Regions;
 using QuanLyTangThuHoKhau.Core.Types.QuanLyDuLieu;
 using QuanLyTangThuHoKhau.QuanLyDuLieu.Types;
-using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.Views;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views;
 
 namespace QuanLyTangThuHoKhau.QuanLyDuLieu.ViewModels
 {
@@ -13,6 +13,7 @@ namespace QuanLyTangThuHoKhau.QuanLyDuLieu.ViewModels
         private readonly IRegionManager _regionManager;
 
         private Type _startView;
+        private bool _ignoreDoiViewHienThi;
 
         public QuanLyDuLieuRootViewModel(IRegionManager regionManager)
         {
@@ -28,9 +29,12 @@ namespace QuanLyTangThuHoKhau.QuanLyDuLieu.ViewModels
             _startView = typeof(TimKiemTuiHSCTView);
 
             CacChucNangViewList = new ViewNavigationListData();
+            _ignoreDoiViewHienThi = true;
             SelectedViewHienThi = CacChucNangViewList.FirstOrDefault(x => x.ViewType == _startView)?.ViewType;
 
-            _regionManager.RegisterViewWithRegion(QuanLyDuLieuRegionNames.QUAN_LY_DU_LIEU_ROOT_REGION, _startView);
+            // _regionManager.RegisterViewWithRegion(QuanLyDuLieuRegionNames.QUAN_LY_DU_LIEU_ROOT_REGION, _startView);
+            _regionManager.RegisterViewWithRegion(QuanLyDuLieuRegionNames.QUAN_LY_DU_LIEU_ROOT_REGION, typeof(TimKiemTuiHSCTView));
+            _ignoreDoiViewHienThi = false;
         }
 
         #endregion
@@ -52,7 +56,7 @@ namespace QuanLyTangThuHoKhau.QuanLyDuLieu.ViewModels
             get => _selectedViewHienThi;
             set
             {
-                if (_selectedViewHienThi != value)
+                if (_selectedViewHienThi != value && !_ignoreDoiViewHienThi)
                 {
                     DoiViewHienThi(value.Name);
                 }

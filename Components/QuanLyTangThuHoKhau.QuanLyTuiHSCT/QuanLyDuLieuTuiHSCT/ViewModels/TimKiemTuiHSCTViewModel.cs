@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 using log4net;
 using Prism.Commands;
 using Prism.Mvvm;
 using QuanLyTangThuHoKhau.Core.Exceptions;
-using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions.TimKiemTuiHSCTExceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services;
 
-namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.ViewModels
+namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 {
     public class TimKiemTuiHSCTViewModel : BindableBase
     {
@@ -25,7 +23,14 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.ViewModels
         }
 
         #region Tim kiem
-        
+
+        private int _soHSCTRutGonCanTim;
+
+        public int SoHSCTRutGonCanTim
+        {
+            get => _soHSCTRutGonCanTim;
+            set => SetProperty(ref _soHSCTRutGonCanTim, value);
+        }
 
         #endregion
 
@@ -97,12 +102,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.ViewModels
 
         public ICommand TimKiemThongTinHSCTCommand { get; private set; }
 
-        private async void TimKiemThongTinHSCT(int soHSCTRutGonCanTim)
+        private async void TimKiemThongTinHSCT()
         {
             try
             {
                 //Kiem tra dieu kien
-                if (soHSCTRutGonCanTim <= 0)
+                if (SoHSCTRutGonCanTim <= 0)
                 {
                     throw new SoHSCTKhongDungException()
                     {
@@ -111,7 +116,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.ViewModels
                 }
 
                 //Lay thong tin ho so
-                var ketQuaTuiHSCT = await _tuiHSCTService.TimKiemTuiHSCTTheoSoHSCT(soHSCTRutGonCanTim);
+                var ketQuaTuiHSCT = await _tuiHSCTService.TimKiemTuiHSCTTheoSoHSCT(SoHSCTRutGonCanTim);
                 if (ketQuaTuiHSCT == null)
                 {
                     throw new SoHSCTKhongDungException()
@@ -146,7 +151,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.ViewModels
 
         private void InitCommands()
         {
-            TimKiemThongTinHSCTCommand = new DelegateCommand<int>(TimKiemThongTinHSCT);
+            TimKiemThongTinHSCTCommand = new DelegateCommand(TimKiemThongTinHSCT);
         }
 
         #endregion

@@ -11,6 +11,7 @@ using QuanLyTangThuHoKhau.QuanLyDuLieu.Views;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT;
 using QuanLyTangThuHoKhau.QuanLyThonXom;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services;
 
 namespace QuanLyTangThuHoKhau
 {
@@ -29,7 +30,9 @@ namespace QuanLyTangThuHoKhau
             //Khoi tao cac view de dieu huong
             containerRegistry.RegisterForNavigation<KhoiTaoDuLieuBanDauRootView>();
             containerRegistry.RegisterForNavigation<QuanLyDuLieuRootView>();
-            
+
+            containerRegistry.RegisterSingleton<ITuiHSCTCRUDService, TuiHSCTCRUDServiceSampleData>();
+
         }
 
         override protected DependencyObject CreateShell()

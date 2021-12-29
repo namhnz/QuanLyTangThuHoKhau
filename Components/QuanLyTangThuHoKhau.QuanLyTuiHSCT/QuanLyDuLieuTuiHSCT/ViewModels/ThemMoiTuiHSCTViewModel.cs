@@ -11,7 +11,7 @@ using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Services;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions;
 
-namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.ViewModels
+namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 {
     public class ThemMoiTuiHSCTViewModel: BindableBase
     {

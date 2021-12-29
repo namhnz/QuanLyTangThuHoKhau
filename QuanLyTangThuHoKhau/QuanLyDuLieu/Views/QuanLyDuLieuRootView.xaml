@@ -132,9 +132,10 @@
                 DockPanel.Dock="Top"
                 DisplayMemberPath="NavigationTitle"
                 SelectedValuePath="ViewType"
-                SelectedValue="{Binding SelectedViewHienThi, Mode=TwoWay}"
+                SelectedValue="{Binding SelectedViewHienThi}"
                 ItemsSource="{Binding CacChucNangViewList}">
             </ui:ListView>
+            <TextBlock Text="123456"></TextBlock>
         </DockPanel>
 
         <!-- <sc:SampleFrame -->

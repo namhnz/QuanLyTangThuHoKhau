@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.Views;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views;
 
 namespace QuanLyTangThuHoKhau.QuanLyDuLieu.Types
 {

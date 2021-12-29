@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <None Remove="KhoiTaoCacTuiHSCT\ViewModels\KhoiTaoCacTuiHSCTViewModel.cs~RF52dec8.TMP" />
-    <None Remove="QuanLyDuLieuTuiHSCTMoi\ViewModels\TimKiemTuiHSCTViewModel.cs~RF4c569a.TMP" />
+    <None Remove="QuanLyDuLieuTuiHSCT\ViewModels\TimKiemTuiHSCTViewModel.cs~RF4c569a.TMP" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +27,6 @@
   <ItemGroup>
     <Folder Include="Exceptions\TimKiemTuiHSCTExceptions\" />
     <Folder Include="KhoiTaoCacTuiHSCT\ViewModels\" />
-    <Folder Include="QuanLyDuLieuTuiHSCTMoi\ViewModels\" />
   </ItemGroup>
 
 </Project>

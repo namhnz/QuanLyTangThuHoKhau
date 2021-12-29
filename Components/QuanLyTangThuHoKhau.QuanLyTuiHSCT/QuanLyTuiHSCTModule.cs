@@ -2,7 +2,7 @@
 using Prism.Modularity;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.Views;
-using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCTMoi.Views;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT
@@ -15,7 +15,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT
             // containerRegistry.Register<ICacTheCCCDsToExcelFileExporter, CacTheCCCDsToExcelFileExporter>();
             // containerRegistry.RegisterSingleton<ITuiHSCTCRUDService, TuiHSCTCRUDService>();
             //
-            containerRegistry.RegisterSingleton<ITuiHSCTCRUDService, TuiHSCTCRUDServiceSampleData>();
+            // containerRegistry.RegisterSingleton<ITuiHSCTCRUDService, TuiHSCTCRUDServiceSampleData>();
 
             // containerRegistry.RegisterSingleton<ICommandBarCompositeCommands, CommandBarCompositeCommands>();
             // containerRegistry.RegisterSingleton<ICommandBarUIState, CommandBarUIState>();

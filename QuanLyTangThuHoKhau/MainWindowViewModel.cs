@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using log4net;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -6,6 +7,7 @@ using QuanLyTangThuHoKhau.Core.Settings;
 using QuanLyTangThuHoKhau.Core.Types;
 using QuanLyTangThuHoKhau.KhoiTaoDuLieuBanDau.Views;
 using QuanLyTangThuHoKhau.QuanLyDuLieu.Views;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views;
 using QuanLyTraThe.Core.Constants.Settings;
 
 namespace QuanLyTangThuHoKhau
@@ -25,18 +27,27 @@ namespace QuanLyTangThuHoKhau
 
             InitData();
         }
-        
+
         private void InitData()
         {
-            var getSettingDaKhoiTaoDuLieuBanDauResult = _settingsManager.GetSetting(
-                KhoiTaoDuLieuBanDauSettingKeys.APP_DA_KHOI_TAO_DU_LIEU_BAN_DAU, out bool appDataKhoiTaoDuLieuBanDau);
-
-            if (getSettingDaKhoiTaoDuLieuBanDauResult)
+            try
             {
-                if (appDataKhoiTaoDuLieuBanDau)
+                var foundSettingDaKhoiTaoDuLieuBanDauResult = _settingsManager.GetSetting(
+                    KhoiTaoDuLieuBanDauSettingKeys.APP_DA_KHOI_TAO_DU_LIEU_BAN_DAU,
+                    out bool appDataKhoiTaoDuLieuBanDau);
+
+                if (foundSettingDaKhoiTaoDuLieuBanDauResult)
                 {
-                    _regionManager.RegisterViewWithRegion<QuanLyDuLieuRootView>(MainWindowRegionNames
-                        .MAIN_WINDOW_ROOT_REGION);
+                    if (appDataKhoiTaoDuLieuBanDau)
+                    {
+                        _regionManager.RegisterViewWithRegion<TimKiemTuiHSCTView>(MainWindowRegionNames
+                            .MAIN_WINDOW_ROOT_REGION);
+                    }
+                    else
+                    {
+                        _regionManager.RegisterViewWithRegion<KhoiTaoDuLieuBanDauRootView>(MainWindowRegionNames
+                            .MAIN_WINDOW_ROOT_REGION);
+                    }
                 }
                 else
                 {
@@ -44,10 +55,10 @@ namespace QuanLyTangThuHoKhau
                         .MAIN_WINDOW_ROOT_REGION);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                Log.Error("Co loi xay ra khi lay gia tri cua APP_DA_KHOI_TAO_DU_LIEU_BAN_DAU tu settings");
-                MessageBox.Show("Đã có lỗi xảy ra trong quá trình lấy các giá trị cài đặt");
+                Log.Error(ex);
+                MessageBox.Show("Đã có lỗi xảy ra trong quá trình khởi chạp app");
                 System.Windows.Application.Current.Shutdown();
             }
         }
