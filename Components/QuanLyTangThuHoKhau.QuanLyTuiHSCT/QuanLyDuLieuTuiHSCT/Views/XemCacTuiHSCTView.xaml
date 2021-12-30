@@ -51,12 +51,16 @@
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
-    <DockPanel LastChildFill="True">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="350"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
         <Border
             Width="400"
             BorderBrush="{DynamicResource TextControlBorderBrush}"
             BorderThickness="1"
-            DockPanel.Dock="Left">
+            Grid.Column="0">
             <TreeView
                 x:Name="DuyetCapLuuTruHSCTTreeView"
                 MinWidth="345"
@@ -79,11 +83,17 @@
                 </i:Interaction.Triggers>
             </TreeView>
         </Border>
-        <ui:ListView
-            x:Name="DanhSachTuiHSCTTheoCapLuuTruListView"
-            ItemTemplate="{StaticResource BasicListViewTemplate}"
-            BorderThickness="1"
-            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
-            ItemsSource="{Binding DanhSachHSCTTheoCapLuuTru}"/>
-    </DockPanel>
+        <DockPanel Grid.Column="1"
+                   LastChildFill="True">
+            <TextBlock d:Text="Số hộ thường trú được hiển thị: 30"
+                       Text="{Binding DanhSachHSCTTheoCapLuuTru.Count, StringFormat='{}Số hộ thường trú được hiển thị: {0}'}"
+                       DockPanel.Dock="Bottom"></TextBlock>
+            <ui:ListView
+                x:Name="DanhSachTuiHSCTTheoCapLuuTruListView"
+                ItemTemplate="{StaticResource BasicListViewTemplate}"
+                BorderThickness="1"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                ItemsSource="{Binding DanhSachHSCTTheoCapLuuTru}"/>
+        </DockPanel>
+    </Grid>
 </UserControl>

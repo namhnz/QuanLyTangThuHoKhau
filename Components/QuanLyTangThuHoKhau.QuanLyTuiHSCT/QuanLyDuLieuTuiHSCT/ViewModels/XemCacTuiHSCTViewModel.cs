@@ -28,7 +28,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             _tuiHSCTService = tuiHSCTService;
             InitCommands();
             InitData();
-
+            
         }
 
 
