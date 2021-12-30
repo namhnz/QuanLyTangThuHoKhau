@@ -19,6 +19,13 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
         #region Lay danh sach tui ho so
 
+        public async Task<List<TuiHSCT>> LietKeToanBoTuiHSCT()
+        {
+            var toanBoTuiHSCT = await Task.Run(TuiHSCTSampleData.ToanBoTuiHSCT);
+
+            return toanBoTuiHSCT;
+        }
+
         public async Task<List<TuiHSCT>> LietKeToanBoTuiHSCTTheoThonXom(ThonXom thonXom)
         {
             if (thonXom == null)

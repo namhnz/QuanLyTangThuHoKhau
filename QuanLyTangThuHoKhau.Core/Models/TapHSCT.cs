@@ -13,5 +13,10 @@ namespace QuanLyTangThuHoKhau.Core.Models
         
         [BsonRef(DataReposNames.CAC_THON_XOM)]
         public ThonXom ThonXom { get; set; }
+
+        public override string ToString()
+        {
+            return $"Tập {ThuTuTapHSCT} - " + (LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTGoc ? "Gốc" : "Bổ sung");
+        }
     }
 }

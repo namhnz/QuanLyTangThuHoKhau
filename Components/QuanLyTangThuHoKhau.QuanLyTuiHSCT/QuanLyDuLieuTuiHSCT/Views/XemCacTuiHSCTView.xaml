@@ -9,8 +9,10 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:types="clr-namespace:QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             xmlns:ui="http://schemas.modernwpf.com/2019">
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
     <UserControl.Resources>
+        <!-- Left tree view -->
         <HierarchicalDataTemplate
             x:Key="ThonXomTemplate"
             ItemsSource="{Binding Children}">
@@ -33,6 +35,21 @@
             x:Key="ExplorerItemTemplateSelector"
             ThonXomTemplate="{StaticResource ThonXomTemplate}"
             TapHSCTTemplate="{StaticResource TapHSCTTemplate}" />
+
+        <!-- Right list view -->
+        <DataTemplate x:Key="BasicListViewTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    Text="{Binding ViTriTui, Mode=OneTime}"
+                    Margin="0,5,25,5" />
+                <TextBlock
+                    Text="{Binding HSCT.MaHSCTDayDu, Mode=OneTime}"
+                    Margin="0,5,15,5" />
+                <TextBlock
+                    Text="{Binding HSCT.ChuHo, Mode=OneTime}"
+                    Margin="0,5,0,5" />
+            </StackPanel>
+        </DataTemplate>
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
         <Border
@@ -43,7 +60,6 @@
             <TreeView
                 x:Name="DuyetCapLuuTruHSCTTreeView"
                 MinWidth="345"
-                MaxHeight="400"
                 Margin="0,12,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
@@ -54,8 +70,20 @@
                         <Setter Property="IsExpanded" Value="True" />
                     </Style>
                 </TreeView.ItemContainerStyle>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedItemChanged">
+                        <i:InvokeCommandAction
+                            Command="{Binding ThayDoiDanhSachHSCTHienThiCommand}"
+                            CommandParameter="{Binding SelectedItem, ElementName=DuyetCapLuuTruHSCTTreeView}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </TreeView>
         </Border>
-        <ListView></ListView>
+        <ui:ListView
+            x:Name="DanhSachTuiHSCTTheoCapLuuTruListView"
+            ItemTemplate="{StaticResource BasicListViewTemplate}"
+            BorderThickness="1"
+            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+            ItemsSource="{Binding DanhSachHSCTTheoCapLuuTru}"/>
     </DockPanel>
 </UserControl>

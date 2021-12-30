@@ -7,6 +7,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 {
     public interface ITuiHSCTCRUDService
     {
+        public Task<List<TuiHSCT>> LietKeToanBoTuiHSCT();
         public Task<List<TuiHSCT>> LietKeToanBoTuiHSCTTheoThonXom(ThonXom thonXom);
         public Task<TuiHSCT> TimKiemTuiHSCTTheoSoHSCT(int soHSCTCanTim);
 

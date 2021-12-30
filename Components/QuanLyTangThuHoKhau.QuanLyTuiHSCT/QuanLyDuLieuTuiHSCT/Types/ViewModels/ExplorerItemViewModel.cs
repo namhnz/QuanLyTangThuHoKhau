@@ -5,6 +5,14 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types.ViewModels
 {
     public class ExplorerItemViewModel: BindableBase
     {
+        private int _sourceId;
+
+        public int SourceId
+        {
+            get => _sourceId;
+            set => SetProperty(ref _sourceId, value);
+        }
+
         private string _name;
 
         public string Name

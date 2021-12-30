@@ -21,6 +21,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
         #region Lay danh sach tui ho so
 
+        public async Task<List<TuiHSCT>> LietKeToanBoTuiHSCT()
+        {
+            var toanBoTuiHSCT = await Task.Run(() => _dataService.TuiHSCTRepository.FindAll().ToList());
+            return toanBoTuiHSCT;
+        }
+
         public async Task<List<TuiHSCT>> LietKeToanBoTuiHSCTTheoThonXom(ThonXom thonXom)
         {
             if (thonXom == null)
@@ -43,7 +49,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             // var cacTapHSCTCuaThonXom =
             //     _dataService.TapHSCTRepository.FindAll().Where(x => x.ThonXom.Id == thonXom.Id).ToList();
 
-            var toanBoTuiHSCT = await Task.Run(() => _dataService.TuiHSCTRepository.FindAll().ToList());
+            var toanBoTuiHSCT = await LietKeToanBoTuiHSCT();
+
             var toanBoTuiHSCTCuaThonXom =
                 toanBoTuiHSCT.Where(x => x.TapHSCT.ThonXom.TenThonXom == thonXom.TenThonXom).ToList();
 

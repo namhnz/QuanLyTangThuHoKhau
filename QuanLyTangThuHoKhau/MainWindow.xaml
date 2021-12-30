@@ -29,7 +29,7 @@
     <!--         <qldlViews:QuanLyDuLieuRootView></qldlViews:QuanLyDuLieuRootView> -->
     <!--     </DataTemplate> -->
     <!-- </Window.Resources> -->
-    <ScrollViewer>
+    <!--<ScrollViewer>-->
         <ContentControl prism:RegionManager.RegionName="{x:Static coreTypes:MainWindowRegionNames.MAIN_WINDOW_ROOT_REGION}">
             <!-- <ContentControl.Style> -->
             <!--     <Style TargetType="{x:Type ContentControl}"> -->
@@ -47,7 +47,7 @@
             <!--     </Style> -->
             <!-- </ContentControl.Style> -->
         </ContentControl>
-    </ScrollViewer>
+    <!--</ScrollViewer>-->
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding ThayDoiViewTheoCaiDatCommand}" />

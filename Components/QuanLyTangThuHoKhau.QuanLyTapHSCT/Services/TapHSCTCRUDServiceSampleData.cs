@@ -21,29 +21,28 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
 
         public async Task<List<TapHSCT>> LietKeToanBoTapHSCTTheoThonXom(ThonXom thonXom)
         {
-            // if (thonXom == null)
-            // {
-            //     throw new ChuaChonThonXomChuaTapHSCTException()
-            //     {
-            //         ErrorMessage = "Chưa chọn thôn, xóm để lấy các tập hồ sơ"
-            //     };
-            // }
-            //
-            // var thonXomDaCo = _dataService.ThonXomRepository.FindOne(thonXom.Id);
-            // if (thonXomDaCo == null)
-            // {
-            //     throw new ChuaChonThonXomChuaTapHSCTException()
-            //     {
-            //         ErrorMessage = "Thôn, xóm đã chọn không tồn tại"
-            //     };
-            // }
-            //
-            // var toanBoTapHSCT = await LietKeToanBoTapHSCT();
-            //
-            // var cacTapHSCTTheoThonXom = toanBoTapHSCT.Where(x => x.ThonXom.Id == thonXom.Id)
-            //     .OrderBy(x => x.ThuTuTapHSCT).ToList();
-            // return cacTapHSCTTheoThonXom;
-            return new List<TapHSCT>();
+            if (thonXom == null)
+            {
+                throw new ChuaChonThonXomChuaTapHSCTException()
+                {
+                    ErrorMessage = "Chưa chọn thôn, xóm để lấy các tập hồ sơ"
+                };
+            }
+
+            var thonXomDaCo = ThonXomSampleData.ToanBoThonXom().FirstOrDefault(x => x.Id == thonXom.Id);
+            if (thonXomDaCo == null)
+            {
+                throw new ChuaChonThonXomChuaTapHSCTException()
+                {
+                    ErrorMessage = "Thôn, xóm đã chọn không tồn tại"
+                };
+            }
+            
+            var toanBoTapHSCT = await LietKeToanBoTapHSCT();
+            
+            var cacTapHSCTTheoThonXom = toanBoTapHSCT.Where(x => x.ThonXom.Id == thonXom.Id)
+                .OrderBy(x => x.ThuTuTapHSCT).ToList();
+            return cacTapHSCTTheoThonXom;
         }
 
         public async Task<TapHSCT> LayTapHSCTBoSungCuaThonXom(ThonXom thonXom)
