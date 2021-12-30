@@ -65,14 +65,14 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
             //     };
             // }
             //
-            // var toanBoTapHSCT = await LietKeToanBoTapHSCT();
-            //
-            // var tapHSCTBoSungCuaThonXom = toanBoTapHSCT
-            //     .Where(x => x.ThonXom.Id == thonXom.Id)
-            //     .First(x => x.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTBoSung);
-            //
-            // return tapHSCTBoSungCuaThonXom;
-            return null;
+            var toanBoTapHSCT = await LietKeToanBoTapHSCT();
+            
+            var tapHSCTBoSungCuaThonXom = toanBoTapHSCT
+                .Where(x => x.ThonXom.Id == thonXom.Id)
+                .First(x => x.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTBoSung);
+            
+            return tapHSCTBoSungCuaThonXom;
+
         }
 
         public async Task ThemTapHSCTMoi(int thuTuTapHSCT, LoaiTapHSCT loaiTapHSCT, ThonXom thonXom)

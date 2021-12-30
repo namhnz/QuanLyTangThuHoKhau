@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Windows.ApplicationModel.Activation;
+using Newtonsoft.Json;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types;
 
 namespace QuanLyTangThuHoKhau.Core.AppServices.SampleDataServices
@@ -47,6 +49,8 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.SampleDataServices
                 LoaiCapDonVi = CapDonViHanhChinh.TinhThanh,
                 TenLoaiCapDonVi = "Tỉnh"
             };
+
+            Debug.WriteLine(JsonConvert.SerializeObject(_tinhNgheAn));
         }
 
         private static XaPhuongSampleData _sampleData;

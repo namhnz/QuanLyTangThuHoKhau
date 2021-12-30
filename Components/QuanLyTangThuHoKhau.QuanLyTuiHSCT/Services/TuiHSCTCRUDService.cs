@@ -68,6 +68,22 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             return tuiHSCTMoiNhat.HSCT.SoHSCT + 1;
         }
 
+        public async Task<int> TaoViTriTuiHSCTMoi(ThonXom thonXom)
+        {
+            if (thonXom == null)
+            {
+                throw new ThonXomKhongTonTaiException()
+                {
+                    ErrorMessage = "Chưa chọn thôn, xóm để lấy vị trí túi hồ sơ mới"
+                };
+            }
+
+            var viTriTuiLonNhat = (await LietKeToanBoTuiHSCTTheoThonXom(thonXom))
+                .Where(x => x.TapHSCT.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTBoSung).Max(x => x.ViTriTui);
+
+            return viTriTuiLonNhat + 1;
+        }
+
         public async Task ThemTuiHSCTMoi(TapHSCT tapHSCT, int viTriTui, DateTime? ngayDangKy, string chuHo = "")
         {
             if (tapHSCT == null)
@@ -104,6 +120,19 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             };
 
             await Task.Run(() => { _dataService.TuiHSCTRepository.Insert(tuiHSCTMoi); });
+        }
+
+        public async Task ThemTuiHSCTMoi(TuiHSCT tuiHSCTMoi)
+        {
+            if (tuiHSCTMoi == null)
+            {
+                throw new TuiHSCTKhongTonTaiException()
+                {
+                    ErrorMessage = "Không có túi HSCT để thêm mới"
+                };
+            }
+
+            await Task.Run(() => _dataService.TuiHSCTRepository.Insert(tuiHSCTMoi));
         }
 
         private async Task<HSCT> TaoHSCTMoi(ThonXom thonXom, DateTime? ngayDangKy, string chuHo = "")

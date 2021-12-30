@@ -41,11 +41,11 @@
                         Command="{Binding ThemMoiTuiHSCTCommand}"></Button>
             </ui:SimpleStackPanel>
             <TextBlock
-                x:Name="ErrorText"
                 Style="{StaticResource BodyTextBlockStyle}"
                 Foreground="{DynamicResource SystemControlErrorTextForegroundBrush}"
                 Margin="0,8,0,0"
-                Visibility="Collapsed" />
+                Visibility="Collapsed" 
+                Text="{Binding ErrorText}"/>
         </StackPanel>
     </ui:SimpleStackPanel>
 </UserControl>

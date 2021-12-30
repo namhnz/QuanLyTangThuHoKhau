@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using log4net;
+using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
@@ -55,9 +59,9 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             set => SetProperty(ref _hoTenChuHo, value);
         }
 
-        private DateTime _ngayDangKy;
+        private DateTime? _ngayDangKy;
 
-        public DateTime NgayDangKy
+        public DateTime? NgayDangKy
         {
             get => _ngayDangKy;
             set => SetProperty(ref _ngayDangKy, value);
@@ -88,6 +92,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
         private async void InitData()
         {
+            NgayDangKy = DateTime.Now;
             DanhSachThonXom = await _thonXomService.LietKeToanBoThonXom();
         }
 
@@ -99,6 +104,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
         private async void ThemMoiTuiHSCT()
         {
+            ErrorText = null;
+
             try
             {
                 KiemTraThongTinCuaTuiHSCT();
@@ -109,14 +116,20 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                 var hsctMoi = new HSCT((uint)soHSCTMoi, SelectedThonXomChuaTuiHSCT, NgayDangKy, HoTenChuHo);
 
                 //Lay thong tin tap ho so bo sung cua thon, xom da chon
-                // var tapHSCTBoSungCuaThonXom = await _tapHSCTService.LayTapHSCTBoSungCuaThonXom(SelectedThonXomChuaTuiHSCT);
+                var tapHSCTBoSungCuaThonXom = await _tapHSCTService.LayTapHSCTBoSungCuaThonXom(SelectedThonXomChuaTuiHSCT);
+                var viTriTuiHSCTMoi = await _tuiHSCTService.TaoViTriTuiHSCTMoi(SelectedThonXomChuaTuiHSCT);
 
                 var tuiHSCTMoi = new TuiHSCT()
                 {
                     HSCT = hsctMoi,
-                    // TapHSCT = tapHSCTBoSungCuaThonXom
+                    TapHSCT = tapHSCTBoSungCuaThonXom,
+                    ViTriTui = viTriTuiHSCTMoi
                 };
 
+                //Them moi tui ho so vao du lieu
+                await _tuiHSCTService.ThemTuiHSCTMoi(tuiHSCTMoi);
+
+                Debug.WriteLine(JsonConvert.SerializeObject(tuiHSCTMoi));
                 MessageBox.Show("Thêm hộ thường trú mới thành công");
             }
             catch (Exception ex)
@@ -124,7 +137,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                 if (ex is ChuaChonThonXomChuaTuiHSCTException or NgayDangKyTuiHSCTKhongDungException)
                 {
                     var exBase = (BaseException)ex;
-                    ErrorText = exBase.Message;
+                    ErrorText = exBase.ErrorMessage;
                 }
                 else
                 {
@@ -144,7 +157,15 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                 };
             }
 
-            if (NgayDangKy.Date > DateTime.Now.Date)
+            if (NgayDangKy == null)
+            {
+                throw new NgayDangKyTuiHSCTKhongDungException()
+                {
+                    ErrorMessage = "Ngày đăng ký thường trú không được để trống"
+                };
+            }
+
+            if (NgayDangKy.Value.Date > DateTime.Now.Date)
             {
                 throw new NgayDangKyTuiHSCTKhongDungException()
                 {
@@ -153,6 +174,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             }
             
         }
+
+        
 
         #endregion
     }

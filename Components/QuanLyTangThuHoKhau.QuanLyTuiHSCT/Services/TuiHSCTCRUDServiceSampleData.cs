@@ -56,6 +56,22 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             return soHSCTLonNhat + 1;
         }
 
+        public async Task<int> TaoViTriTuiHSCTMoi(ThonXom thonXom)
+        {
+            if (thonXom == null)
+            {
+                throw new ThonXomKhongTonTaiException()
+                {
+                    ErrorMessage = "Chưa chọn thôn, xóm để lấy vị trí túi hồ sơ mới"
+                };
+            }
+
+            var viTriTuiLonNhat = (await LietKeToanBoTuiHSCTTheoThonXom(thonXom))
+                .Where(x => x.TapHSCT.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTBoSung).Max(x => x.ViTriTui);
+
+            return viTriTuiLonNhat + 1;
+        }
+
         #endregion
 
 
@@ -95,9 +111,29 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
                 ViTriTui = viTriTuiHSCTMoi
             };
 
+            var idTuiHSCTMoi = TuiHSCTSampleData.ToanBoTuiHSCT().Max(x => x.Id) + 1;
+            tuiHSCTMoi.Id = idTuiHSCTMoi;
+
             await Task.Run(() => { TuiHSCTSampleData.ThemTuiHSCTMoi(tuiHSCTMoi); });
         }
 
+        public async Task ThemTuiHSCTMoi(TuiHSCT tuiHSCTMoi)
+        {
+            if (tuiHSCTMoi == null)
+            {
+                throw new TuiHSCTKhongTonTaiException()
+                {
+                    ErrorMessage = "Không có túi HSCT để thêm mới"
+                };
+            }
+
+            var idTuiHSCTMoi = TuiHSCTSampleData.ToanBoTuiHSCT().Max(x => x.Id) + 1;
+            tuiHSCTMoi.Id = idTuiHSCTMoi;
+
+            await Task.Run(() => { TuiHSCTSampleData.ThemTuiHSCTMoi(tuiHSCTMoi); });
+        }
+
+        //Dung cho phuong thuc tao moi tui ho so
         private async Task<HSCT> TaoHSCTMoi(ThonXom thonXom, DateTime? ngayDangKy, string chuHo = "")
         {
             //Kiem tra thon xom da chon xem ton tai hay khong
