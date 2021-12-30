@@ -34,19 +34,20 @@
             ThonXomTemplate="{StaticResource ThonXomTemplate}"
             TapHSCTTemplate="{StaticResource TapHSCTTemplate}" />
     </UserControl.Resources>
-    <DockPanel>
+    <DockPanel LastChildFill="True">
         <Border
-            Height="400"
+            Width="400"
             BorderBrush="{DynamicResource TextControlBorderBrush}"
-            BorderThickness="1">
+            BorderThickness="1"
+            DockPanel.Dock="Left">
             <TreeView
-                x:Name="DuyenCapLuuTruHSCTTreeView"
+                x:Name="DuyetCapLuuTruHSCTTreeView"
                 MinWidth="345"
                 MaxHeight="400"
                 Margin="0,12,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
-                ItemsSource="{Binding}"
+                ItemsSource="{Binding DanhSachCapLuuTru}"
                 ItemTemplateSelector="{StaticResource ExplorerItemTemplateSelector}">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="TreeViewItem" BasedOn="{StaticResource DefaultTreeViewItemStyle}">
@@ -55,5 +56,6 @@
                 </TreeView.ItemContainerStyle>
             </TreeView>
         </Border>
+        <ListView></ListView>
     </DockPanel>
 </UserControl>
