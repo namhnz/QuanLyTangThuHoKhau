@@ -7,6 +7,7 @@ using QuanLyTangThuHoKhau.Core;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices;
 using QuanLyTangThuHoKhau.Core.Settings;
 using QuanLyTangThuHoKhau.KhoiTaoDuLieuBanDau.Views;
+using QuanLyTangThuHoKhau.MenuPart;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT;
 using QuanLyTangThuHoKhau.QuanLyThaoTacDuLieu.Views;
 using QuanLyTangThuHoKhau.QuanLyThonXom;
@@ -17,7 +18,7 @@ namespace QuanLyTangThuHoKhau
 {
     public class Bootstrapper : PrismBootstrapper
     {
-        override protected void RegisterTypes(IContainerRegistry containerRegistry)
+        protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             // containerRegistry.RegisterSingleton<IApplicationCommands, ApplicationCommands>();
             //
@@ -35,21 +36,22 @@ namespace QuanLyTangThuHoKhau
 
         }
 
-        override protected DependencyObject CreateShell()
+        protected override DependencyObject CreateShell()
         {
             return Container.Resolve<MainWindow>();
         }
 
-        override protected void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
+        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
             moduleCatalog.AddModule<CoreModule>();
             moduleCatalog.AddModule<QuanLyThonXomModule>();
             moduleCatalog.AddModule<QuanLyTapHSCTModule>();
             moduleCatalog.AddModule<QuanLyTuiHSCTModule>();
+            moduleCatalog.AddModule<MenuPartModule>();
             // moduleCatalog.AddModule<QuetTheModule>();
             // moduleCatalog.AddModule<NhanTheModule>();
             // moduleCatalog.AddModule<CaiDatModule>();
-            
+
         }
 
         // override protected void ConfigureRegionAdapterMappings(RegionAdapterMappings regionAdapterMappings)

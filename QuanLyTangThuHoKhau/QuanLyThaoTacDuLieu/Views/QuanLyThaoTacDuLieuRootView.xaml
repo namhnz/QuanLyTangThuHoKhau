@@ -10,7 +10,8 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:qldlCoreTypes="clr-namespace:QuanLyTangThuHoKhau.Core.Types.QuanLyDuLieu;assembly=QuanLyTangThuHoKhau.Core">
+             xmlns:qldlCoreTypes="clr-namespace:QuanLyTangThuHoKhau.Core.Types.QuanLyDuLieu;assembly=QuanLyTangThuHoKhau.Core"
+             xmlns:menuPart="clr-namespace:QuanLyTangThuHoKhau.MenuPart;assembly=QuanLyTangThuHoKhau.MenuPart">
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -27,98 +28,9 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
     
-            <Menu>
-                <MenuItem Header="Theme">
-                    <!-- <ui:RadioMenuItem -->
-                    <!--     Header="Default" -->
-                    <!--     IsChecked="{Binding ApplicationTheme, Source={x:Static sc:ThemeManagerProxy.Current}, Mode=OneWay, Converter={StaticResource IsDefaultConverter}}" -->
-                    <!--     Checked="Default_Checked" /> -->
-                    <!-- <ui:RadioMenuItem -->
-                    <!--     Header="Light" -->
-                    <!--     IsChecked="{Binding ApplicationTheme, Source={x:Static sc:ThemeManagerProxy.Current}, Mode=OneWay, Converter={StaticResource IsLightConverter}}" -->
-                    <!--     Checked="Light_Checked" /> -->
-                    <!-- <ui:RadioMenuItem -->
-                    <!--     Header="Dark" -->
-                    <!--     IsChecked="{Binding ApplicationTheme, Source={x:Static sc:ThemeManagerProxy.Current}, Mode=OneWay, Converter={StaticResource IsDarkConverter}}" -->
-                    <!--     Checked="Dark_Checked" /> -->
-                </MenuItem>
-                <!-- <MenuItem -->
-                <!--     x:Name="PresetsMenu" -->
-                <!--     Header="Presets" -->
-                <!--     MenuItem.Click="PresetMenuItem_Click"> -->
-                <!--     <ui:RadioMenuItem -->
-                <!--         Header="Default" -->
-                <!--         IsChecked="True" /> -->
-                <!--     <ui:RadioMenuItem Header="Forest" /> -->
-                <!--     <ui:RadioMenuItem Header="Lavender" /> -->
-                <!--     <ui:RadioMenuItem Header="Nighttime" /> -->
-                <!-- </MenuItem> -->
-                <!-- <MenuItem -->
-                <!--     Header="Sizing" -->
-                <!--     MenuItem.Click="SizingMenuItem_Click"> -->
-                <!--     <ui:RadioMenuItem -->
-                <!--         Header="Standard" -->
-                <!--         IsChecked="True" /> -->
-                <!--     <ui:RadioMenuItem -->
-                <!--         Header="Compact" -->
-                <!--         Tag="Compact" /> -->
-                <!-- </MenuItem> -->
-                <!-- <MenuItem -->
-                <!--     Header="Title Bar" -->
-                <!--     DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"> -->
-                <!--     <MenuItem -->
-                <!--         Header="IsBackButtonVisible" -->
-                <!--         IsEnabled="False" -->
-                <!--         IsCheckable="True" -->
-                <!--         IsChecked="{Binding Path=(ui:TitleBar.IsBackButtonVisible), Mode=OneWay}" /> -->
-                <!--     <MenuItem -->
-                <!--         Header="IsIconVisible" -->
-                <!--         IsCheckable="True" -->
-                <!--         IsChecked="{Binding Path=(ui:TitleBar.IsIconVisible)}" /> -->
-                <!-- </MenuItem> -->
-                <!-- <MenuItem Header="Shadows"> -->
-                <!--     <ui:RadioMenuItem -->
-                <!--         x:Name="ShadowsAuto" -->
-                <!--         Header="Use system setting" -->
-                <!--         IsChecked="True" -->
-                <!--         Checked="ShadowsAuto_Checked" /> -->
-                <!--     <ui:RadioMenuItem -->
-                <!--         x:Name="ShadowsEnabled" -->
-                <!--         Header="Enabled" -->
-                <!--         Checked="ShadowsEnabled_Checked" /> -->
-                <!--     <ui:RadioMenuItem -->
-                <!--         x:Name="ShadowsDisabled" -->
-                <!--         Header="Disabled" -->
-                <!--         Checked="ShadowsDisabled_Checked" /> -->
-                <!-- </MenuItem> -->
-                <MenuItem Header="Settings">
-                    <MenuItem Header="Automatically hide scroll bars">
-                        <ui:RadioMenuItem
-                            x:Name="AutoHideScrollBarsAuto"
-                            Header="Use system setting"
-                            IsChecked="True"/>
-                        <ui:RadioMenuItem
-                            x:Name="AutoHideScrollBarsOn"
-                            Header="On"/>
-                        <ui:RadioMenuItem
-                            x:Name="AutoHideScrollBarsOff"
-                            Header="Off"/>
-                    </MenuItem>
-                </MenuItem>
-                <!-- <MenuItem -->
-                <!--     x:Name="DebugMenuItem" -->
-                <!--     Header="Debug" -->
-                <!--     Visibility="Collapsed"> -->
-                <!--     <MenuItem -->
-                <!--         Header="Force GC" -->
-                <!--         Click="ForceGC" /> -->
-                <!--     <MenuItem -->
-                <!--         x:Name="NewWindowMenuItem" -->
-                <!--         Header="New window" -->
-                <!--         Visibility="Collapsed" -->
-                <!--         Click="NewWindow" /> -->
-                <!-- </MenuItem> -->
-            </Menu>
+            <!-- Hien thi menu -->
+
+            <menuPart:MenuPartRootView></menuPart:MenuPartRootView>
     
         </Grid>
     

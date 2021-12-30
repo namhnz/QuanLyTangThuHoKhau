@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="QuanLyTangThuHoKhau.MenuPart.MenuPartRootView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:QuanLyTangThuHoKhau.MenuPart"
+             mc:Ignorable="d" 
+             d:DesignHeight="80" d:DesignWidth="800"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:ui="http://schemas.modernwpf.com/2019">
+    <Menu>
+        <MenuItem Header="Theme">
+            <!-- <ui:RadioMenuItem -->
+            <!--     Header="Default" -->
+            <!--     IsChecked="{Binding ApplicationTheme, Source={x:Static sc:ThemeManagerProxy.Current}, Mode=OneWay, Converter={StaticResource IsDefaultConverter}}" -->
+            <!--     Checked="Default_Checked" /> -->
+            <!-- <ui:RadioMenuItem -->
+            <!--     Header="Light" -->
+            <!--     IsChecked="{Binding ApplicationTheme, Source={x:Static sc:ThemeManagerProxy.Current}, Mode=OneWay, Converter={StaticResource IsLightConverter}}" -->
+            <!--     Checked="Light_Checked" /> -->
+            <!-- <ui:RadioMenuItem -->
+            <!--     Header="Dark" -->
+            <!--     IsChecked="{Binding ApplicationTheme, Source={x:Static sc:ThemeManagerProxy.Current}, Mode=OneWay, Converter={StaticResource IsDarkConverter}}" -->
+            <!--     Checked="Dark_Checked" /> -->
+        </MenuItem>
+        <!-- <MenuItem -->
+        <!--     x:Name="PresetsMenu" -->
+        <!--     Header="Presets" -->
+        <!--     MenuItem.Click="PresetMenuItem_Click"> -->
+        <!--     <ui:RadioMenuItem -->
+        <!--         Header="Default" -->
+        <!--         IsChecked="True" /> -->
+        <!--     <ui:RadioMenuItem Header="Forest" /> -->
+        <!--     <ui:RadioMenuItem Header="Lavender" /> -->
+        <!--     <ui:RadioMenuItem Header="Nighttime" /> -->
+        <!-- </MenuItem> -->
+        <!-- <MenuItem -->
+        <!--     Header="Sizing" -->
+        <!--     MenuItem.Click="SizingMenuItem_Click"> -->
+        <!--     <ui:RadioMenuItem -->
+        <!--         Header="Standard" -->
+        <!--         IsChecked="True" /> -->
+        <!--     <ui:RadioMenuItem -->
+        <!--         Header="Compact" -->
+        <!--         Tag="Compact" /> -->
+        <!-- </MenuItem> -->
+        <!-- <MenuItem -->
+        <!--     Header="Title Bar" -->
+        <!--     DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}"> -->
+        <!--     <MenuItem -->
+        <!--         Header="IsBackButtonVisible" -->
+        <!--         IsEnabled="False" -->
+        <!--         IsCheckable="True" -->
+        <!--         IsChecked="{Binding Path=(ui:TitleBar.IsBackButtonVisible), Mode=OneWay}" /> -->
+        <!--     <MenuItem -->
+        <!--         Header="IsIconVisible" -->
+        <!--         IsCheckable="True" -->
+        <!--         IsChecked="{Binding Path=(ui:TitleBar.IsIconVisible)}" /> -->
+        <!-- </MenuItem> -->
+        <!-- <MenuItem Header="Shadows"> -->
+        <!--     <ui:RadioMenuItem -->
+        <!--         x:Name="ShadowsAuto" -->
+        <!--         Header="Use system setting" -->
+        <!--         IsChecked="True" -->
+        <!--         Checked="ShadowsAuto_Checked" /> -->
+        <!--     <ui:RadioMenuItem -->
+        <!--         x:Name="ShadowsEnabled" -->
+        <!--         Header="Enabled" -->
+        <!--         Checked="ShadowsEnabled_Checked" /> -->
+        <!--     <ui:RadioMenuItem -->
+        <!--         x:Name="ShadowsDisabled" -->
+        <!--         Header="Disabled" -->
+        <!--         Checked="ShadowsDisabled_Checked" /> -->
+        <!-- </MenuItem> -->
+        <MenuItem Header="Settings">
+            <MenuItem Header="Automatically hide scroll bars">
+                <ui:RadioMenuItem
+                            x:Name="AutoHideScrollBarsAuto"
+                            Header="Use system setting"
+                            IsChecked="True"/>
+                <ui:RadioMenuItem
+                            x:Name="AutoHideScrollBarsOn"
+                            Header="On"/>
+                <ui:RadioMenuItem
+                            x:Name="AutoHideScrollBarsOff"
+                            Header="Off"/>
+            </MenuItem>
+        </MenuItem>
+         <MenuItem 
+             x:Name="TroGiupMenuItem" 
+             Header="Trợ giúp"> 
+             <MenuItem 
+                 Header="Giới thiệu" 
+                 Command="{Binding ShowGioiThieuContentDialogCommand}" /> 
+         </MenuItem> 
+    </Menu>
+</UserControl>
