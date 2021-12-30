@@ -33,6 +33,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT
             containerRegistry.RegisterForNavigation<KhoiTaoCacTuiHSCTView>();
             containerRegistry.RegisterForNavigation<TimKiemTuiHSCTView>();
             containerRegistry.RegisterForNavigation<ThemMoiTuiHSCTView>();
+            containerRegistry.RegisterForNavigation<XemCacTuiHSCTView>();
         }
 
         public void OnInitialized(IContainerProvider containerProvider)
