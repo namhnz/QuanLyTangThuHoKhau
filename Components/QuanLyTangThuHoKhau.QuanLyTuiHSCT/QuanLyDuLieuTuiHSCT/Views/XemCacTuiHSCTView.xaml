@@ -1,16 +1,18 @@
 ﻿<UserControl x:Class="QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views.XemCacTuiHSCTView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:types="clr-namespace:QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types"
+             xmlns:controls="clr-namespace:QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types.Controls"
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:ui="http://schemas.modernwpf.com/2019"
-             xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             x:Name="RootXemCacTuiHSCTUserControl">
     <UserControl.Resources>
         <!-- Left tree view -->
         <HierarchicalDataTemplate
@@ -36,64 +38,144 @@
             ThonXomTemplate="{StaticResource ThonXomTemplate}"
             TapHSCTTemplate="{StaticResource TapHSCTTemplate}" />
 
-        <!-- Right list view -->
-        <DataTemplate x:Key="BasicListViewTemplate">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Text="{Binding ViTriTui, Mode=OneTime}"
-                    Margin="0,5,25,5" />
-                <TextBlock
-                    Text="{Binding HSCT.MaHSCTDayDu, Mode=OneTime}"
-                    Margin="0,5,15,5" />
-                <TextBlock
-                    Text="{Binding HSCT.ChuHo, Mode=OneTime}"
-                    Margin="0,5,0,5" />
-            </StackPanel>
-        </DataTemplate>
+        <!-- Right datagrid view -->
+        <ui:CommandBarFlyout
+            Placement="LeftEdgeAlignedTop"
+            x:Key="ChinhSuaTuiHSCTCommandBarFlyout">
+            <ui:AppBarButton Label="Xem" Icon="View" ToolTipService.ToolTip="Xem thông tin hộ" 
+                             Click="ChinhSuaTuiHSCTCommandBarFlyout_OnXem"/>
+            <ui:AppBarButton Label="Chỉnh sửa" Icon="Edit" ToolTipService.ToolTip="Chỉnh sửa chủ hộ" />
+            <ui:CommandBarFlyout.SecondaryCommands>
+                <ui:AppBarButton Label="Xoá" Icon="Delete" ToolTipService.ToolTip="Xoá đăng ký hộ" />
+            </ui:CommandBarFlyout.SecondaryCommands>
+        </ui:CommandBarFlyout>
+
     </UserControl.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Border
-            Width="400"
-            BorderBrush="{DynamicResource TextControlBorderBrush}"
-            BorderThickness="1"
-            Grid.Column="0">
-            <TreeView
-                x:Name="DuyetCapLuuTruHSCTTreeView"
-                MinWidth="345"
-                Margin="0,12,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                ItemsSource="{Binding DanhSachCapLuuTru}"
-                ItemTemplateSelector="{StaticResource ExplorerItemTemplateSelector}">
-                <TreeView.ItemContainerStyle>
-                    <Style TargetType="TreeViewItem" BasedOn="{StaticResource DefaultTreeViewItemStyle}">
-                        <Setter Property="IsExpanded" Value="True" />
-                    </Style>
-                </TreeView.ItemContainerStyle>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectedItemChanged">
-                        <i:InvokeCommandAction
-                            Command="{Binding ThayDoiDanhSachHSCTHienThiCommand}"
-                            CommandParameter="{Binding SelectedItem, ElementName=DuyetCapLuuTruHSCTTreeView}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </TreeView>
-        </Border>
-        <DockPanel Grid.Column="1"
-                   LastChildFill="True">
+    <DockPanel LastChildFill="True">
+        <Grid DockPanel.Dock="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Style="{DynamicResource SubtitleTextBlockStyle}"
+                       Margin="0,15"
+                       Text="Thông tin tổng quan"
+                       Grid.Row="0">
+            </TextBlock>
+
+            <ui:SimpleStackPanel Grid.Row="1"
+                                 Spacing="20"
+                                 HorizontalAlignment="Left"
+                                 Orientation="Horizontal">
+                <controls:SummaryInfoItemControl TieuDe="Thôn, xóm"
+                                                 BieuTuong="&#xE10F;"
+                                                 SoLuong="{Binding TongSoThonXom}">
+                </controls:SummaryInfoItemControl>
+                <controls:SummaryInfoItemControl TieuDe="Số hộ thường trú"
+                                                 BieuTuong="&#xE125;"
+                                                 SoLuong="{Binding TongSoHoDangThuongTru}">
+                </controls:SummaryInfoItemControl>
+            </ui:SimpleStackPanel>
+        </Grid>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="32"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <TextBlock Style="{DynamicResource SubtitleTextBlockStyle}"
+                       Margin="0,15"
+                       Text="Xem chi tiết các hộ thường trú"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="2"
+                       Grid.Row="0">
+            </TextBlock>
+
+            <DockPanel Grid.Column="0"
+                       Grid.Row="1"
+                       LastChildFill="True">
+                <Border BorderThickness="0 0 1 0"
+                        BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}">
+                    <TreeView
+                        x:Name="DuyetCapLuuTruHSCTTreeView"
+                        ItemsSource="{Binding DanhSachCapLuuTru}"
+                        ItemTemplateSelector="{StaticResource ExplorerItemTemplateSelector}">
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="TreeViewItem" BasedOn="{StaticResource DefaultTreeViewItemStyle}">
+                                <Setter Property="IsExpanded" Value="True" />
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectedItemChanged">
+                                <i:InvokeCommandAction
+                                    Command="{Binding ThayDoiDanhSachHSCTHienThiCommand}"
+                                    CommandParameter="{Binding SelectedItem, ElementName=DuyetCapLuuTruHSCTTreeView}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TreeView>
+                </Border>
+            </DockPanel>
+
+
+            <DockPanel Grid.Column="1"
+                       Grid.Row="1"
+                       LastChildFill="True">
+                <DataGrid
+                    x:Name="DanhSachTuiHSCTTheoCapLuuTruDataGrid"
+                    AutoGenerateColumns="False"
+                    HeadersVisibility="Column"
+                    GridLinesVisibility="Horizontal"
+                    RowDetailsVisibilityMode="Collapsed"
+                    ItemsSource="{Binding DanhSachHSCTTheoCapLuuTru}"
+                    SelectedItem="{Binding SelectedTuiHSCT}"
+                    VirtualizingPanel.VirtualizationMode="Recycling"
+                    VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                    IsReadOnly="True"
+                    SelectionUnit="FullRow"
+                    SelectionMode="Single"
+                    ContextMenuOpening="DanhSachTuiHSCTTheoCapLuuTruDataGrid_OnContextMenuOpening">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Header="Số HSCT"
+                            Width="105"
+                            Binding="{Binding HSCT.MaHSCTDayDu}" />
+                        <DataGridTextColumn
+                            Header="Chủ hộ"
+                            Width="135"
+                            Binding="{Binding HSCT.ChuHo}" />
+                        <DataGridTextColumn
+                            Header="Ngày đăng ký"
+                            Width="135"
+                            Binding="{Binding HSCT.NgayDangKy, StringFormat='{}{0:dd/MM/yyyy}'}" />
+                        <DataGridTextColumn
+                            Header="Tập số"
+                            Width="60"
+                            Binding="{Binding TapHSCT.ThuTuTapHSCT}" />
+                        <DataGridTextColumn
+                            Header="Vị trí túi"
+                            Width="90"
+                            Binding="{Binding ViTriTui}" />
+                        <DataGridCheckBoxColumn
+                            Header="Đang thường trú"
+                            Width="145"
+                            Binding="{Binding HSCT.DangThuongTru}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+
             <TextBlock d:Text="Số hộ thường trú được hiển thị: 30"
                        Text="{Binding DanhSachHSCTTheoCapLuuTru.Count, StringFormat='{}Số hộ thường trú được hiển thị: {0}'}"
-                       DockPanel.Dock="Bottom"></TextBlock>
-            <ui:ListView
-                x:Name="DanhSachTuiHSCTTheoCapLuuTruListView"
-                ItemTemplate="{StaticResource BasicListViewTemplate}"
-                BorderThickness="1"
-                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
-                ItemsSource="{Binding DanhSachHSCTTheoCapLuuTru}"/>
-        </DockPanel>
-    </Grid>
+                       Grid.Row="2"
+                       Grid.ColumnSpan="2"
+                       Grid.Column="0"
+                       VerticalAlignment="Center">
+            </TextBlock>
+        </Grid>
+    </DockPanel>
 </UserControl>

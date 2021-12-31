@@ -48,12 +48,6 @@
             </ui:ListView>
         </DockPanel>
     
-        <!-- <sc:SampleFrame -->
-        <!--     x:Name="rootFrame" -->
-        <!--     Grid.Row="1" -->
-        <!--     Grid.Column="1" -->
-        <!--     Navigating="RootFrame_Navigating" -->
-        <!--     Navigated="RootFrame_Navigated" /> -->
         <ContentControl
             Grid.Row="1"
             Grid.Column="1"

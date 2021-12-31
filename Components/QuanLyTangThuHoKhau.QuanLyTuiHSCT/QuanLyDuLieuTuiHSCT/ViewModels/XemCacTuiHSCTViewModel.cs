@@ -4,28 +4,35 @@ using System.Linq;
 using System.Windows.Input;
 using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Regions;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.Models;
+using QuanLyTangThuHoKhau.Core.Types.QuanLyDuLieu;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Services;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Services;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types.ViewModels;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 {
     public class XemCacTuiHSCTViewModel : BindableBase
     {
+        private readonly IRegionManager _regionManager;
+
         private readonly IThonXomCRUDService _thonXomService;
         private readonly ITapHSCTCRUDService _tapHSCTService;
         private readonly ITuiHSCTCRUDService _tuiHSCTService;
 
         public XemCacTuiHSCTViewModel(IThonXomCRUDService thonXomService, ITapHSCTCRUDService tapHSCTService,
-            ITuiHSCTCRUDService tuiHSCTService)
+            ITuiHSCTCRUDService tuiHSCTService, IRegionManager regionManager)
         {
             _thonXomService = thonXomService;
             _tapHSCTService = tapHSCTService;
             _tuiHSCTService = tuiHSCTService;
+            _regionManager = regionManager;
+
             InitCommands();
             InitData();
             
@@ -40,6 +47,9 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             DanhSachCapLuuTru = new ObservableCollection<ExplorerItemViewModel>();
 
             var toanBoThonXom = await _thonXomService.LietKeToanBoThonXom();
+
+            //Hien thi thong ke
+            TongSoThonXom = toanBoThonXom.Count;
 
             foreach (var thonXom in toanBoThonXom)
             {
@@ -62,11 +72,17 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
             //Khoi tao list view hien thi danh sach ho so
             _toanBoHSCTCuaXaPhuong = (await _tuiHSCTService.LietKeToanBoTuiHSCT()).ToList();
+
+            //Hien thi thong ke
+            TongSoHoDangThuongTru = _toanBoHSCTCuaXaPhuong.Count(x => x.HSCT.DangThuongTru);
         }
 
         private void InitCommands()
         {
             ThayDoiDanhSachHSCTHienThiCommand = new DelegateCommand<ExplorerItemViewModel>(ThayDoiDanhSachHSCTHienThi);
+
+            //Command bar flyout
+            XemThongChiTietTuiHSCTCommand = new DelegateCommand(XemThongChiTietTuiHSCT);
         }
 
         #endregion
@@ -112,6 +128,51 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                         .Where(x => x.TapHSCT.Id == selectedCapLuuTru.SourceId).ToList();
                 }
             }
+        }
+
+        private TuiHSCT _selectedTuiHSCT;
+
+        public TuiHSCT SelectedTuiHSCT
+        {
+            get => _selectedTuiHSCT;
+            set => SetProperty(ref _selectedTuiHSCT, value);
+        }
+
+
+        #endregion
+
+        #region Cac so lieu tong quan
+
+        private int _tongSoThonXom;
+
+        public int TongSoThonXom
+        {
+            get => _tongSoThonXom;
+            set => SetProperty(ref _tongSoThonXom, value);
+        }
+
+        private int _tongSoHoDangThuongTru;
+
+        public int TongSoHoDangThuongTru
+        {
+            get => _tongSoHoDangThuongTru;
+            set => SetProperty(ref _tongSoHoDangThuongTru, value);
+        }
+
+
+        #endregion
+
+        #region Command bar flyout
+
+        public ICommand XemThongChiTietTuiHSCTCommand { get; private set; }
+
+        private void XemThongChiTietTuiHSCT()
+        {
+            var navigationParameters = new NavigationParameters();
+            navigationParameters.Add("TuiHSCTCanHienThiChiTiet", SelectedTuiHSCT);
+
+            _regionManager.RequestNavigate(QuanLyDuLieuRegionNames.QUAN_LY_DU_LIEU_ROOT_REGION,
+                nameof(TimKiemTuiHSCTView), navigationParameters);
         }
 
         #endregion

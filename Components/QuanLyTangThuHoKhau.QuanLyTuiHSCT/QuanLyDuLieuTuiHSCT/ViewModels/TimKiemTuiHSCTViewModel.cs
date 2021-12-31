@@ -4,13 +4,15 @@ using System.Windows.Input;
 using log4net;
 using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Regions;
 using QuanLyTangThuHoKhau.Core.Exceptions;
+using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions.TimKiemTuiHSCTExceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 {
-    public class TimKiemTuiHSCTViewModel : BindableBase
+    public class TimKiemTuiHSCTViewModel : BindableBase, INavigationAware
     {
         private readonly ITuiHSCTCRUDService _tuiHSCTService;
 
@@ -160,6 +162,28 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
         }
 
         #endregion
-        
+
+        #region Dieu huong
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            if (navigationContext.Parameters["TuiHSCTCanHienThiChiTiet"] is TuiHSCT tuiHSCTTruyenTuViewKhac)
+            {
+                SoHSCTRutGonCanTim = tuiHSCTTruyenTuViewKhac.HSCT.SoHSCT;
+                TimKiemThongTinHSCT();
+            }
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return false;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            // throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

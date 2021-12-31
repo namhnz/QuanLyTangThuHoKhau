@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types.Controls.SummaryInfoItemControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="140" d:DesignWidth="150"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             x:Name="RootSummaryInfoItemUserControl">
+    <Border BorderThickness="1"
+            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+            CornerRadius="4"
+            Background="{StaticResource SystemControlBackgroundAltHighBrush}"
+            Width="120"
+            VerticalAlignment="Top">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"></RowDefinition>
+                <RowDefinition Height="40"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource TitleTextBlockStyle}"
+                       Foreground="{StaticResource SystemControlBackgroundAccentBrush}"
+                       d:Text="4"
+                       FontWeight="SemiBold"
+                       Text="{Binding SoLuong, ElementName=RootSummaryInfoItemUserControl}"
+            ></TextBlock>
+            <Border Grid.Row="1"
+                    Background="{StaticResource SystemControlBackgroundAccentBrush}">
+                <TextBlock d:Text="Thôn, xóm"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Margin="0 10 0 0"
+                           Text="{Binding TieuDe, ElementName=RootSummaryInfoItemUserControl}"></TextBlock>
+            </Border>
+            <Grid Grid.Row="1"
+                  Margin="0 -16 0 0"
+                  VerticalAlignment="Top">
+                <Ellipse Width="32"
+                         Height="32"
+                         Stroke="{StaticResource SystemControlBackgroundAltHighBrush}"
+                         Fill="{StaticResource SystemControlBackgroundAccentBrush}"
+                         StrokeThickness="5"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center">
+                    
+                </Ellipse>
+                <ui:FontIcon d:Glyph="&#xE10F;"
+                             FontSize="12"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             Foreground="{StaticResource SystemControlBackgroundAltHighBrush}"
+                             Glyph="{Binding BieuTuong, ElementName=RootSummaryInfoItemUserControl}"></ui:FontIcon>
+            </Grid>
+        </Grid>
+        
+    </Border>
+</UserControl>
