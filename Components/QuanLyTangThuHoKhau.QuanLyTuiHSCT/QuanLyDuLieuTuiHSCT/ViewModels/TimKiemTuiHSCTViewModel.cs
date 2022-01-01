@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 using log4net;
@@ -9,21 +8,13 @@ using Prism.Regions;
 using QuanLyTangThuHoKhau.Core.Exceptions;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions.TimKiemTuiHSCTExceptions;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 {
     public class TimKiemTuiHSCTViewModel : BindableBase, INavigationAware
     {
-        // Class lua chon data template de hien thi
-        public enum LoaiDataTemplateDeHienThiKetQua
-        {
-            ChuaNhapSoHSCTDeTimKiemDataTemplate,
-            HienThiThongTinTuiHSCTTimThayDataTemplate,
-            KhongTimThayTuiHSCTDataTemplate
-        }
-
-
         private readonly ITuiHSCTCRUDService _tuiHSCTService;
 
         private static readonly ILog Log =
@@ -33,6 +24,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
         {
             _tuiHSCTService = tuiHSCTService;
             InitCommands();
+            InitData();
         }
 
         #region Tim kiem
@@ -43,6 +35,18 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
         {
             get => _soHSCTRutGonCanTim;
             set => SetProperty(ref _soHSCTRutGonCanTim, value);
+        }
+
+        #endregion
+
+        #region Hien thi template ket qua
+
+        private LoaiDataTemplateHienThiKetQuaTimKiemTuiHSCT _dataTemplateHienThiKetQuaTimKiem;
+
+        public LoaiDataTemplateHienThiKetQuaTimKiemTuiHSCT DataTemplateHienThiKetQuaTimKiem
+        {
+            get => _dataTemplateHienThiKetQuaTimKiem;
+            set => SetProperty(ref _dataTemplateHienThiKetQuaTimKiem, value);
         }
 
         #endregion
@@ -117,11 +121,16 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
         private async void TimKiemThongTinHSCT()
         {
+            ErrorText = null;
+
             try
             {
                 //Kiem tra dieu kien
                 if (SoHSCTRutGonCanTim <= 0)
                 {
+                    DataTemplateHienThiKetQuaTimKiem = LoaiDataTemplateHienThiKetQuaTimKiemTuiHSCT
+                        .ChuaNhapSoHSCTDeTimKiemDataTemplate;
+
                     throw new SoHSCTKhongDungException()
                     {
                         ErrorMessage = "Số HSCT cần tìm không đúng"
@@ -132,14 +141,13 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                 var ketQuaTuiHSCT = await _tuiHSCTService.TimKiemTuiHSCTTheoSoHSCT(SoHSCTRutGonCanTim);
                 if (ketQuaTuiHSCT == null)
                 {
-                    throw new SoHSCTKhongDungException()
-                    {
-                        ErrorMessage = "Không tim thấy hộ thường trú nào có số HSCT như trên"
-                    };
-                }
-                else
-                {
-                    ErrorText = null;
+                    // throw new SoHSCTKhongDungException()
+                    // {
+                    //     ErrorMessage = "Không tìm thấy hộ thường trú nào có số HSCT như trên"
+                    // };
+                    DataTemplateHienThiKetQuaTimKiem =
+                        LoaiDataTemplateHienThiKetQuaTimKiemTuiHSCT.KhongTimThayTuiHSCTDataTemplate;
+                    return;
                 }
 
                 var ketQuaTapHSCT = ketQuaTuiHSCT.TapHSCT;
@@ -151,6 +159,10 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                 KetQuaViTriTuiHSCT = ketQuaTuiHSCT.ViTriTui;
                 KetQuaHoTenChuHo = ketQuaTuiHSCT.HSCT.ChuHo;
                 KetQuaNgayDangKy = ketQuaTuiHSCT.HSCT.NgayDangKy;
+
+                //Thay doi template hien thi
+                DataTemplateHienThiKetQuaTimKiem = LoaiDataTemplateHienThiKetQuaTimKiemTuiHSCT
+                    .HienThiThongTinTuiHSCTTimThayDataTemplate;
             }
             catch (Exception ex)
             {
@@ -169,6 +181,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
         private void InitCommands()
         {
             TimKiemThongTinHSCTCommand = new DelegateCommand(TimKiemThongTinHSCT);
+        }
+
+        private void InitData()
+        {
+            DataTemplateHienThiKetQuaTimKiem =
+                LoaiDataTemplateHienThiKetQuaTimKiemTuiHSCT.ChuaNhapSoHSCTDeTimKiemDataTemplate;
         }
 
         #endregion

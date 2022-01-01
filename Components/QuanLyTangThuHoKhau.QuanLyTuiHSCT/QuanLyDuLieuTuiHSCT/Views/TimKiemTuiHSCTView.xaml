@@ -7,7 +7,8 @@
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:ui="http://schemas.modernwpf.com/2019"
-             prism:ViewModelLocator.AutoWireViewModel="True">
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:types="clr-namespace:QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types">
     <UserControl.Resources>
         <Style x:Key="BoxHeaderStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
             <Setter Property="Margin" Value="0,0,0,4" />
@@ -75,8 +76,6 @@
                                              Foreground="{StaticResource SystemControlBackgroundAccentBrush}"
                                              FontSize="16">
                                 </ui:FontIcon>
-
-
                             </Grid>
                             <TextBlock Grid.Row="0"
                                        Grid.Column="1"
@@ -211,38 +210,68 @@
 
         <!-- Hien thi khi chua nhap bat ky thong tin nao de tim kiem -->
         <DataTemplate DataType="{x:Type ContentControl}" x:Key="ChuaNhapSoHSCTDeTimKiemDataTemplate">
-            <ui:SimpleStackPanel HorizontalAlignment="Center"
-                                 VerticalAlignment="Center"
-                                 Spacing="10">
-                <ContentControl HorizontalAlignment="Center">
-                    <ui:FontIcon Glyph="&#xE721;"
-                                 Width="30"
-                                 Height="30" />
-                </ContentControl>
-                <TextBlock Text="Nhập số HSCT để tìm kiếm thông tin"
-                           Width="240"
-                           Style="{StaticResource BodyTextBlockStyle}"
-                           TextAlignment="Center"
-                           TextWrapping="WrapWithOverflow" />
-            </ui:SimpleStackPanel>
+            <Border BorderThickness="1"
+                    BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                    CornerRadius="4"
+                    Width="700"
+                    Height="200"
+                    x:Name="KetQuaTimKiemHSCTBorder">
+                <ui:SimpleStackPanel HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Spacing="10">
+                    <Grid HorizontalAlignment="Center">
+                        <Ellipse Width="40"
+                                 Height="40"
+                                 Stroke="{StaticResource SystemControlBackgroundAccentBrush}"
+                                 StrokeThickness="1"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center">
+                        </Ellipse>
+                        <ui:FontIcon Glyph="&#xE721;"
+                                     Foreground="{StaticResource SystemControlBackgroundAccentBrush}"
+                                     FontSize="16">
+                        </ui:FontIcon>
+                    </Grid>
+                    <TextBlock Text="Nhập số HSCT để tìm kiếm thông tin"
+                               MaxWidth="600"
+                               Style="{StaticResource BodyTextBlockStyle}"
+                               TextAlignment="Center"
+                               TextWrapping="WrapWithOverflow" />
+                </ui:SimpleStackPanel>
+            </Border>
         </DataTemplate>
 
         <!-- Hien thi khi khong tim thay tui ho so nao -->
         <DataTemplate DataType="{x:Type ContentControl}" x:Key="KhongTimThayTuiHSCTDataTemplate">
-            <ui:SimpleStackPanel HorizontalAlignment="Center"
-                                 VerticalAlignment="Center"
-                                 Spacing="10">
-                <ContentControl HorizontalAlignment="Center">
-                    <ui:FontIcon Glyph="&#xE783;"
-                                 Width="30"
-                                 Height="30" />
-                </ContentControl>
-                <TextBlock Text="Không thìm thấy thông tin hộ thường trú"
-                           Width="240"
-                           Style="{StaticResource BodyTextBlockStyle}"
-                           TextAlignment="Center"
-                           TextWrapping="WrapWithOverflow" />
-            </ui:SimpleStackPanel>
+            <Border BorderThickness="1"
+                    BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                    CornerRadius="4"
+                    Width="700"
+                    Height="200"
+                    x:Name="KetQuaTimKiemHSCTBorder">
+                <ui:SimpleStackPanel HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Spacing="10">
+                    <Grid HorizontalAlignment="Center">
+                        <Ellipse Width="40"
+                                 Height="40"
+                                 Stroke="{StaticResource SystemControlBackgroundAccentBrush}"
+                                 StrokeThickness="1"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center">
+                        </Ellipse>
+                        <ui:FontIcon Glyph="&#xE783;"
+                                     Foreground="{StaticResource SystemControlBackgroundAccentBrush}"
+                                     FontSize="16">
+                        </ui:FontIcon>
+                    </Grid>
+                    <TextBlock Text="Không thìm thấy thông tin hộ thường trú"
+                               MaxWidth="600"
+                               Style="{StaticResource BodyTextBlockStyle}"
+                               TextAlignment="Center"
+                               TextWrapping="WrapWithOverflow" />
+                </ui:SimpleStackPanel>
+            </Border>
         </DataTemplate>
 
     </UserControl.Resources>
@@ -287,8 +316,15 @@
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource ChuaNhapSoHSCTDeTimKiemDataTemplate}"></Setter>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsThongTinNhanTheItemSelected}" Value="True">
-                            <Setter Property="ContentTemplate" Value="{StaticResource HienThiThongTinNhanTheKhiCoItemDuocChon}"></Setter>
+                        <DataTrigger Binding="{Binding DataTemplateHienThiKetQuaTimKiem}"
+                                     Value="{x:Static types:LoaiDataTemplateHienThiKetQuaTimKiemTuiHSCT.HienThiThongTinTuiHSCTTimThayDataTemplate}">
+                            <Setter Property="ContentTemplate"
+                                    Value="{StaticResource HienThiThongTinTuiHSCTTimThayDataTemplate}">
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding DataTemplateHienThiKetQuaTimKiem}"
+                                     Value="{x:Static types:LoaiDataTemplateHienThiKetQuaTimKiemTuiHSCT.KhongTimThayTuiHSCTDataTemplate}">
+                            <Setter Property="ContentTemplate" Value="{StaticResource KhongTimThayTuiHSCTDataTemplate}"></Setter>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
