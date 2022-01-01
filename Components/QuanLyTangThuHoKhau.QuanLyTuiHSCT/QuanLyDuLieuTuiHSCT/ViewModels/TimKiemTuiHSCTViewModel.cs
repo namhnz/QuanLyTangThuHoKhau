@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using CustomMVVMDialogs;
 using log4net;
 using ModernWpf.Controls;
-using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
-using QuanLyTangThuHoKhau.Core.AppServices.SampleDataServices;
 using QuanLyTangThuHoKhau.Core.Exceptions;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.Core.Ultis;
-using QuanLyTangThuHoKhau.QuanLyTapHSCT.Exceptions;
-using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Types;
-using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels;
-using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions.TimKiemTuiHSCTExceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types;
@@ -142,7 +135,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
         public ICommand TimKiemThongTinHSCTCommand { get; private set; }
 
-        private async void TimKiemThongTinHSCT()
+        private async Task TimKiemThongTinHSCT()
         {
             ErrorText = null;
 
@@ -204,7 +197,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
         private void InitCommands()
         {
-            TimKiemThongTinHSCTCommand = new DelegateCommand(TimKiemThongTinHSCT);
+            TimKiemThongTinHSCTCommand = new DelegateCommand(async () => await TimKiemThongTinHSCT());
 
             ShowChinhSuaTuiHSCTCustomContentDialogCommand =
                 new DelegateCommand(() => ShowChinhSuaTuiHSCTCustomContentDialog(false));
@@ -223,12 +216,21 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
         #region Dieu huong
 
-        public void OnNavigatedTo(NavigationContext navigationContext)
+        public async void OnNavigatedTo(NavigationContext navigationContext)
         {
             if (navigationContext.Parameters["TuiHSCTCanHienThiChiTiet"] is TuiHSCT tuiHSCTTruyenTuViewKhac)
             {
                 SoHSCTRutGonCanTim = tuiHSCTTruyenTuViewKhac.HSCT.SoHSCT;
-                TimKiemThongTinHSCT();
+                await TimKiemThongTinHSCT();
+
+                //Di kiem theo hien thi hop thoai chinh sua
+                if (navigationContext.Parameters["ShowChinhSuaTuiHSCTKemTheo"] is true)
+                {
+                    if (navigationContext.Parameters["XoaDangKyThuongTruTuiHSCTKemTheo"] is bool xoaDangKyThuongTruTuiHSCTKemTheo)
+                    {
+                        ShowChinhSuaTuiHSCTCustomContentDialog(xoaDangKyThuongTruTuiHSCTKemTheo);
+                    }
+                }
             }
         }
 
@@ -248,7 +250,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
         public ICommand ShowChinhSuaTuiHSCTCustomContentDialogCommand { get; private set; }
 
-        private async void ShowChinhSuaTuiHSCTCustomContentDialog(bool isXoaThuongTru)
+        private async void ShowChinhSuaTuiHSCTCustomContentDialog(bool xoaThuongTruTuiHSCT)
         {
             var tuiHSCTCanChinhSua = KetQuaTuiHSCTTimThay.DeepClone();
 
@@ -256,7 +258,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
             dialogViewModel.SoHSCT = tuiHSCTCanChinhSua.HSCT.MaHSCTDayDu;
             dialogViewModel.ChuHo = tuiHSCTCanChinhSua.HSCT.ChuHo;
-            dialogViewModel.DangThuongTru = isXoaThuongTru ? false : tuiHSCTCanChinhSua.HSCT.DangThuongTru;
+            dialogViewModel.DangThuongTru = xoaThuongTruTuiHSCT ? false : tuiHSCTCanChinhSua.HSCT.DangThuongTru;
 
             var dialogResult =
                 await _dialogService.ShowCustomContentDialogAsync<ChinhSuaTuiHSCTCustomContentDialog>(

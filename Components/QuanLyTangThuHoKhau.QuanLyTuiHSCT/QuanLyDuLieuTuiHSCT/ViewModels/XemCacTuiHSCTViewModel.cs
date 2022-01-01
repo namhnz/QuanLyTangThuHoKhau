@@ -82,7 +82,9 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             ThayDoiDanhSachHSCTHienThiCommand = new DelegateCommand<ExplorerItemViewModel>(ThayDoiDanhSachHSCTHienThi);
 
             //Command bar flyout
-            XemThongChiTietTuiHSCTCommand = new DelegateCommand(XemThongChiTietTuiHSCT);
+            XemThongChiTietTuiHSCTCommand = new DelegateCommand(() => XemThongChiTietTuiHSCT(false, false));
+            ChinhSuaTuiHSCTCommand = new DelegateCommand(() => XemThongChiTietTuiHSCT(true, false));
+            XoaDangKyThuongTruTuiHSCTCommand = new DelegateCommand(() => XemThongChiTietTuiHSCT(true, true));
         }
 
         #endregion
@@ -166,14 +168,20 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
         public ICommand XemThongChiTietTuiHSCTCommand { get; private set; }
 
-        private void XemThongChiTietTuiHSCT()
+        private void XemThongChiTietTuiHSCT(bool showChinhSuaTuiHSCTKemTheo, bool xoaDangKyThuongTruTuiHSCTKemTheo)
         {
             var navigationParameters = new NavigationParameters();
             navigationParameters.Add("TuiHSCTCanHienThiChiTiet", SelectedTuiHSCT);
 
+            navigationParameters.Add("ShowChinhSuaTuiHSCTKemTheo", showChinhSuaTuiHSCTKemTheo);
+            navigationParameters.Add("XoaDangKyThuongTruTuiHSCTKemTheo", xoaDangKyThuongTruTuiHSCTKemTheo);
+
             _regionManager.RequestNavigate(QuanLyDuLieuRegionNames.QUAN_LY_DU_LIEU_ROOT_REGION,
                 nameof(TimKiemTuiHSCTView), navigationParameters);
         }
+
+        public ICommand ChinhSuaTuiHSCTCommand { get; private set; }
+        public ICommand XoaDangKyThuongTruTuiHSCTCommand { get; private set; }
 
         #endregion
     }

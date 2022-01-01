@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
@@ -51,6 +52,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
         public async Task<TuiHSCT> TimKiemTuiHSCTTheoSoHSCT(int soHSCTCanTim)
         {
+            Debug.WriteLine(TuiHSCTSampleData.ToanBoTuiHSCT().Any(x => x==null));
+
             var tuiHSCTCanTim = await Task.Run(() =>
                 TuiHSCTSampleData.ToanBoTuiHSCT().FirstOrDefault(x => x.HSCT.SoHSCT == soHSCTCanTim));
 
