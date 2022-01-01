@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 using log4net;
@@ -14,6 +15,15 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 {
     public class TimKiemTuiHSCTViewModel : BindableBase, INavigationAware
     {
+        // Class lua chon data template de hien thi
+        public enum LoaiDataTemplateDeHienThiKetQua
+        {
+            ChuaNhapSoHSCTDeTimKiemDataTemplate,
+            HienThiThongTinTuiHSCTTimThayDataTemplate,
+            KhongTimThayTuiHSCTDataTemplate
+        }
+
+
         private readonly ITuiHSCTCRUDService _tuiHSCTService;
 
         private static readonly ILog Log =
@@ -47,9 +57,9 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             set => SetProperty(ref _ketQuaSoHSCTDayDu, value);
         }
 
-        private string _ketQuaDiaChiHoThuongTru;
+        private ThonXom _ketQuaDiaChiHoThuongTru;
 
-        public string KetQuaDiaChiHoThuongTru
+        public ThonXom KetQuaDiaChiHoThuongTru
         {
             get => _ketQuaDiaChiHoThuongTru;
             set => SetProperty(ref _ketQuaDiaChiHoThuongTru, value);
@@ -136,7 +146,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
                 //Hien thi cac gia tri
                 KetQuaSoHSCTDayDu = ketQuaTuiHSCT.HSCT.MaHSCTDayDu;
-                KetQuaDiaChiHoThuongTru = ketQuaTapHSCT.ThonXom.ToString();
+                KetQuaDiaChiHoThuongTru = ketQuaTapHSCT.ThonXom;
                 KetQuaThuTuTapHSCT = ketQuaTapHSCT.ThuTuTapHSCT;
                 KetQuaViTriTuiHSCT = ketQuaTuiHSCT.ViTriTui;
                 KetQuaHoTenChuHo = ketQuaTuiHSCT.HSCT.ChuHo;
