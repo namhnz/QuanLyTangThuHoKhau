@@ -1,39 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using log4net;
 using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Regions;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.Exceptions;
 using QuanLyTangThuHoKhau.Core.Models;
+using QuanLyTangThuHoKhau.Core.Types.QuanLyDuLieu;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Services;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Services;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 {
-    public class ThemMoiTuiHSCTViewModel: BindableBase
+    public class ThemMoiTuiHSCTViewModel : BindableBase, INavigationAware
     {
         private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public ThemMoiTuiHSCTViewModel(IThonXomCRUDService thonXomService,ITapHSCTCRUDService tapHSCTService, ITuiHSCTCRUDService tuiHSCTService)
+        public ThemMoiTuiHSCTViewModel(IThonXomCRUDService thonXomService, ITapHSCTCRUDService tapHSCTService,
+            ITuiHSCTCRUDService tuiHSCTService, IRegionManager regionManager)
         {
             _thonXomService = thonXomService;
             _tapHSCTService = tapHSCTService;
             _tuiHSCTService = tuiHSCTService;
+            _regionManager = regionManager;
 
             InitData();
             InitCommands();
-
         }
+
+        #region Du lieu nhap vao
 
         private List<ThonXom> _danhSachThonXom;
 
@@ -67,6 +71,10 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             set => SetProperty(ref _ngayDangKy, value);
         }
 
+        #endregion
+
+        #region Hien thi loi
+
         private string _errorText;
 
         public string ErrorText
@@ -75,11 +83,14 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             set => SetProperty(ref _errorText, value);
         }
 
+        #endregion
+
         #region Cac phu thuoc
 
         private readonly IThonXomCRUDService _thonXomService;
         private readonly ITapHSCTCRUDService _tapHSCTService;
         private readonly ITuiHSCTCRUDService _tuiHSCTService;
+        private readonly IRegionManager _regionManager;
 
         #endregion
 
@@ -116,7 +127,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                 var hsctMoi = new HSCT((uint)soHSCTMoi, SelectedThonXomChuaTuiHSCT, NgayDangKy, HoTenChuHo);
 
                 //Lay thong tin tap ho so bo sung cua thon, xom da chon
-                var tapHSCTBoSungCuaThonXom = await _tapHSCTService.LayTapHSCTBoSungCuaThonXom(SelectedThonXomChuaTuiHSCT);
+                var tapHSCTBoSungCuaThonXom =
+                    await _tapHSCTService.LayTapHSCTBoSungCuaThonXom(SelectedThonXomChuaTuiHSCT);
                 var viTriTuiHSCTMoi = await _tuiHSCTService.TaoViTriTuiHSCTMoi(SelectedThonXomChuaTuiHSCT);
 
                 var tuiHSCTMoi = new TuiHSCT()
@@ -129,8 +141,11 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                 //Them moi tui ho so vao du lieu
                 await _tuiHSCTService.ThemTuiHSCTMoi(tuiHSCTMoi);
 
-                Debug.WriteLine(JsonConvert.SerializeObject(tuiHSCTMoi));
+                // Debug.WriteLine(JsonConvert.SerializeObject(tuiHSCTMoi));
                 MessageBox.Show("Thêm hộ thường trú mới thành công");
+
+                //Hien thi thong tin tui ho so moi tao o tren
+                HienThiThongTinTuiHSCTMoiTao(tuiHSCTMoi);
             }
             catch (Exception ex)
             {
@@ -172,10 +187,40 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                     ErrorMessage = "Ngày đăng ký thường trú không được quá thời gian so với hiện tại"
                 };
             }
-            
         }
 
-        
+        #endregion
+
+        #region Dieu huong den thong tin tui ho so moi
+
+        private void HienThiThongTinTuiHSCTMoiTao(TuiHSCT tuiHSCTMoiTao)
+        {
+            if (tuiHSCTMoiTao != null)
+            {
+                var navigationParameters = new NavigationParameters();
+                navigationParameters.Add("TuiHSCTCanHienThiChiTiet", tuiHSCTMoiTao);
+
+                _regionManager.RequestNavigate(QuanLyDuLieuRegionNames.QUAN_LY_DU_LIEU_ROOT_REGION,
+                    nameof(TimKiemTuiHSCTView), navigationParameters);
+            }
+        }
+
+        #endregion
+
+        #region Dieu huong
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return false;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+        }
 
         #endregion
     }
