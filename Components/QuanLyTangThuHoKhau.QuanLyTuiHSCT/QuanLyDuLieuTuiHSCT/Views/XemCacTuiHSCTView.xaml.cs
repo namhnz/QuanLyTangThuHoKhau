@@ -43,13 +43,13 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views
 
         private void ChinhSuaTuiHSCTCommandBarFlyout_OnXem(object sender, RoutedEventArgs e)
         {
-            var viewModel = (XemCacTuiHSCTViewModel)this.DataContext;
-            viewModel.XemThongChiTietTuiHSCTCommand.Execute(sender);
-
             if (ChinhSuaTuiHSCTCommandBarFlyout.IsOpen)
             {
                 ChinhSuaTuiHSCTCommandBarFlyout.Hide();
             }
+
+            var viewModel = (XemCacTuiHSCTViewModel)this.DataContext;
+            viewModel.XemThongChiTietTuiHSCTCommand.Execute(sender);
         }
     }
 }

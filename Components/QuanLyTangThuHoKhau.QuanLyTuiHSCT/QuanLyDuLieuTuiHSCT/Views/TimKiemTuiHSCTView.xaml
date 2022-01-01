@@ -1,9 +1,9 @@
 ﻿<UserControl x:Class="QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views.TimKiemTuiHSCTView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:ui="http://schemas.modernwpf.com/2019"
@@ -13,36 +13,180 @@
             <Setter Property="Margin" Value="0,0,0,4" />
         </Style>
     </UserControl.Resources>
-    <ui:SimpleStackPanel >
-        <ui:SimpleStackPanel Orientation="Horizontal"
-                             Spacing="5">
+    <ui:SimpleStackPanel>
+        <ui:SimpleStackPanel Spacing="5"
+                             Orientation="Horizontal"
+                             HorizontalAlignment="Center"
+                             Margin="0 40">
             <ui:NumberBox
                 Width="350"
-                Header="Số HSCT"
-                ui:ControlHelper.PlaceholderText="Chỉ nhập phần đuôi của dãy số HSCT"
+                ui:ControlHelper.PlaceholderText="Nhập số HSCT"
                 SpinButtonPlacementMode="Inline"
                 Value="{Binding SoHSCTRutGonCanTim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Button Content="Tìm kiếm"
                     Command="{Binding TimKiemThongTinHSCTCommand}"
-                    VerticalAlignment="Bottom"></Button>
+                    VerticalAlignment="Bottom">
+            </Button>
+
         </ui:SimpleStackPanel>
         <TextBlock d:Text="Số HSCT nhập vào không đúng"
                    Text="{Binding ErrorText}"
-                   Foreground="{StaticResource SystemControlErrorTextForegroundBrush}"></TextBlock>
+                   Foreground="{StaticResource SystemControlErrorTextForegroundBrush}">
+        </TextBlock>
 
         <TextBlock d:Text="Số HSCT: 17152-000342"
-                   Text="{Binding KetQuaSoHSCTDayDu, StringFormat='{}Số HSCT: {0}'}"></TextBlock>
+                   Text="{Binding KetQuaSoHSCTDayDu, StringFormat='{}Số HSCT: {0}'}">
+        </TextBlock>
         <TextBlock d:Text="Địa chỉ: Thôn 1, xã Quỳnh Hoa, huyện Quỳnh Lưu, tỉnh Nghệ An"
-                   Text="{Binding KetQuaDiaChiHoThuongTru, StringFormat='{}Địa chỉ: {0}'}"></TextBlock>
+                   Text="{Binding KetQuaDiaChiHoThuongTru, StringFormat='{}Địa chỉ: {0}'}">
+        </TextBlock>
         <TextBlock d:Text="Tập HSCT: Tập 1"
-                   Text="{Binding KetQuaThuTuTapHSCT, StringFormat='{}Tập HSCT: {0}'}"></TextBlock>
+                   Text="{Binding KetQuaThuTuTapHSCT, StringFormat='{}Tập HSCT: {0}'}">
+        </TextBlock>
         <TextBlock d:Text="Vị trí túi HSCT: 71"
-                   Text="{Binding KetQuaViTriTuiHSCT, StringFormat='{}Vị trí túi HSCT: {0}'}"></TextBlock>
+                   Text="{Binding KetQuaViTriTuiHSCT, StringFormat='{}Vị trí túi HSCT: {0}'}">
+        </TextBlock>
         <Separator></Separator>
         <TextBlock Text="Thông tin thêm"></TextBlock>
         <TextBlock d:Text="Họ tên chủ hộ: Vũ Văn Dũng"
-                   Text="{Binding KetQuaHoTenChuHo, StringFormat='{}Họ tên chủ hộ: {0}'}"></TextBlock>
+                   Text="{Binding KetQuaHoTenChuHo, StringFormat='{}Họ tên chủ hộ: {0}'}">
+        </TextBlock>
         <TextBlock d:Text="Ngày đăng ký: 27/12/2021"
-                   Text="{Binding KetQuaNgayDangKy, StringFormat='{}Ngày đăng ký: {0:dd/MM/yyyy}'}"></TextBlock>
+                   Text="{Binding KetQuaNgayDangKy, StringFormat='{}Ngày đăng ký: {0:dd/MM/yyyy}'}">
+        </TextBlock>
+
+
+        <Border BorderThickness="1"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                CornerRadius="4">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <ui:SimpleStackPanel Orientation="Horizontal"
+                                     Grid.Row="0"
+                                     Spacing="5">
+                    <TextBlock d:Text="Xã Quỳnh Hoa, Huyện Quỳnh Lưu, Tỉnh Nghệ An"
+                               Style="{StaticResource BodyTextBlockStyle}"
+                               Foreground="{StaticResource SystemControlForegroundBaseMediumHighBrush}"></TextBlock>
+                    <ui:FontIcon Glyph="&#xE970;"
+                                 FontSize="12">
+                    </ui:FontIcon>
+                    <TextBlock d:Text="Thôn 1"
+                               Style="{StaticResource BaseTextBlockStyle}"></TextBlock>
+                </ui:SimpleStackPanel>
+
+                <Border Grid.Column="0"
+                    Grid.Row="1"
+                    Padding="0 15"
+                    BorderThickness="1">
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Column="0"
+                          Grid.Row="0"
+                          Grid.RowSpan="2">
+                            <Ellipse Width="50"
+                                 Height="50"
+                                 Stroke="{StaticResource SystemControlBackgroundAccentBrush}"
+                                 StrokeThickness="1"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center">
+                            </Ellipse>
+                            <ui:FontIcon Glyph="&#xF000;"
+                                     Foreground="{StaticResource SystemControlBackgroundAccentBrush}"></ui:FontIcon>
+
+
+                        </Grid>
+                        <TextBlock Grid.Row="0"
+                               Grid.Column="1"
+                               d:Text="17152-000156"
+                               FontWeight="SemiBold"
+                               Style="{StaticResource SubheaderTextBlockStyle}">
+                        </TextBlock>
+
+                        <ui:SimpleStackPanel Spacing="30"
+                                         Orientation="Horizontal"
+                                         Grid.Row="1"
+                                         Grid.Column="1">
+                            <ui:SimpleStackPanel Orientation="Horizontal"
+                                             Spacing="5">
+                                <Label d:Content="Tập số"
+                                   Foreground="{StaticResource SystemControlForegroundBaseMediumHighBrush}"
+                                   VerticalAlignment="Center"></Label>
+                                <TextBlock d:Text="1"
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource BaseTextBlockStyle}"></TextBlock>
+                            </ui:SimpleStackPanel>
+
+                            <ui:SimpleStackPanel Orientation="Horizontal"
+                                             Spacing="5">
+                                <Label d:Content="Vị trí túi"
+                                   Foreground="{StaticResource SystemControlForegroundBaseMediumHighBrush}"
+                                   VerticalAlignment="Center"></Label>
+                                <TextBlock d:Text="71"
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource BaseTextBlockStyle}"></TextBlock>
+                            </ui:SimpleStackPanel>
+
+                            <ui:SimpleStackPanel Orientation="Horizontal"
+                                             Spacing="5">
+                                <Label d:Content="Chủ hộ"
+                                   Foreground="{StaticResource SystemControlForegroundBaseMediumHighBrush}"
+                                   VerticalAlignment="Center"></Label>
+                                <TextBlock d:Text="Vũ Văn Dũng"
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource BaseTextBlockStyle}"></TextBlock>
+                            </ui:SimpleStackPanel>
+
+                            <ui:SimpleStackPanel Orientation="Horizontal"
+                                             Spacing="5">
+                                <Label d:Content="Ngày đăng ký"
+                                   Foreground="{StaticResource SystemControlForegroundBaseMediumHighBrush}"
+                                   VerticalAlignment="Center"></Label>
+                                <TextBlock d:Text="27/12/2021"
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource BaseTextBlockStyle}"></TextBlock>
+                            </ui:SimpleStackPanel>
+                        </ui:SimpleStackPanel>
+                    </Grid>
+                </Border>
+
+                <ui:SimpleStackPanel Orientation="Horizontal"
+                                     Spacing="20"
+                                     Grid.Row="2">
+                    <Button>
+                        <Button.Content>
+                            <ui:SimpleStackPanel Orientation="Horizontal"
+                                                 Spacing="5">
+                                <ui:FontIcon Glyph="&#xE104;"></ui:FontIcon>
+                                <TextBlock Text="Chỉnh sửa"></TextBlock>
+                            </ui:SimpleStackPanel>
+                        </Button.Content>
+                    </Button>
+
+                    <Button>
+                        <Button.Content>
+                            <ui:SimpleStackPanel Orientation="Horizontal"
+                                                 Spacing="5">
+                                <ui:FontIcon Glyph="&#xE107;"></ui:FontIcon>
+                                <TextBlock Text="Xoá thường trú"></TextBlock>
+                            </ui:SimpleStackPanel>
+                        </Button.Content>
+                    </Button>
+
+                </ui:SimpleStackPanel>
+            </Grid>
+
+        </Border>
     </ui:SimpleStackPanel>
 </UserControl>
