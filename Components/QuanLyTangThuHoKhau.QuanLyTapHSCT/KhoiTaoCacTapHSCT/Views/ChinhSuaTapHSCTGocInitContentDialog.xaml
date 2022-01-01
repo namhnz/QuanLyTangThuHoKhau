@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     d:DesignHeight="756"
     d:DesignWidth="548"
-    x:Name="chinhSuaTapHSCTGocInitContentDialog"
+    x:Name="RootChinhSuaTapHSCTGocInitContentDialog"
     Style="{StaticResource ScrollableContentDialogStyle}"
     Title="Chỉnh sửa tập HSCT gốc"
     PrimaryButtonText="Chỉnh sửa"

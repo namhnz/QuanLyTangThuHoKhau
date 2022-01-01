@@ -18,6 +18,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
         public Task ThemTuiHSCTMoi(TuiHSCT tuiHSCTMoi);
 
         public Task ThayDoiTenChuHoCuaTuiHSCT(int idTuiHSCT, string chuHoMoi);
+        public Task CapNhatThongTinTuiHSCT(TuiHSCT tuiHSCTChinhSua);
+
         public Task XoaTuiHSCT(int idTuiHSCT);
     }
 }

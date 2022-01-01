@@ -211,6 +211,39 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             });
         }
 
+        public async Task CapNhatThongTinTuiHSCT(TuiHSCT tuiHSCTChinhSua)
+        {
+            // tuiHSCTChinhSua.HSCT.ChuHo = tuiHSCTChinhSua.HSCT.ChuHo.Trim();
+
+
+            await Task.Run(() =>
+            {
+                var tuiHSCTTonTai = _dataService.TuiHSCTRepository.FindOne(tuiHSCTChinhSua.Id);
+
+                if (tuiHSCTTonTai == null)
+                {
+                    throw new TuiHSCTKhongTonTaiException()
+                    {
+                        ErrorMessage = "Túi hồ sơ cần chỉnh sửa không tồn tại"
+                    };
+                }
+
+                //Khong duoc de trong ten chu ho neu truoc do da co
+                if (!string.IsNullOrEmpty(tuiHSCTTonTai.HSCT.ChuHo))
+                {
+                    if (string.IsNullOrEmpty(tuiHSCTChinhSua.HSCT.ChuHo))
+                    {
+                        throw new TenChuHoKhongDungException()
+                        {
+                            ErrorMessage = "Tên chủ hộ không đúng"
+                        };
+                    }
+                }
+
+                _dataService.TuiHSCTRepository.Update(tuiHSCTChinhSua);
+            });
+        }
+
         #endregion
 
         #region Xoa tui ho so cu tru

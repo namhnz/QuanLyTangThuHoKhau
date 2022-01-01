@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types
 {
+    [Serializable]
     public class DonViHanhChinhQuanHuyen : DonViHanhChinhChung
     {
         [JsonProperty(PropertyName = "level2_id")]

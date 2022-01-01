@@ -1,8 +1,10 @@
-﻿using LiteDB;
+﻿using System;
+using LiteDB;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types;
 
 namespace QuanLyTangThuHoKhau.Core.Models
 {
+    [Serializable]
     public class ThonXom
     {
         [BsonId] public int Id { get; set; }
@@ -13,5 +15,6 @@ namespace QuanLyTangThuHoKhau.Core.Models
         {
             return $"{TenThonXom}, {DonViHanhChinhPhuongXa.TenDonViDuCap}";
         }
+        
     }
 }

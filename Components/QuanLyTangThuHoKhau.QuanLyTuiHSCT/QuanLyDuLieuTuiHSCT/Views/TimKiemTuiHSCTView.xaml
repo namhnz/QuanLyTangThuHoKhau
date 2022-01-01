@@ -33,7 +33,7 @@
                         <ui:SimpleStackPanel Orientation="Horizontal"
                                              Spacing="5">
                             <TextBlock d:Text="Xã Quỳnh Hoa, Huyện Quỳnh Lưu, Tỉnh Nghệ An"
-                                       Text="{Binding KetQuaDiaChiHoThuongTru.DonViHanhChinhPhuongXa.TenDonViDuCap}"
+                                       Text="{Binding KetQuaTuiHSCTTimThay.TapHSCT.ThonXom.DonViHanhChinhPhuongXa.TenDonViDuCap}"
                                        Style="{StaticResource BodyTextBlockStyle}"
                                        Foreground="{StaticResource SystemControlForegroundBaseMediumHighBrush}">
                             </TextBlock>
@@ -41,7 +41,7 @@
                                          FontSize="12">
                             </ui:FontIcon>
                             <TextBlock d:Text="Thôn 1"
-                                       Text="{Binding KetQuaDiaChiHoThuongTru.TenThonXom}"
+                                       Text="{Binding KetQuaTuiHSCTTimThay.TapHSCT.ThonXom.TenThonXom}"
                                        Style="{StaticResource BaseTextBlockStyle}">
                             </TextBlock>
                         </ui:SimpleStackPanel>
@@ -80,7 +80,7 @@
                             <TextBlock Grid.Row="0"
                                        Grid.Column="1"
                                        d:Text="17152-000156"
-                                       Text="{Binding KetQuaSoHSCTDayDu, StringFormat='{}Số HSCT: {0}'}"
+                                       Text="{Binding KetQuaTuiHSCTTimThay.HSCT.MaHSCTDayDu, StringFormat='{}Số HSCT: {0}'}"
                                        Style="{StaticResource SubheaderTextBlockStyle}">
                             </TextBlock>
 
@@ -95,7 +95,7 @@
                                            VerticalAlignment="Center">
                                     </Label>
                                     <TextBlock d:Text="1"
-                                               Text="{Binding KetQuaThuTuTapHSCT}"
+                                               Text="{Binding KetQuaTuiHSCTTimThay.TapHSCT.ThuTuTapHSCT}"
                                                VerticalAlignment="Center"
                                                Style="{StaticResource BaseTextBlockStyle}">
                                     </TextBlock>
@@ -108,7 +108,7 @@
                                            VerticalAlignment="Center">
                                     </Label>
                                     <TextBlock d:Text="71"
-                                               Text="{Binding KetQuaViTriTuiHSCT}"
+                                               Text="{Binding KetQuaTuiHSCTTimThay.ViTriTui}"
                                                VerticalAlignment="Center"
                                                Style="{StaticResource BaseTextBlockStyle}">
                                     </TextBlock>
@@ -121,9 +121,18 @@
                                            VerticalAlignment="Center">
                                     </Label>
                                     <TextBlock d:Text="Đang thường trú"
-                                               Text="Đang thường trú"
-                                               VerticalAlignment="Center"
-                                               Style="{StaticResource BaseTextBlockStyle}">
+                                               VerticalAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock"
+                                                BasedOn="{StaticResource BaseTextBlockStyle}">
+                                                <Setter Property="Text" Value="Đang thường trú"></Setter>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding KetQuaTuiHSCTTimThay.HSCT.DangThuongTru}" Value="false">
+                                                        <Setter Property="Text" Value="Đã xoá thường trú"></Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
                                     </TextBlock>
                                 </ui:SimpleStackPanel>
 
@@ -148,7 +157,7 @@
                                                VerticalAlignment="Center">
                                         </Label>
                                         <TextBlock d:Text="Vũ Văn Dũng"
-                                                   Text="{Binding KetQuaHoTenChuHo}"
+                                                   Text="{Binding KetQuaTuiHSCTTimThay.HSCT.ChuHo}"
                                                    VerticalAlignment="Center"
                                                    Style="{StaticResource BaseTextBlockStyle}">
                                         </TextBlock>
@@ -161,7 +170,7 @@
                                                VerticalAlignment="Center">
                                         </Label>
                                         <TextBlock d:Text="27/12/2021"
-                                                   Text="{Binding KetQuaNgayDangKy, StringFormat='{}{0:dd/MM/yyyy}'}"
+                                                   Text="{Binding KetQuaTuiHSCTTimThay.HSCT.NgayDangKy, StringFormat='{}{0:dd/MM/yyyy}'}"
                                                    VerticalAlignment="Center"
                                                    Style="{StaticResource BaseTextBlockStyle}">
                                         </TextBlock>
@@ -176,7 +185,7 @@
                             Padding="10 5">
                         <ui:SimpleStackPanel Orientation="Horizontal"
                                              Spacing="20">
-                            <Button>
+                            <Button Command="{Binding ShowChinhSuaTuiHSCTCustomContentDialogCommand}">
                                 <Button.Content>
                                     <ui:SimpleStackPanel Orientation="Horizontal"
                                                          Spacing="5">
@@ -188,7 +197,7 @@
                                 </Button.Content>
                             </Button>
 
-                            <Button>
+                            <Button Command="{Binding ShowXoaThuongTruTuiHSCTCustomContentDialogCommand}">
                                 <Button.Content>
                                     <ui:SimpleStackPanel Orientation="Horizontal"
                                                          Spacing="5">

@@ -3,6 +3,7 @@ using QuanLyTangThuHoKhau.Core.Models;
 
 namespace QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types
 {
+    [Serializable]
     public class HSCT
     {
         public int SoHSCT { get; set; }
@@ -20,5 +21,6 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types
             NgayDangKy = ngayDangKy;
             DangThuongTru = dangThuongTru;
         }
+        
     }
 }

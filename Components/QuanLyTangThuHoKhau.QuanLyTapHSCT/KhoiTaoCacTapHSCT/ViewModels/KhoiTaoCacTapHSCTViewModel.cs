@@ -61,41 +61,6 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
             _danhSachThonXomGoc = new List<ThonXom>();
         }
 
-        // private async void InitSampleData()
-        // {
-        //     var xaPhuongHienDangQuanLy =
-        //         (await _dvhcService.LoadToanBoXaPhuongVietNam()).First(x => x.TenDonVi.Contains("Quỳnh Hoa"));
-        //
-        //     var cacThonXomKhoiTao = new List<ThonXom>();
-        //     for (int i = 0; i < 6; i++)
-        //     {
-        //         cacThonXomKhoiTao.Add(new ThonXom()
-        //         {
-        //             TenThonXom = $"Thôn {i + 1}",
-        //             DonViHanhChinhPhuongXa = xaPhuongHienDangQuanLy
-        //         });
-        //     }
-        //
-        //     CacThonXomKemTheoTapHSCTViewModel = new List<ThonXomKemTheoTapHSCTViewModel>();
-        //     foreach (var thonXom in cacThonXomKhoiTao)
-        //     {
-        //         var tapHSCTGoc1 = new TapHSCTGocInitModel();
-        //         tapHSCTGoc1.KhoiTaoCacGiaTriCuaTapHSCT(thonXom, 1, 1, 255);
-        //         // var tapHSCTGoc2 = new TapHSCTGocInitModel();
-        //         // tapHSCTGoc2.KhoiTaoCacGiaTriCuaTapHSCT(thonXom, 2, 256, 320);
-        //         // var tapHSCTGoc3 = new TapHSCTGocInitModel();
-        //         // tapHSCTGoc3.KhoiTaoCacGiaTriCuaTapHSCT(thonXom, 1, 321, 330);
-        //
-        //         CacThonXomKemTheoTapHSCTViewModel.Add(
-        //             new ThonXomKemTheoTapHSCTViewModel(thonXom, new ObservableCollection<TapHSCTGocInitModel>()
-        //             {
-        //                 tapHSCTGoc1,
-        //                 // tapHSCTGoc2,
-        //                 // tapHSCTGoc3
-        //             }));
-        //     }
-        // }
-
         public ICommand ShowThemMoiTapHSCTGocInitCustomContentDialogCommand { get; private set; }
 
         private async void ShowThemMoiTapHSCTGocInitCustomContentDialog()
