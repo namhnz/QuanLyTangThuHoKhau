@@ -32,6 +32,8 @@ namespace QuanLyTangThuHoKhau
             containerRegistry.RegisterForNavigation<KhoiTaoDuLieuBanDauRootView>();
             containerRegistry.RegisterForNavigation<QuanLyThaoTacDuLieuRootView>();
 
+            containerRegistry.RegisterForNavigation<GioiThieuKhoiTaoDuLieuBanDauView>();
+
             containerRegistry.RegisterSingleton<ITuiHSCTCRUDService, TuiHSCTCRUDServiceSampleData>();
 
         }

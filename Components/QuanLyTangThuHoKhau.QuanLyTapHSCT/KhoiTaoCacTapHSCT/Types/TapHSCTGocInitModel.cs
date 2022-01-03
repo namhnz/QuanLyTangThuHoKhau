@@ -5,7 +5,8 @@ using QuanLyTangThuHoKhau.QuanLyTapHSCT.Exceptions;
 
 namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Types
 {
-    public class TapHSCTGocInitModel: TapHSCT, ICloneable
+    [Serializable]
+    public class TapHSCTGocInitModel: TapHSCT
     {
         public int SoHSCTBatDau { get; private set; }
         public int SoHSCTKetThuc { get; private set; }
@@ -78,10 +79,6 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Types
             SoHSCTBatDau = (int)soHSCTBatDau;
             SoHSCTKetThuc = (int)soHSCTKetThuc;
         }
-
-        public object Clone()
-        {
-            return this.MemberwiseClone();
-        }
+        
     }
 }

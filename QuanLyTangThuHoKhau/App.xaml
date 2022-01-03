@@ -23,6 +23,14 @@
                     <Thickness x:Key="ContentDialogTitleMargin">24,0,24,12</Thickness>
                 </Style.Resources>
             </Style>
+
+            <Style x:Key="BoxHeaderStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+                <Setter Property="Margin" Value="0,0,0,4" />
+            </Style>
+
+            <Style x:Key="PageTitleStyle" TargetType="TextBlock" BasedOn="{StaticResource TitleTextBlockStyle}">
+                <Setter Property="Margin" Value="0,8,0,12" />
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

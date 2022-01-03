@@ -28,24 +28,17 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
         private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        #region Cac phu thuoc
+
         private readonly IDialogService _dialogService;
-
-        private readonly IDonViHanhChinhService _dvhcService;
-
-        private ObservableCollection<ThonXomKemTheoTapHSCTViewModel> _cacThonXomKemTheoTapHSCTViewModel;
         private readonly IRegionManager _regionManager;
 
-        public ObservableCollection<ThonXomKemTheoTapHSCTViewModel> CacThonXomKemTheoTapHSCTViewModel
-        {
-            get => _cacThonXomKemTheoTapHSCTViewModel;
-            set => SetProperty(ref _cacThonXomKemTheoTapHSCTViewModel, value);
-        }
+        #endregion
 
         public KhoiTaoCacTapHSCTViewModel(IDialogService dialogService,
             IDonViHanhChinhService dvhcService, IRegionManager regionManager)
         {
             _dialogService = dialogService;
-            _dvhcService = dvhcService;
             _regionManager = regionManager;
 
             InitCommands();
@@ -54,12 +47,45 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
             InitData();
         }
 
+        #region Khoi tao
+
         private void InitData()
         {
             CacThonXomKemTheoTapHSCTViewModel = new ObservableCollection<ThonXomKemTheoTapHSCTViewModel>();
 
             _danhSachThonXomGoc = new List<ThonXom>();
         }
+
+        private void InitCommands()
+        {
+            ShowThemMoiTapHSCTGocInitCustomContentDialogCommand =
+                new DelegateCommand(ShowThemMoiTapHSCTGocInitCustomContentDialog);
+
+            ShowChinhSuaTapHSCTGocInitCustomContentDialogCommand =
+                new DelegateCommand<TapHSCTGocInitModel>(ShowChinhSuaTapHSCTGocInitCustomContentDialog);
+
+            XoaTapHSCTGocInitCommand = new DelegateCommand<TapHSCTGocInitModel>(XoaTapHSCTGocInit);
+
+            //Khoi tao command dieu huong truoc, sau
+            QuayVeBuocKhoiTaoDanhSachThonXomCommand = new DelegateCommand(QuayVeBuocKhoiTaoDanhSachThonXom);
+            ChuyenBuocKhoiTaoCacTuiHSCTCommand = new DelegateCommand(ChuyenBuocKhoiTaoCacTuiHSCT);
+        }
+
+        #endregion
+
+        #region Cac danh sach hien thi
+
+        private ObservableCollection<ThonXomKemTheoTapHSCTViewModel> _cacThonXomKemTheoTapHSCTViewModel;
+
+        public ObservableCollection<ThonXomKemTheoTapHSCTViewModel> CacThonXomKemTheoTapHSCTViewModel
+        {
+            get => _cacThonXomKemTheoTapHSCTViewModel;
+            set => SetProperty(ref _cacThonXomKemTheoTapHSCTViewModel, value);
+        }
+
+        #endregion
+
+        #region Cac command thao tac du lieu
 
         public ICommand ShowThemMoiTapHSCTGocInitCustomContentDialogCommand { get; private set; }
 
@@ -156,7 +182,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
 
         private async void ShowChinhSuaTapHSCTGocInitCustomContentDialog(TapHSCTGocInitModel tapHSCTGoc)
         {
-            var tapHSCTCanChinhSua = (TapHSCTGocInitModel)tapHSCTGoc.Clone();
+            var tapHSCTCanChinhSua = tapHSCTGoc.DeepClone();
 
             var dialogViewModel = new ChinhSuaTapHSCTGocInitCustomContentDialogViewModel();
 
@@ -235,7 +261,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
 
             //Kiem tra khoang so ho so
             var toanBoCacTapHSCTTrongToanXaPhuong = CacThonXomKemTheoTapHSCTViewModel.SelectMany(x => x.CacTapHSCTGoc)
-                .ToList().Clone().ToList();
+                .ToList().DeepClone().ToList();
             //Loai bo tap ho so dang chinh sua
             toanBoCacTapHSCTTrongToanXaPhuong.RemoveAll(x =>
                 x.ThonXom.TenThonXom == tapHSCTChinhSua.ThonXom.TenThonXom &&
@@ -294,6 +320,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
             }
         }
 
+        #endregion
+
         #region Dieu huong truoc, sau
 
         public ICommand ChuyenBuocKhoiTaoCacTuiHSCTCommand { get; private set; }
@@ -320,21 +348,6 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
 
         #endregion
 
-
-        private void InitCommands()
-        {
-            ShowThemMoiTapHSCTGocInitCustomContentDialogCommand =
-                new DelegateCommand(ShowThemMoiTapHSCTGocInitCustomContentDialog);
-
-            ShowChinhSuaTapHSCTGocInitCustomContentDialogCommand =
-                new DelegateCommand<TapHSCTGocInitModel>(ShowChinhSuaTapHSCTGocInitCustomContentDialog);
-
-            XoaTapHSCTGocInitCommand = new DelegateCommand<TapHSCTGocInitModel>(XoaTapHSCTGocInit);
-
-            //Khoi tao command dieu huong truoc, sau
-            QuayVeBuocKhoiTaoDanhSachThonXomCommand = new DelegateCommand(QuayVeBuocKhoiTaoDanhSachThonXom);
-            ChuyenBuocKhoiTaoCacTuiHSCTCommand = new DelegateCommand(ChuyenBuocKhoiTaoCacTuiHSCT);
-        }
 
         #region Thuc thi INavigationAware
 

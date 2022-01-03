@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="QuanLyTangThuHoKhau.KhoiTaoDuLieuBanDau.Views.GioiThieuKhoiTaoDuLieuBanDauView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:QuanLyTangThuHoKhau.KhoiTaoDuLieuBanDau.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:ui="http://schemas.modernwpf.com/2019">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ui:SimpleStackPanel Spacing="15"
+                             VerticalAlignment="Center"
+                             Margin="20 0">
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}"
+                       Text="Quản lý lưu trữ tàng thư hộ khẩu"
+                       TextWrapping="WrapWithOverflow">
+            </TextBlock>
+            <TextBlock Style="{StaticResource BodyTextBlockStyle}"
+                       Text="Khởi tạo dữ liệu các hộ thường trú gốc"
+                       TextWrapping="WrapWithOverflow">
+            </TextBlock>
+            <Button Style="{DynamicResource AccentButtonStyle}"
+                    Content="Bắt đầu"
+                    Command="{Binding BatDauKhoiTaoDuLieuCommand}">
+            </Button>
+        </ui:SimpleStackPanel>
+        <Image Grid.Column="1"
+               Source="pack://application:,,,/QuanLyTangThuHoKhau.Core;component/Assets/KhoiTaoDuLieuBanDauImages/anh_gioi_thieu_khoi_tao.png">
+        </Image>
+    </Grid>
+</UserControl>

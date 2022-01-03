@@ -8,9 +8,28 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:prism="http://prismlibrary.com/"
-             prism:ViewModelLocator.AutoWireViewModel="True">
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             x:Name="RootKhoiTaoCacTapHSCTViewUserControl">
     <UserControl.Resources>
-        <DataTemplate x:Key="TapHSCTDataTemplate">
+        <!-- Context menu chinh sua tap ho so -->
+        <ContextMenu x:Key="ChinhSuaThongTinTapHSCTItemContextMenu">
+            <MenuItem Header="Chỉnh sửa tập HSCT"
+                      Click="ChinhSuaThongTinTapHSCTItemContextMenu_OnChinhSua">
+                <MenuItem.Icon>
+                    <ui:FontIcon Glyph="&#xE1C2;" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator></Separator>
+            <MenuItem Header="Xoá tập HSCT"
+                      Click="ChinhSuaThongTinTapHSCTItemContextMenu_OnXoa">
+                <MenuItem.Icon>
+                    <ui:FontIcon Glyph="&#xE107;" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+
+        <!-- Hien thi tap ho so trong danh sach tap ho so-->
+        <DataTemplate x:Key="TapHSCTItemDataTemplate">
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
@@ -37,83 +56,102 @@
 
             </StackPanel>
         </DataTemplate>
+        <!-- Hien thi danh sach tap ho so khi khong co ho so nao -->
+        <DataTemplate x:Key="HienThiChuaCoTapHSCTDataTemplate">
+            <TextBlock Text="Chưa có tập HSCT của thôn, xóm được thêm"></TextBlock>
+        </DataTemplate>
+        <!-- Hien thi danh sach tap ho so khi co ho so-->
+        <DataTemplate x:Key="HienThiDanhSachTapHSCTCuaThonXomDataTemplate">
+            <ListBox
+                x:Name="CacTapHSCTTrongThonXomListBox"
+                ItemsSource="{Binding CacTapHSCTGoc}"
+                ItemTemplate="{StaticResource TapHSCTItemDataTemplate}">
+                <ListBox.Resources>
+                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                        <Setter Property="ContextMenu" Value="{StaticResource ChinhSuaThongTinTapHSCTItemContextMenu}" />
 
-        <DataTemplate x:Key="ThonXomKemTheoTapHSCTTemplate">
+                    </Style>
+                </ListBox.Resources>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </DataTemplate>
+        <!-- Style de lua chon data template hien thi danh sach tap ho so -->
+        <Style x:Key="HienThiNoiDungCacTapHSCTStyle"
+               TargetType="ContentControl">
+            <Setter Property="ContentTemplate"
+                    Value="{StaticResource HienThiDanhSachTapHSCTCuaThonXomDataTemplate}">
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CacTapHSCTGoc.Count}"
+                             Value="0">
+                    <Setter Property="ContentTemplate"
+                            Value="{StaticResource HienThiChuaCoTapHSCTDataTemplate}">
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Hien thi thon, xom -->
+        <DataTemplate x:Key="ThonXomKemTheoTapHSCTItemDataTemplate">
             <StackPanel>
                 <TextBlock
                     Text="{Binding ThonXom.TenThonXom, Mode=OneTime}"
-                    Padding="8"
-                    Style="{StaticResource TitleTextBlockStyle}" />
-                <ListBox
-                    x:Name="CacTapHSCTTrongThonXomListBox"
-                    ItemsSource="{Binding CacTapHSCTGoc}"
-                    ItemTemplate="{StaticResource TapHSCTDataTemplate}">
-                    <ListBox.Resources>
-                        <!--Defines a context menu-->
-                        <ContextMenu x:Key="ModifyListBoxItemContextMenu">
-                            <MenuItem Header="Chỉnh sửa tập HSCT"
-                                      Command="{Binding DataContext.ShowChinhSuaTapHSCTGocInitCustomContentDialogCommand, Source={x:Reference CacThonXomItemsRepeater}}"
-                                      CommandParameter="{Binding}">
-                                <MenuItem.Icon>
-                                    <ui:FontIcon Glyph="&#xE1C2;" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <Separator></Separator>
-                            <MenuItem Header="Xoá tập HSCT"
-                                      Command="{Binding DataContext.XoaTapHSCTGocInitCommand, Source={x:Reference CacThonXomItemsRepeater}}"
-                                      CommandParameter="{Binding}">
-                                <MenuItem.Icon>
-                                    <ui:FontIcon Glyph="&#xE107;" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                        </ContextMenu>
-                        <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                            <Setter Property="ContextMenu" Value="{StaticResource ModifyListBoxItemContextMenu}" />
-                        </Style>
-                    </ListBox.Resources>
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel IsItemsHost="True" />
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                </ListBox>
+                    Style="{StaticResource SubtitleTextBlockStyle}" />
+                <!-- Hien thi danh sach cac tap ho so -->
+                <ContentControl Content="{Binding}"
+                                Style="{StaticResource HienThiNoiDungCacTapHSCTStyle}">
+                </ContentControl>
             </StackPanel>
         </DataTemplate>
-    </UserControl.Resources>
-    <ui:SimpleStackPanel>
-        <TextBlock
-            Text="Thiết lập các tập hồ sơ"
-            Style="{StaticResource TitleTextBlockStyle}"
-            FontSize="28"
-            Margin="0,8,0,12" />
-        <GroupBox Header="Thêm tập HSCT">
-            <StackPanel>
-                <Button Content="Thêm"
-                        Style="{DynamicResource AccentButtonStyle}"
-                        Command="{Binding ShowThemMoiTapHSCTGocInitCustomContentDialogCommand}">
-                </Button>
-            </StackPanel>
-        </GroupBox>
-        <GroupBox Header="Hồ sơ của các thôn, xóm">
+        <!-- Hien thi danh sach thon xom khi khong co thon xom nao -->
+        <DataTemplate x:Key="HienThiChuaCoThonXomDataTemplate">
+            <TextBlock Text="Chưa có thôn, xóm nào được thêm"></TextBlock>
+        </DataTemplate>
+        <!-- Hien thi danh sach tap ho so khi co thon xom -->
+        <DataTemplate x:Key="HienThiDanhSachThonXomDataTemplate">
             <ui:ItemsRepeaterScrollHost>
                 <ScrollViewer HorizontalScrollBarVisibility="Auto">
                     <ui:ItemsRepeater
                         VerticalAlignment="Top"
                         ItemsSource="{Binding CacThonXomKemTheoTapHSCTViewModel}"
-                        ItemTemplate="{StaticResource ThonXomKemTheoTapHSCTTemplate}"
+                        ItemTemplate="{StaticResource ThonXomKemTheoTapHSCTItemDataTemplate}"
                         x:Name="CacThonXomItemsRepeater">
-
                         <ui:ItemsRepeater.Layout>
                             <ui:StackLayout Orientation="Vertical" />
                         </ui:ItemsRepeater.Layout>
-
                     </ui:ItemsRepeater>
                 </ScrollViewer>
             </ui:ItemsRepeaterScrollHost>
-        </GroupBox>
+        </DataTemplate>
+        <!-- Style de lua chon data template hien thi danh sach tap ho so -->
+        <Style x:Key="HienThiNoiDungCacThonXomStyle"
+               TargetType="ContentControl">
+            <Setter Property="ContentTemplate"
+                    Value="{StaticResource HienThiDanhSachThonXomDataTemplate}">
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CacThonXomKemTheoTapHSCTViewModel.Count}"
+                             Value="0">
+                    <Setter Property="ContentTemplate"
+                            Value="{StaticResource HienThiChuaCoThonXomDataTemplate}">
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
-        <ui:SimpleStackPanel Spacing="5"
-                             Orientation="Horizontal">
+    </UserControl.Resources>
+
+    <DockPanel LastChildFill="True">
+        <!-- Cac nut dieu huong -->
+        <ui:SimpleStackPanel Orientation="Horizontal"
+                             DockPanel.Dock="Bottom"
+                             HorizontalAlignment="Right"
+                             Margin="0 0 20 20"
+                             Spacing="5">
             <Button
                 Content="Quay lại"
                 Command="{Binding QuayVeBuocKhoiTaoDanhSachThonXomCommand}">
@@ -124,5 +162,60 @@
                 Command="{Binding ChuyenBuocKhoiTaoCacTuiHSCTCommand}">
             </Button>
         </ui:SimpleStackPanel>
-    </ui:SimpleStackPanel>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <ui:SimpleStackPanel Grid.Column="0"
+                                 VerticalAlignment="Center"
+                                 Margin="20 0">
+                <!-- Tieu de view -->
+                <TextBlock
+                    Text="Thiết lập các tập HSCT"
+                    Style="{DynamicResource PageTitleStyle}"
+                    DockPanel.Dock="Top" />
+                <!-- Them moi tap ho so -->
+                <ui:SimpleStackPanel Spacing="4">
+                    <TextBlock Style="{StaticResource BodyTextBlockStyle}"
+                               Text="Tập HSCT là cấp lưu trữ chứa các túi HSCT. Nhấn vào nút Thêm mới để thêm các tập HSCT mới vào thôn, xóm"
+                               TextWrapping="WrapWithOverflow">
+                    </TextBlock>
+                    <Button Content="Thêm mới"
+                            Style="{DynamicResource AccentButtonStyle}"
+                            Command="{Binding ShowThemMoiTapHSCTGocInitCustomContentDialogCommand}">
+                    </Button>
+                </ui:SimpleStackPanel>
+
+
+            </ui:SimpleStackPanel>
+            <Grid Grid.Column="1" Margin="20 0 0 0"
+                  VerticalAlignment="Center">
+                <!-- Noi dung -->
+                <ScrollViewer>
+                    <GroupBox Header="Hồ sơ của các thôn, xóm">
+                        <ui:SimpleStackPanel Spacing="8">
+                            
+
+                            <ui:SimpleStackPanel>
+                                <TextBlock
+                                    Text="Danh sách tập HSCT thuộc các thôn, xóm"
+                                    Style="{DynamicResource BoxHeaderStyle}" />
+
+                                <!-- Hien thi danh sach thon, xom thuoc xa, phuong -->
+                                <ContentControl Style="{StaticResource HienThiNoiDungCacThonXomStyle}"
+                                                Content="{Binding}">
+                                </ContentControl>
+                            </ui:SimpleStackPanel>
+                        </ui:SimpleStackPanel>
+                    </GroupBox>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+
+
+    </DockPanel>
+
+
 </UserControl>

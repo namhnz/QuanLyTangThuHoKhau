@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <None Remove="Assets\AppIcons\app_icon.ico" />
+    <None Remove="Assets\KhoiTaoDuLieuBanDauImages\anh_gioi_thieu_khoi_tao.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +33,7 @@
 
   <ItemGroup>
     <Resource Include="Assets\AppIcons\app_icon.ico" />
+    <Resource Include="Assets\KhoiTaoDuLieuBanDauImages\anh_gioi_thieu_khoi_tao.png" />
   </ItemGroup>
 
 </Project>
