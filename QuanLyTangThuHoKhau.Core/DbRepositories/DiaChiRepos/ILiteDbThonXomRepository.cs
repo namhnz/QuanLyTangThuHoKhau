@@ -24,5 +24,7 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.DiaChiRepos
         public bool Update(ThonXom thonXom);
 
         public bool Delete(int id);
+
+        public void DeleteAll();
     }
 }

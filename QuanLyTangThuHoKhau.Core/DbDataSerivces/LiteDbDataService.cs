@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using QuanLyTangThuHoKhau.Core.Database;
 using QuanLyTangThuHoKhau.Core.DbRepositories.DiaChiRepos;
 using QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos;
@@ -19,6 +20,13 @@ namespace QuanLyTangThuHoKhau.Core.DbDataSerivces
 
         public LiteDbDataService()
         {
+            var appFolder = System.AppDomain.CurrentDomain.BaseDirectory;
+            var dataFolder = Path.Combine(appFolder, @"data");
+            if (!Directory.Exists(dataFolder))
+            {
+                Directory.CreateDirectory(dataFolder);
+            }
+
             string connStr = LiteDbConfig.ConnectionString;
 
             if (string.IsNullOrEmpty(connStr))

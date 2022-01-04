@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Newtonsoft.Json;
 using QuanLyTangThuHoKhau.Core.Models;
 
@@ -64,6 +65,16 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.SampleDataServices
         public static List<ThonXom> ToanBoThonXom()
         {
             return SampleData._danhSachThonXom;
+        }
+
+        public static bool ThemThonXomMoi(ThonXom thonXomMoi)
+        {
+            var thonXomIdMoiNhat = SampleData._danhSachThonXom.Max(x => x.Id);
+
+            thonXomMoi.Id = thonXomIdMoiNhat + 1;
+            
+            SampleData._danhSachThonXom.Add(thonXomMoi);
+            return true;
         }
     }
 }

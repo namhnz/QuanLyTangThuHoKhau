@@ -65,5 +65,11 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos
             return _liteDb.GetCollection<TuiHSCT>(DataReposNames.CAC_TUI_HSCT)
                 .Delete(id);
         }
+
+        public void DeleteAll()
+        {
+            _liteDb.GetCollection<TuiHSCT>(DataReposNames.CAC_TUI_HSCT)
+                .DeleteAll();
+        }
     }
 }

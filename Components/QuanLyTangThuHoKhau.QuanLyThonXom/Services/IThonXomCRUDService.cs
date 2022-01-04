@@ -8,8 +8,14 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
     public interface IThonXomCRUDService
     {
         public Task<List<ThonXom>> LietKeToanBoThonXom();
+
         public Task ThemThonXomMoi(string tenThonXom, DonViHanhChinhChung donViHanhChinhXaPhuong);
+        public Task ThemThonXomMoi(ThonXom thonXomMoi);
+
         public Task ThayDoiTenThonXomDaCo(int idThonXomDaCo, string tenThonXom);
+
         public Task XoaThonXomDaCo(int idThonXomDaCo);
+
+        public Task XoaTatCaDuLieu();
     }
 }

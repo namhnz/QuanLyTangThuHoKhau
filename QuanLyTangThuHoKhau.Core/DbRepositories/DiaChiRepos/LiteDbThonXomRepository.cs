@@ -30,8 +30,9 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.DiaChiRepos
 
         public bool Insert(ThonXom thonXom)
         {
-            return _liteDb.GetCollection<ThonXom>(DataReposNames.CAC_THON_XOM)
+            var insertedId = _liteDb.GetCollection<ThonXom>(DataReposNames.CAC_THON_XOM)
                 .Insert(thonXom);
+            return insertedId != null;
         }
 
         public int InsertMany(IEnumerable<ThonXom> cacThonXom)
@@ -50,6 +51,12 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.DiaChiRepos
         {
             return _liteDb.GetCollection<ThonXom>(DataReposNames.CAC_THON_XOM)
                 .Delete(id);
+        }
+
+        // Xoa tat ca moi thu trong du lieu
+        public void DeleteAll()
+        {
+            _liteDb.GetCollection<ThonXom>(DataReposNames.CAC_THON_XOM).DeleteAll();
         }
     }
 }

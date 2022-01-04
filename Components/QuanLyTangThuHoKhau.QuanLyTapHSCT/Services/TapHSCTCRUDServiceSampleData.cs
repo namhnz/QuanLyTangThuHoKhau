@@ -1,17 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.AppServices.SampleDataServices;
-using QuanLyTangThuHoKhau.Core.DbDataSerivces;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Exceptions;
-using Unity.Lifetime;
 
 namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
 {
-    public class TapHSCTCRUDServiceSampleData: ITapHSCTCRUDService
+    public class TapHSCTCRUDServiceSampleData : ITapHSCTCRUDService
     {
+        #region Lay thong tin
 
         public async Task<List<TapHSCT>> LietKeToanBoTapHSCT()
         {
@@ -37,9 +37,9 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
                     ErrorMessage = "Thôn, xóm đã chọn không tồn tại"
                 };
             }
-            
+
             var toanBoTapHSCT = await LietKeToanBoTapHSCT();
-            
+
             var cacTapHSCTTheoThonXom = toanBoTapHSCT.Where(x => x.ThonXom.Id == thonXom.Id)
                 .OrderBy(x => x.ThuTuTapHSCT).ToList();
             return cacTapHSCTTheoThonXom;
@@ -47,91 +47,43 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
 
         public async Task<TapHSCT> LayTapHSCTBoSungCuaThonXom(ThonXom thonXom)
         {
-            // if (thonXom == null)
-            // {
-            //     throw new ChuaChonThonXomChuaTapHSCTException()
-            //     {
-            //         ErrorMessage = "Chưa chọn thôn, xóm để lấy các tập hồ sơ"
-            //     };
-            // }
-            //
-            // var thonXomDaCo = _dataService.ThonXomRepository.FindOne(thonXom.Id);
-            // if (thonXomDaCo == null)
-            // {
-            //     throw new ChuaChonThonXomChuaTapHSCTException()
-            //     {
-            //         ErrorMessage = "Thôn, xóm đã chọn không tồn tại"
-            //     };
-            // }
-            //
             var toanBoTapHSCT = await LietKeToanBoTapHSCT();
-            
+
             var tapHSCTBoSungCuaThonXom = toanBoTapHSCT
                 .Where(x => x.ThonXom.Id == thonXom.Id)
                 .First(x => x.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTBoSung);
-            
-            return tapHSCTBoSungCuaThonXom;
 
+            return tapHSCTBoSungCuaThonXom;
         }
+
+        #endregion
+
+        #region Them tap ho so moi
 
         public async Task ThemTapHSCTMoi(int thuTuTapHSCT, LoaiTapHSCT loaiTapHSCT, ThonXom thonXom)
         {
-            // if (thuTuTapHSCT <= 0)
-            // {
-            //     throw new ThuTuTapHSCTKhongDungException()
-            //     {
-            //         ErrorMessage = "Số thứ tự của tập hồ sơ thêm mới không đúng"
-            //     };
-            // }
-            //
-            // if (thonXom == null)
-            // {
-            //     throw new ChuaChonThonXomChuaTapHSCTException()
-            //     {
-            //         ErrorMessage = "Chưa chọn thôn, xóm chứa tập hồ sơ"
-            //     };
-            // }
-            //
-            // var thonXomDaCo = _dataService.ThonXomRepository.FindOne(thonXom.Id);
-            // if (thonXomDaCo == null)
-            // {
-            //     throw new ChuaChonThonXomChuaTapHSCTException()
-            //     {
-            //         ErrorMessage = "Thôn, xóm đã chọn không tồn tại"
-            //     };
-            // }
-            //
-            // //Khong the them moi tap ho so goc co cung so thu tu
-            // if (loaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTGoc)
-            // {
-            //     var tapHSCTGocDaTonTai = (await LietKeToanBoTapHSCT()).Any(x =>
-            //         x.ThuTuTapHSCT == thuTuTapHSCT && x.ThonXom.Id == thonXom.Id);
-            //
-            //     if (tapHSCTGocDaTonTai)
-            //     {
-            //         throw new ThuTuTapHSCTKhongDungException()
-            //         {
-            //             ErrorMessage = "Không thể thêm thêm tập hồ sơ gốc với cùng số thứ tự trong cùng thôn, xóm"
-            //         };
-            //     }
-            // }
-            //
-            //
-            // var tapHSCTMoi = new TapHSCT()
-            // {
-            //     ThuTuTapHSCT = thuTuTapHSCT,
-            //     LoaiTapHSCT = loaiTapHSCT,
-            //     ThonXom = thonXom
-            // };
-            //
-            // await Task.Run(() => { _dataService.TapHSCTRepository.Insert(tapHSCTMoi); });
+            throw new NotImplementedException(
+                "Sample data không hỗ trợ các phương thức khởi tạo dữ liệu mà tự tạo dữ liệu có sẵn");
         }
-        
+
+        public Task ThemTapHSCTMoi(TapHSCT tapHSCTMoi)
+        {
+            throw new NotImplementedException(
+                "Sample data không hỗ trợ các phương thức khởi tạo dữ liệu mà tự tạo dữ liệu có sẵn");
+        }
+
+        #endregion
+
         //Tap ho so sau khi da tao thi khong the thay doi
+
+        #region Xoa tap ho so
 
         public async Task XoaTapHSCTDaCo(int idTapHSCTDaCo)
         {
-            // await Task.Run(() => { _dataService.ThonXomRepository.Delete(idTapHSCTDaCo); });
+            throw new NotImplementedException(
+                "Sample data không hỗ trợ các phương thức khởi tạo dữ liệu mà tự tạo dữ liệu có sẵn");
         }
+
+        #endregion
     }
 }

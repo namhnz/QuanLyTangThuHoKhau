@@ -64,30 +64,36 @@
                     Style="{DynamicResource PageTitleStyle}"
                     DockPanel.Dock="Top" />
 
-                <GroupBox Header="Khởi tạo các túi HSCT">
-                    <ui:SimpleStackPanel Spacing="4">
-                        <TextBlock
-                            Text="Trạng thái khởi tạo các túi HSCT"
-                            Style="{DynamicResource BoxHeaderStyle}" />
 
-                        <ContentControl
-                            d:ContentTemplate="{StaticResource TrangThaiDaKhoiTaoXongCacTuiHSCTDataTemplate}">
-                            <ContentControl.Style>
-                                <Style TargetType="{x:Type ContentControl}">
-                                    <Setter Property="ContentTemplate"
-                                            Value="{StaticResource TrangThaiDaKhoiTaoXongCacTuiHSCTDataTemplate}">
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <DataTrigger
-                                            Binding="{Binding DataContext.IsDangKhoiTaoCacTuiHSCT, ElementName=RootKhoiTaoCacTuiHoSoUserControl}"
-                                            Value="True">
-                                            <Setter Property="ContentTemplate"
-                                                    Value="{StaticResource TrangThaiDangKhoiTaoCacTuiHSCTDataTemplate}" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ContentControl.Style>
-                        </ContentControl>
+                <GroupBox Header="Khởi tạo các túi HSCT">
+                    <ui:SimpleStackPanel Spacing="8">
+                        <Button Content="Khởi tạo dữ liệu"
+                                Command="{Binding TaoDuLieuVaGhiVaoDbCommand}"></Button>
+
+                        <ui:SimpleStackPanel Spacing="4">
+                            <TextBlock
+                                Text="Trạng thái khởi tạo các túi HSCT"
+                                Style="{DynamicResource BoxHeaderStyle}" />
+
+                            <ContentControl
+                                d:ContentTemplate="{StaticResource TrangThaiDaKhoiTaoXongCacTuiHSCTDataTemplate}">
+                                <ContentControl.Style>
+                                    <Style TargetType="{x:Type ContentControl}">
+                                        <Setter Property="ContentTemplate"
+                                                Value="{StaticResource TrangThaiDaKhoiTaoXongCacTuiHSCTDataTemplate}">
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding DataContext.IsDangKhoiTaoCacTuiHSCT, ElementName=RootKhoiTaoCacTuiHoSoUserControl}"
+                                                Value="True">
+                                                <Setter Property="ContentTemplate"
+                                                        Value="{StaticResource TrangThaiDangKhoiTaoCacTuiHSCTDataTemplate}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
+                        </ui:SimpleStackPanel>
                     </ui:SimpleStackPanel>
                 </GroupBox>
 

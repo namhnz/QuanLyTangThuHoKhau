@@ -5,11 +5,10 @@ using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.DbDataSerivces;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Exceptions;
-using Unity.Lifetime;
 
 namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
 {
-    public class TapHSCTCRUDService: ITapHSCTCRUDService
+    public class TapHSCTCRUDService : ITapHSCTCRUDService
     {
         private readonly ILiteDbDataService _dataService;
 
@@ -78,6 +77,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
             return tapHSCTBoSungCuaThonXom;
         }
 
+        #region Them moi tap ho so
+
         public async Task ThemTapHSCTMoi(int thuTuTapHSCT, LoaiTapHSCT loaiTapHSCT, ThonXom thonXom)
         {
             if (thuTuTapHSCT <= 0)
@@ -130,7 +131,54 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
 
             await Task.Run(() => { _dataService.TapHSCTRepository.Insert(tapHSCTMoi); });
         }
-        
+
+        public async Task ThemTapHSCTMoi(TapHSCT tapHSCTMoi)
+        {
+            if (tapHSCTMoi.ThuTuTapHSCT <= 0)
+            {
+                throw new ThuTuTapHSCTKhongDungException()
+                {
+                    ErrorMessage = "Số thứ tự của tập hồ sơ thêm mới không đúng"
+                };
+            }
+
+            if (tapHSCTMoi.ThonXom == null)
+            {
+                throw new ChuaChonThonXomChuaTapHSCTException()
+                {
+                    ErrorMessage = "Chưa chọn thôn, xóm chứa tập hồ sơ"
+                };
+            }
+
+            var thonXomDaCo = _dataService.ThonXomRepository.FindOne(tapHSCTMoi.ThonXom.Id);
+            if (thonXomDaCo == null)
+            {
+                throw new ChuaChonThonXomChuaTapHSCTException()
+                {
+                    ErrorMessage = "Thôn, xóm đã chọn không tồn tại"
+                };
+            }
+
+            //Khong the them moi tap ho so goc co cung so thu tu
+            if (tapHSCTMoi.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTGoc)
+            {
+                var tapHSCTGocDaTonTai = (await LietKeToanBoTapHSCT()).Any(x =>
+                    x.ThuTuTapHSCT == tapHSCTMoi.ThuTuTapHSCT && x.ThonXom.Id == tapHSCTMoi.ThonXom.Id);
+
+                if (tapHSCTGocDaTonTai)
+                {
+                    throw new ThuTuTapHSCTKhongDungException()
+                    {
+                        ErrorMessage = "Không thể thêm thêm tập hồ sơ gốc với cùng số thứ tự trong cùng thôn, xóm"
+                    };
+                }
+            }
+
+            await Task.Run(() => { _dataService.TapHSCTRepository.Insert(tapHSCTMoi); });
+        }
+
+        #endregion
+
         //Tap ho so sau khi da tao thi khong the thay doi
 
         public async Task XoaTapHSCTDaCo(int idTapHSCTDaCo)

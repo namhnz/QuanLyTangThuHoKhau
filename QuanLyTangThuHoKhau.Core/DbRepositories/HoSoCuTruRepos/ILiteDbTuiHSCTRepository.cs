@@ -28,6 +28,7 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos
         #region Xoa
 
         public bool Delete(int id);
+        public void DeleteAll();
 
         #endregion
     }

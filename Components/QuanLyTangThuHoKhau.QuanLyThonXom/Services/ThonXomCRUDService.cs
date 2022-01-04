@@ -23,6 +23,8 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
             return toanBoThonXom;
         }
 
+        #region Them moi
+
         public async Task ThemThonXomMoi(string tenThonXom, DonViHanhChinhChung donViHanhChinhXaPhuong)
         {
             tenThonXom = tenThonXom.Trim();
@@ -54,6 +56,32 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
                 _dataService.ThonXomRepository.Insert(thonXomMoi);
             });
         }
+
+        public async Task ThemThonXomMoi(ThonXom thonXomMoi)
+        {
+            if (thonXomMoi == null || string.IsNullOrEmpty(thonXomMoi.TenThonXom))
+            {
+                throw new TenThonXomKhongDungException()
+                {
+                    ErrorMessage = "Tên thôn, xóm thêm mới không đúng"
+                };
+            }
+
+            if (thonXomMoi.DonViHanhChinhPhuongXa == null || thonXomMoi.DonViHanhChinhPhuongXa.LoaiCapDonVi != CapDonViHanhChinh.PhuongXa)
+            {
+                throw new DonViHanhChinhXaPhuongKhongDungException()
+                {
+                    ErrorMessage = "Lựa chọn đơn vị hành chính của thôn, xóm thêm mới không phải cấp xã, phường"
+                };
+            }
+            
+            await Task.Run(() =>
+            {
+                _dataService.ThonXomRepository.Insert(thonXomMoi);
+            });
+        }
+
+        #endregion
 
         public async Task ThayDoiTenThonXomDaCo(int idThonXomDaCo, string tenThonXom)
         {
@@ -92,6 +120,16 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
             await Task.Run(() =>
             {
                 _dataService.ThonXomRepository.Delete(idThonXomDaCo);
+            });
+        }
+
+        public async Task XoaTatCaDuLieu()
+        {
+            await Task.Run(() =>
+            {
+                _dataService.TuiHSCTRepository.DeleteAll();
+                _dataService.TapHSCTRepository.DeleteAll();
+                _dataService.ThonXomRepository.DeleteAll();
             });
         }
     }

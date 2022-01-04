@@ -26,7 +26,7 @@ namespace QuanLyTangThuHoKhau
 
             containerRegistry.RegisterSingleton<IDialogService, DialogService>();
             containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
-            containerRegistry.RegisterSingleton<IDonViHanhChinhService, DonViHanhChinhService>();
+            // containerRegistry.RegisterSingleton<IDonViHanhChinhService, DonViHanhChinhService>();
 
             //Khoi tao cac view de dieu huong
             containerRegistry.RegisterForNavigation<KhoiTaoDuLieuBanDauRootView>();
@@ -34,7 +34,7 @@ namespace QuanLyTangThuHoKhau
 
             containerRegistry.RegisterForNavigation<GioiThieuKhoiTaoDuLieuBanDauView>();
 
-            containerRegistry.RegisterSingleton<ITuiHSCTCRUDService, TuiHSCTCRUDServiceSampleData>();
+            // containerRegistry.RegisterSingleton<ITuiHSCTCRUDService, TuiHSCTCRUDServiceSampleData>();
 
         }
 

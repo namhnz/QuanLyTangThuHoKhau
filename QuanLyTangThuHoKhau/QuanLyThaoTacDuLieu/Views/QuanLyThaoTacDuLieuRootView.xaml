@@ -12,7 +12,7 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:qldlCoreTypes="clr-namespace:QuanLyTangThuHoKhau.Core.Types.QuanLyDuLieu;assembly=QuanLyTangThuHoKhau.Core"
              xmlns:menuPart="clr-namespace:QuanLyTangThuHoKhau.MenuPart;assembly=QuanLyTangThuHoKhau.MenuPart">
-    <Grid x:Name="LayoutRoot">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />

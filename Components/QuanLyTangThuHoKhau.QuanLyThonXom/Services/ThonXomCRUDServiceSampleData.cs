@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types;
@@ -20,34 +21,58 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
 
         public async Task ThemThonXomMoi(string tenThonXom, DonViHanhChinhChung donViHanhChinhXaPhuong)
         {
-            // tenThonXom = tenThonXom.Trim();
-            //
-            // if (string.IsNullOrEmpty(tenThonXom))
-            // {
-            //     throw new TenThonXomKhongDungException()
-            //     {
-            //         ErrorMessage = "Tên thôn, xóm thêm mới không đúng"
-            //     };
-            // }
-            //
-            // if (donViHanhChinhXaPhuong == null || donViHanhChinhXaPhuong.LoaiCapDonVi != CapDonViHanhChinh.PhuongXa)
-            // {
-            //     throw new DonViHanhChinhXaPhuongKhongDungException()
-            //     {
-            //         ErrorMessage = "Lựa chọn đơn vị hành chính của thôn, xóm thêm mới không phải cấp xã, phường"
-            //     };
-            // }
-            //
-            // var thonXomMoi = new ThonXom()
-            // {
-            //     TenThonXom = tenThonXom,
-            //     DonViHanhChinhPhuongXa = donViHanhChinhXaPhuong
-            // };
-            //
-            // await Task.Run(() =>
-            // {
-            //     _dataService.ThonXomRepository.Insert(thonXomMoi);
-            // });
+            tenThonXom = tenThonXom.Trim();
+            
+            if (string.IsNullOrEmpty(tenThonXom))
+            {
+                throw new TenThonXomKhongDungException()
+                {
+                    ErrorMessage = "Tên thôn, xóm thêm mới không đúng"
+                };
+            }
+            
+            if (donViHanhChinhXaPhuong == null || donViHanhChinhXaPhuong.LoaiCapDonVi != CapDonViHanhChinh.PhuongXa)
+            {
+                throw new DonViHanhChinhXaPhuongKhongDungException()
+                {
+                    ErrorMessage = "Lựa chọn đơn vị hành chính của thôn, xóm thêm mới không phải cấp xã, phường"
+                };
+            }
+            
+            var thonXomMoi = new ThonXom()
+            {
+                TenThonXom = tenThonXom,
+                DonViHanhChinhPhuongXa = donViHanhChinhXaPhuong
+            };
+            
+            await Task.Run(() =>
+            {
+                ThonXomSampleData.ThemThonXomMoi(thonXomMoi);
+            });
+        }
+
+        public async Task ThemThonXomMoi(ThonXom thonXomMoi)
+        {
+            if (thonXomMoi == null || string.IsNullOrEmpty(thonXomMoi.TenThonXom))
+            {
+                throw new TenThonXomKhongDungException()
+                {
+                    ErrorMessage = "Tên thôn, xóm thêm mới không đúng"
+                };
+            }
+
+            if (thonXomMoi.DonViHanhChinhPhuongXa == null || thonXomMoi.DonViHanhChinhPhuongXa.LoaiCapDonVi != CapDonViHanhChinh.PhuongXa)
+            {
+                throw new DonViHanhChinhXaPhuongKhongDungException()
+                {
+                    ErrorMessage = "Lựa chọn đơn vị hành chính của thôn, xóm thêm mới không phải cấp xã, phường"
+                };
+            }
+
+            await Task.Run(() =>
+            {
+                ThonXomSampleData.ThemThonXomMoi(thonXomMoi);
+            });
         }
 
         public async Task ThayDoiTenThonXomDaCo(int idThonXomDaCo, string tenThonXom)
@@ -88,6 +113,11 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
             // {
             //     _dataService.ThonXomRepository.Delete(idThonXomDaCo);
             // });
+        }
+
+        public async Task XoaTatCaDuLieu()
+        {
+            throw new NotImplementedException("Sample data không hỗ trợ các phương thức khởi tạo dữ liệu mà tự tạo dữ liệu có sẵn");
         }
     }
 }

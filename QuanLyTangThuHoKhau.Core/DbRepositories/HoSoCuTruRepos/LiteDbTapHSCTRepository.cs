@@ -52,7 +52,11 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos
             return _liteDb.GetCollection<TapHSCT>(DataReposNames.CAC_TAP_HSCT)
                 .Delete(id);
         }
-        
 
+        public void DeleteAll()
+        {
+            _liteDb.GetCollection<TapHSCT>(DataReposNames.CAC_TAP_HSCT)
+                .DeleteAll();
+        }
     }
 }

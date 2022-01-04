@@ -18,5 +18,6 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos
         public bool Update(TapHSCT tapHSCT);
 
         public bool Delete(int id);
+        public void DeleteAll();
     }
 }
