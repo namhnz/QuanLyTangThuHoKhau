@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Gress;
 using log4net;
 using Newtonsoft.Json;
 using Prism.Commands;
@@ -53,14 +54,20 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 
         #region Khoi tao
 
+        public IProgressManager ProgressManager { get; } = new ProgressManager();
+
         private void InitCommands()
         {
             // Khoi tao command tao va ghi du lieu vao db
-            TaoDuLieuVaGhiVaoDbCommand = new DelegateCommand(TaoDuLieuVaGhiVaoDb);
+            TaoDuLieuVaGhiVaoDbCommand =
+                new DelegateCommand(TaoDuLieuVaGhiVaoDb, () => !IsDangKhoiTaoCacTuiHSCT).ObservesProperty(() =>
+                    IsDangKhoiTaoCacTuiHSCT);
 
             //Khoi tao command dieu huong truoc, sau
-            QuayVeBuocTaoCacTapHSCTGocCommand = new DelegateCommand(QuayVeBuocTaoCacTapHSCTGoc);
-            HoanThanhKhoiTaoDuLieuBanDauCommand = new DelegateCommand(HoanThanhKhoiTaoDuLieuBanDau);
+            QuayVeBuocTaoCacTapHSCTGocCommand = new DelegateCommand(QuayVeBuocTaoCacTapHSCTGoc, () => !IsDangKhoiTaoCacTuiHSCT).ObservesProperty(() =>
+                IsDangKhoiTaoCacTuiHSCT);
+            HoanThanhKhoiTaoDuLieuBanDauCommand = new DelegateCommand(HoanThanhKhoiTaoDuLieuBanDau, () => !IsDangKhoiTaoCacTuiHSCT).ObservesProperty(() =>
+                IsDangKhoiTaoCacTuiHSCT);
         }
 
         #endregion
@@ -98,11 +105,11 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 
         private void HoanThanhKhoiTaoDuLieuBanDau()
         {
-            if (IsDangKhoiTaoCacTuiHSCT)
-            {
-                MessageBox.Show("Quá trình tạo dữ liệu đang được thực hiện");
-                return;
-            }
+            // if (IsDangKhoiTaoCacTuiHSCT)
+            // {
+            //     MessageBox.Show("Quá trình tạo dữ liệu đang được thực hiện");
+            //     return;
+            // }
 
             try
             {
@@ -130,11 +137,11 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 
         private void QuayVeBuocTaoCacTapHSCTGoc()
         {
-            if (IsDangKhoiTaoCacTuiHSCT)
-            {
-                MessageBox.Show("Quá trình tạo dữ liệu đang được thực hiện");
-                return;
-            }
+            // if (IsDangKhoiTaoCacTuiHSCT)
+            // {
+            //     MessageBox.Show("Quá trình tạo dữ liệu đang được thực hiện");
+            //     return;
+            // }
 
             _regionManager.RequestNavigate(KhoiTaoDuLieuBanDauRegionNames.KHOI_TAO_DU_LIEU_BAN_DAU_ROOT_REGION,
                 "KhoiTaoCacTapHSCTView");
@@ -281,11 +288,11 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 
         private async void TaoDuLieuVaGhiVaoDb()
         {
-            if (IsDangKhoiTaoCacTuiHSCT)
-            {
-                MessageBox.Show("Quá trình tạo dữ liệu đang được thực hiện");
-                return;
-            }
+            // if (IsDangKhoiTaoCacTuiHSCT)
+            // {
+            //     MessageBox.Show("Quá trình tạo dữ liệu đang được thực hiện");
+            //     return;
+            // }
 
             try
             {

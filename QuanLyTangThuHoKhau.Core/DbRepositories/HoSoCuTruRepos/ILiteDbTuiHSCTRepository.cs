@@ -20,6 +20,7 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos
         #region Them moi, chinh sua
 
         public bool Insert(TuiHSCT tuiHSCT);
+        public int InsertMany(List<TuiHSCT> cacTuiHSCT);
 
         public bool Update(TuiHSCT tuiHSCT);
 
@@ -28,7 +29,7 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos
         #region Xoa
 
         public bool Delete(int id);
-        public void DeleteAll();
+        public int DeleteAll();
 
         #endregion
     }

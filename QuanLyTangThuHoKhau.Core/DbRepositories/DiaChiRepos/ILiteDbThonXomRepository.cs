@@ -17,7 +17,7 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.DiaChiRepos
 
         public bool Insert(ThonXom thonXom);
 
-        public int InsertMany(IEnumerable<ThonXom> cacThonXom);
+        public int InsertMany(List<ThonXom> cacThonXom);
 
         #endregion
 
@@ -25,6 +25,6 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.DiaChiRepos
 
         public bool Delete(int id);
 
-        public void DeleteAll();
+        public int DeleteAll();
     }
 }

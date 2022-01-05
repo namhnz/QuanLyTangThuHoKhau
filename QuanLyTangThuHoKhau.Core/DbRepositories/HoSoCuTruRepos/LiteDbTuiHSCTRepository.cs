@@ -8,14 +8,14 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos
 {
     public class LiteDbTuiHSCTRepository : ILiteDbTuiHSCTRepository
     {
-        private LiteDatabase _liteDb;
+        private readonly LiteDatabase _liteDb;
 
         public LiteDbTuiHSCTRepository(LiteDbContext liteDbContext)
         {
             _liteDb = liteDbContext.Context;
         }
 
-        #region Tim kiem theo dieu kien
+        #region Tim kiem
 
         public IEnumerable<TuiHSCT> FindAll()
         {
@@ -46,13 +46,25 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos
 
         #endregion
 
+        #region Them moi
+
         public bool Insert(TuiHSCT tuiHSCT)
         {
             var insertedId = _liteDb.GetCollection<TuiHSCT>(DataReposNames.CAC_TUI_HSCT)
                 .Insert(tuiHSCT);
 
-            return insertedId != null;
+            return (int)insertedId > 0;
         }
+
+        public int InsertMany(List<TuiHSCT> cacTuiHSCT)
+        {
+            return _liteDb.GetCollection<TuiHSCT>(DataReposNames.CAC_TUI_HSCT)
+                .InsertBulk(cacTuiHSCT);
+        }
+
+        #endregion
+
+        #region Chinh sua
 
         public bool Update(TuiHSCT tuiHSCT)
         {
@@ -60,16 +72,22 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos
                 .Update(tuiHSCT);
         }
 
+        #endregion
+
+        #region Xoa
+
         public bool Delete(int id)
         {
             return _liteDb.GetCollection<TuiHSCT>(DataReposNames.CAC_TUI_HSCT)
                 .Delete(id);
         }
 
-        public void DeleteAll()
+        public int DeleteAll()
         {
-            _liteDb.GetCollection<TuiHSCT>(DataReposNames.CAC_TUI_HSCT)
+            return _liteDb.GetCollection<TuiHSCT>(DataReposNames.CAC_TUI_HSCT)
                 .DeleteAll();
         }
+
+        #endregion
     }
 }
