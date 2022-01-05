@@ -67,6 +67,11 @@
 
                 <GroupBox Header="Khởi tạo các túi HSCT">
                     <ui:SimpleStackPanel Spacing="8">
+                        <TextBlock Style="{StaticResource CaptionTextBlockStyle}"
+                                   Text="Túi HSCT là cấp lưu trữ nhỏ nhất chứa thông tin HSCT"
+                                   TextWrapping="WrapWithOverflow">
+                        </TextBlock>
+
                         <Button Content="Khởi tạo dữ liệu"
                                 Command="{Binding TaoDuLieuVaGhiVaoDbCommand}"></Button>
 
@@ -84,7 +89,7 @@
                                         </Setter>
                                         <Style.Triggers>
                                             <DataTrigger
-                                                Binding="{Binding DataContext.IsDangKhoiTaoCacTuiHSCT, ElementName=RootKhoiTaoCacTuiHoSoUserControl}"
+                                                Binding="{Binding DataContext.ProgressManager.IsActive, ElementName=RootKhoiTaoCacTuiHoSoUserControl}"
                                                 Value="True">
                                                 <Setter Property="ContentTemplate"
                                                         Value="{StaticResource TrangThaiDangKhoiTaoCacTuiHSCTDataTemplate}" />

@@ -99,11 +99,11 @@
                     </TextBlock>
                     <TextBlock>
                         <TextBlock.Style>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource CaptionTextBlockStyle}">
+                            <Style TargetType="TextBlock">
                                 <Setter Property="Text" Value="{Binding DonViXaPhuongDaChon.TenDonViDuCap }"></Setter>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding DonViXaPhuongDaChon}" Value="{x:Null}">
-                                        <Setter Property="TextBlock.Text" Value="Chưa có xã phường nào được chọn" />
+                                        <Setter Property="TextBlock.Text" Value="Chưa có xã, phường nào được chọn" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -124,7 +124,7 @@
                                 x:Name="TenThonXomItemMoiTextBox"
                                 Width="500"
                                 ui:ControlHelper.Header="Thêm thôn, xóm mới:"
-                                ui:ControlHelper.PlaceholderText="Chỉ nhập tên thôn, xóm, không nhập thêm tên xã, phường" />
+                                ui:ControlHelper.Description="Chỉ nhập tên thôn, xóm, không nhập thêm tên xã, phường"/>
                             <Button Content="Thêm mới"
                                     VerticalAlignment="Bottom"
                                     Command="{Binding ThemThonXomItemCommand}"

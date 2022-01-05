@@ -11,6 +11,8 @@ namespace QuanLyTangThuHoKhau.Core.Models
         public string TenThonXom { get; set; }
         public DonViHanhChinhChung DonViHanhChinhPhuongXa { get; set; }
 
+        public string TenThonXomDayDu => $"{TenThonXom}, {DonViHanhChinhPhuongXa.TenDonViDuCap}";
+
         public override string ToString()
         {
             return $"{TenThonXom}, {DonViHanhChinhPhuongXa.TenDonViDuCap}";

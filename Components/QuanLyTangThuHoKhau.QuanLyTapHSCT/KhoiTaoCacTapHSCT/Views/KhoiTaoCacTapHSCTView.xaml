@@ -146,6 +146,12 @@
     </UserControl.Resources>
 
     <DockPanel LastChildFill="True">
+        <!-- Tieu de view -->
+        <TextBlock
+            Text="Thiết lập các tập HSCT"
+            Style="{DynamicResource PageTitleStyle}"
+            DockPanel.Dock="Top" />
+
         <!-- Cac nut dieu huong -->
         <ui:SimpleStackPanel Orientation="Horizontal"
                              DockPanel.Dock="Bottom"
@@ -169,29 +175,33 @@
                 <ColumnDefinition Width="2*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <ui:SimpleStackPanel Grid.Column="0"
-                                 VerticalAlignment="Center"
-                                 Margin="20 0">
-                <!-- Tieu de view -->
-                <TextBlock
-                    Text="Thiết lập các tập HSCT"
-                    Style="{DynamicResource PageTitleStyle}"
-                    DockPanel.Dock="Top" />
-                <!-- Them moi tap ho so -->
-                <ui:SimpleStackPanel Spacing="4">
-                    <TextBlock Style="{StaticResource BodyTextBlockStyle}"
-                               Text="Tập HSCT là cấp lưu trữ chứa các túi HSCT. Nhấn vào nút Thêm mới để thêm các tập HSCT mới vào thôn, xóm"
-                               TextWrapping="WrapWithOverflow">
-                    </TextBlock>
-                    <Button Content="Thêm mới"
-                            Style="{DynamicResource AccentButtonStyle}"
-                            Command="{Binding ShowThemMoiTapHSCTGocInitCustomContentDialogCommand}">
-                    </Button>
-                </ui:SimpleStackPanel>
+                                 Margin="20 0"
+                                 Spacing="8">
+                
+                <GroupBox Header="Quản lý tập HSCT">
+                    <!-- Them moi tap ho so -->
+                    <ui:SimpleStackPanel Spacing="8">
+                        <TextBlock Style="{StaticResource CaptionTextBlockStyle}"
+                                   Text="Tập HSCT là cấp lưu trữ chứa các túi HSCT"
+                                   TextWrapping="WrapWithOverflow">
+                        </TextBlock>
+                        <TextBlock Text="Nhấn vào nút Thêm mới để thêm các tập HSCT mới vào thôn, xóm"
+                                   TextWrapping="WrapWithOverflow"></TextBlock>
+                        <Button Content="Thêm mới"
+                                Style="{DynamicResource AccentButtonStyle}"
+                                Command="{Binding ShowThemMoiTapHSCTGocInitCustomContentDialogCommand}">
+                        </Button>
+                        <TextBlock Text="Nhấn chuột phải vào tập HSCT để chỉnh sửa hoặc xoá"
+                                   TextWrapping="WrapWithOverflow">
+                        </TextBlock>
+                    </ui:SimpleStackPanel>
+                    
+                </GroupBox>
 
 
             </ui:SimpleStackPanel>
-            <Grid Grid.Column="1" Margin="20 0 0 0"
-                  VerticalAlignment="Center">
+            <Grid Grid.Column="1" 
+                  Margin="20 0 0 0">
                 <!-- Noi dung -->
                 <ScrollViewer>
                     <GroupBox Header="Hồ sơ của các thôn, xóm">

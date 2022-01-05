@@ -367,18 +367,18 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
 
                 // Debug.WriteLine(JsonConvert.SerializeObject(danhSachThonXomMoi));
 
-                var duLieuThonXomCu = string.Join(string.Empty, _danhSachThonXomGoc.Select(x => x.TenThonXom));
-                var duLieuThonXomMoi = string.Join(string.Empty, danhSachThonXomMoi.Select(x => x.TenThonXom));
+                var duLieuThonXomCu = string.Join(string.Empty, _danhSachThonXomGoc.Select(x => x.TenThonXomDayDu));
+                var duLieuThonXomMoi = string.Join(string.Empty, danhSachThonXomMoi.Select(x => x.TenThonXomDayDu));
 
                 if (duLieuThonXomMoi != duLieuThonXomCu)
                 {
                     foreach (var thonXomGoc in _danhSachThonXomGoc)
                     {
                         //Truong hop thon, xom goc khong co trong danh sach thon, xom moi thi xoa di
-                        if (!danhSachThonXomMoi.Select(x => x.TenThonXom).Contains(thonXomGoc.TenThonXom))
+                        if (!danhSachThonXomMoi.Select(x => x.TenThonXomDayDu).Contains(thonXomGoc.TenThonXomDayDu))
                         {
                             var thonXomCanXoa = CacThonXomKemTheoTapHSCTViewModel.First(x =>
-                                x.ThonXom.TenThonXom == thonXomGoc.TenThonXom);
+                                x.ThonXom.TenThonXomDayDu == thonXomGoc.TenThonXomDayDu);
 
                             CacThonXomKemTheoTapHSCTViewModel.Remove(thonXomCanXoa);
                         }
@@ -387,7 +387,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
                     foreach (var thonXomMoi in danhSachThonXomMoi)
                     {
                         //Truong hop thon, xom moi khong co trong danh sach thon, xom goc thi them vao
-                        if (!_danhSachThonXomGoc.Select(x => x.TenThonXom).Contains(thonXomMoi.TenThonXom))
+                        if (!_danhSachThonXomGoc.Select(x => x.TenThonXomDayDu).Contains(thonXomMoi.TenThonXomDayDu))
                         {
                             var thonXomMoiKemTheoTapHSCTGoc = new ThonXomKemTheoTapHSCTViewModel(thonXomMoi,
                                 new ObservableCollection<TapHSCTGocInitModel>());

@@ -60,14 +60,14 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
         {
             // Khoi tao command tao va ghi du lieu vao db
             TaoDuLieuVaGhiVaoDbCommand =
-                new DelegateCommand(TaoDuLieuVaGhiVaoDb, () => !IsDangKhoiTaoCacTuiHSCT).ObservesProperty(() =>
-                    IsDangKhoiTaoCacTuiHSCT);
-
+                new DelegateCommand(TaoDuLieuVaGhiVaoDb, () => !ProgressManager.IsActive).ObservesProperty(() =>
+                    ProgressManager);
+            
             //Khoi tao command dieu huong truoc, sau
-            QuayVeBuocTaoCacTapHSCTGocCommand = new DelegateCommand(QuayVeBuocTaoCacTapHSCTGoc, () => !IsDangKhoiTaoCacTuiHSCT).ObservesProperty(() =>
-                IsDangKhoiTaoCacTuiHSCT);
-            HoanThanhKhoiTaoDuLieuBanDauCommand = new DelegateCommand(HoanThanhKhoiTaoDuLieuBanDau, () => !IsDangKhoiTaoCacTuiHSCT).ObservesProperty(() =>
-                IsDangKhoiTaoCacTuiHSCT);
+            QuayVeBuocTaoCacTapHSCTGocCommand = new DelegateCommand(QuayVeBuocTaoCacTapHSCTGoc, () => !ProgressManager.IsActive).ObservesProperty(() =>
+                ProgressManager);
+            HoanThanhKhoiTaoDuLieuBanDauCommand = new DelegateCommand(HoanThanhKhoiTaoDuLieuBanDau, () => !ProgressManager.IsActive).ObservesProperty(() =>
+                ProgressManager);
         }
 
         #endregion
@@ -80,13 +80,13 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 
         #region Hien thi trang thai
 
-        private bool _isDangKhoiTaoCacTuiHSCT;
-
-        public bool IsDangKhoiTaoCacTuiHSCT
-        {
-            get { return _isDangKhoiTaoCacTuiHSCT; }
-            set { SetProperty(ref _isDangKhoiTaoCacTuiHSCT, value); }
-        }
+        // private bool _isDangKhoiTaoCacTuiHSCT;
+        //
+        // public bool IsDangKhoiTaoCacTuiHSCT
+        // {
+        //     get { return _isDangKhoiTaoCacTuiHSCT; }
+        //     set { SetProperty(ref _isDangKhoiTaoCacTuiHSCT, value); }
+        // }
 
         #endregion
 
@@ -296,17 +296,23 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 
             try
             {
-                IsDangKhoiTaoCacTuiHSCT = true;
+                using (var operation = ProgressManager.CreateOperation())
+                {
+                    // IsDangKhoiTaoCacTuiHSCT = true;
+                    operation.Report(0);
 
-                // Tao cac tap ho so va tui ho so
-                var taoDuLieuTask = Task.Run(GenerateData);
+                    // Tao cac tap ho so va tui ho so
+                    var taoDuLieuTask = Task.Run(GenerateData);
 
-                // Reset lai database
-                var resetDbTask = _thonXomService.XoaTatCaDuLieu();
+                    // Reset lai database
+                    var resetDbTask = _thonXomService.XoaTatCaDuLieu();
 
-                await Task.WhenAll(taoDuLieuTask, resetDbTask);
+                    await Task.WhenAll(taoDuLieuTask, resetDbTask);
 
-                await ThemToanBoDuLieuVaoDb();
+                    await ThemToanBoDuLieuVaoDb();
+
+                    operation.Report(1);
+                }
 
                 MessageBox.Show("Thêm dữ liệu vào database thành công");
             }
@@ -315,10 +321,10 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
                 Log.Error(ex);
                 MessageBox.Show("Đã có lỗi xảy ra trong quá trình khởi tạo các túi HSCT");
             }
-            finally
-            {
-                IsDangKhoiTaoCacTuiHSCT = false;
-            }
+            // finally
+            // {
+            //     IsDangKhoiTaoCacTuiHSCT = false;
+            // }
         }
 
         #endregion

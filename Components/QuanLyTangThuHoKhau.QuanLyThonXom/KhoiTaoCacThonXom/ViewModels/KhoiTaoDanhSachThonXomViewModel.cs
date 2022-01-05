@@ -57,7 +57,10 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 
             //2
             DeleteThonXomItemCommand = new DelegateCommand<ThonXom>(DeleteThonXomItem);
-            ThemThonXomItemCommand = new DelegateCommand<string>(ThemThonXomItem);
+            ThemThonXomItemCommand =
+                new DelegateCommand<string>(ThemThonXomItem,
+                        s => DonViXaPhuongDaChon != null)
+                    .ObservesProperty(() => DonViXaPhuongDaChon);
 
             //3
             ChuyenBuocKhoiTaoCacTapHSCTGocCommand = new DelegateCommand(ChuyenBuocKhoiTaoCacTapHSCTGoc);
@@ -74,7 +77,14 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
         public DonViHanhChinhChung DonViXaPhuongDaChon
         {
             get => _donViXaPhuongDaChon;
-            set => SetProperty(ref _donViXaPhuongDaChon, value);
+            set
+            {
+                if (_donViXaPhuongDaChon != value)
+                {
+                    SetProperty(ref _donViXaPhuongDaChon, value);
+                    DeleteAllThonXom();
+                }
+            }
         }
 
         public void XacDinhDonViXaPhuongDaChon(DonViHanhChinhChung donviXaPhuongDaChon)
@@ -141,6 +151,11 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
                     CacThonXomThuocXaPhuongDaChon.Remove(thonXomItem);
                 }
             }
+        }
+
+        private void DeleteAllThonXom()
+        {
+            CacThonXomThuocXaPhuongDaChon.Clear();
         }
 
         public ICommand ThemThonXomItemCommand { get; private set; }
