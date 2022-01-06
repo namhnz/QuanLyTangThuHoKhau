@@ -17,7 +17,7 @@ using QuanLyTangThuHoKhau.Core.Ultis;
 
 namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 {
-    public class KhoiTaoDanhSachThonXomViewModel : BindableBase
+    public class KhoiTaoDanhSachThonXomViewModel : BindableBase, INavigationAware
     {
         private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -41,11 +41,7 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 
         private async void InitData()
         {
-            CacThonXomThuocXaPhuongDaChon = new ObservableCollection<ThonXom>();
-
-            _cacThonXomThuocXaPhuongDaChonCollectionLock = new object();
-            BindingOperations.EnableCollectionSynchronization(_cacThonXomThuocXaPhuongDaChon,
-                _cacThonXomThuocXaPhuongDaChonCollectionLock);
+            CacThonXomThuocXaPhuongDaChon = new List<ThonXom>();
 
             _toanBoXaPhuongVietNam = (await _dvhcService.LoadToanBoXaPhuongVietNam()).ToList();
         }
@@ -56,7 +52,7 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 
 
             //2
-            DeleteThonXomItemCommand = new DelegateCommand<ThonXom>(DeleteThonXomItem);
+            XoaThonXomItemCommand = new DelegateCommand<ThonXom>(XoaThonXomItem);
             ThemThonXomItemCommand =
                 new DelegateCommand<string>(ThemThonXomItem,
                         s => DonViXaPhuongDaChon != null)
@@ -124,32 +120,41 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 
         #region Quan ly cac thon, xom
 
-        //Cap nhat ObservableCollection tu thread khac ngoai UI thread
-        private object _cacThonXomThuocXaPhuongDaChonCollectionLock;
-
         //Danh sach the view model dung de hien thi
-        private ObservableCollection<ThonXom> _cacThonXomThuocXaPhuongDaChon;
+        private List<ThonXom> _cacThonXomThuocXaPhuongDaChon;
 
-        public ObservableCollection<ThonXom> CacThonXomThuocXaPhuongDaChon
+        public List<ThonXom> CacThonXomThuocXaPhuongDaChon
         {
             get => _cacThonXomThuocXaPhuongDaChon;
-            set => SetProperty(ref _cacThonXomThuocXaPhuongDaChon, value);
+            set
+            {
+                if (value is List<ThonXom> list)
+                {
+                    SetProperty(ref _cacThonXomThuocXaPhuongDaChon, list);
+                }
+                else
+                {
+                    _cacThonXomThuocXaPhuongDaChon = new List<ThonXom>();
+                }
+            }
         }
 
-        public ICommand DeleteThonXomItemCommand { get; private set; }
+        public ICommand XoaThonXomItemCommand { get; private set; }
 
-        private void DeleteThonXomItem(ThonXom thonXomItem)
+        private void XoaThonXomItem(ThonXom thonXomItem)
         {
             var xoaThonXomItemKhoiDanhSachConfirmResult = MessageBox.Show(
                 "Bạn có muốn xoá thôn, xóm này khỏi danh sách các thôn, xóm đã nhập không?", "Xoá thôn, xóm",
                 MessageBoxButton.YesNo);
-            
+
             if (xoaThonXomItemKhoiDanhSachConfirmResult == MessageBoxResult.Yes)
             {
-                lock (_cacThonXomThuocXaPhuongDaChonCollectionLock)
-                {
-                    CacThonXomThuocXaPhuongDaChon.Remove(thonXomItem);
-                }
+                var toanBoThonXom = CacThonXomThuocXaPhuongDaChon.ToList();
+                var indexCanXoa = toanBoThonXom.IndexOf(thonXomItem);
+
+                toanBoThonXom.RemoveAt(indexCanXoa);
+
+                CacThonXomThuocXaPhuongDaChon = toanBoThonXom;
             }
         }
 
@@ -185,6 +190,8 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
                 };
 
                 //Them thon, xom moi vao danh sach
+                var toanBoThonXom = CacThonXomThuocXaPhuongDaChon.ToList();
+
                 var isThonXomItemMoiDaDuocThemVaoDanhSach =
                     CacThonXomThuocXaPhuongDaChon.Any(x => x.TenThonXom == tenThonXomItem);
                 if (isThonXomItemMoiDaDuocThemVaoDanhSach)
@@ -193,10 +200,8 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
                 }
                 else
                 {
-                    lock (_cacThonXomThuocXaPhuongDaChonCollectionLock)
-                    {
-                        CacThonXomThuocXaPhuongDaChon.Add(thonXomItemMoi);
-                    }
+                    toanBoThonXom.Add(thonXomItemMoi);
+                    CacThonXomThuocXaPhuongDaChon = toanBoThonXom;
                 }
             }
             catch (Exception ex)
@@ -221,6 +226,25 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 
             _regionManager.RequestNavigate(KhoiTaoDuLieuBanDauRegionNames.KHOI_TAO_DU_LIEU_BAN_DAU_ROOT_REGION,
                 "KhoiTaoCacTapHSCTView", navigationParameters);
+        }
+
+        #endregion
+
+        #region Dieu huong
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            
         }
 
         #endregion

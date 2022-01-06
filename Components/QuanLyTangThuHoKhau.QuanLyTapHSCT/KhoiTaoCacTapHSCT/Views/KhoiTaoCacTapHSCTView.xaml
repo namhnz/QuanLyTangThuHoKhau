@@ -11,6 +11,36 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              x:Name="RootKhoiTaoCacTapHSCTViewUserControl">
     <UserControl.Resources>
+        <!-- Style hien thi khi khong co item nao -->
+        <Style x:Key="HienThiCacTapHSCTListBoxKhongCoItemNaoStyle" TargetType="{x:Type ListBox}" BasedOn="{StaticResource {x:Type ListBox}}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}" Value="0">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <TextBlock>Không có kết quả nào để hiển thị</TextBlock>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="HienThiCacThonXomListBoxKhongCoItemNaoStyle" TargetType="{x:Type ui:ItemsRepeater}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}" Value="0">
+                    <Setter Property="">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <TextBlock>Không có thôn, xóm nào để hiển thị</TextBlock>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+
         <!-- Context menu chinh sua tap ho so -->
         <ContextMenu x:Key="ChinhSuaThongTinTapHSCTItemContextMenu">
             <MenuItem Header="Chỉnh sửa tập HSCT"
@@ -56,45 +86,7 @@
 
             </StackPanel>
         </DataTemplate>
-        <!-- Hien thi danh sach tap ho so khi khong co ho so nao -->
-        <DataTemplate x:Key="HienThiChuaCoTapHSCTDataTemplate">
-            <TextBlock Text="Chưa có tập HSCT của thôn, xóm được thêm"></TextBlock>
-        </DataTemplate>
-        <!-- Hien thi danh sach tap ho so khi co ho so-->
-        <DataTemplate x:Key="HienThiDanhSachTapHSCTCuaThonXomDataTemplate">
-            <ListBox
-                x:Name="CacTapHSCTTrongThonXomListBox"
-                ItemsSource="{Binding CacTapHSCTGoc}"
-                ItemTemplate="{StaticResource TapHSCTItemDataTemplate}">
-                <ListBox.Resources>
-                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                        <Setter Property="ContextMenu" Value="{StaticResource ChinhSuaThongTinTapHSCTItemContextMenu}" />
-
-                    </Style>
-                </ListBox.Resources>
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True" />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-            </ListBox>
-        </DataTemplate>
-        <!-- Style de lua chon data template hien thi danh sach tap ho so -->
-        <Style x:Key="HienThiNoiDungCacTapHSCTStyle"
-               TargetType="ContentControl">
-            <Setter Property="ContentTemplate"
-                    Value="{StaticResource HienThiDanhSachTapHSCTCuaThonXomDataTemplate}">
-            </Setter>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding CacTapHSCTGoc.Count}"
-                             Value="0">
-                    <Setter Property="ContentTemplate"
-                            Value="{StaticResource HienThiChuaCoTapHSCTDataTemplate}">
-                    </Setter>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
+        
         <!-- Hien thi thon, xom -->
         <DataTemplate x:Key="ThonXomKemTheoTapHSCTItemDataTemplate">
             <StackPanel>
@@ -102,46 +94,25 @@
                     Text="{Binding ThonXom.TenThonXom, Mode=OneTime}"
                     Style="{StaticResource SubtitleTextBlockStyle}" />
                 <!-- Hien thi danh sach cac tap ho so -->
-                <ContentControl Content="{Binding}"
-                                Style="{StaticResource HienThiNoiDungCacTapHSCTStyle}">
-                </ContentControl>
+                <ListBox
+                    x:Name="CacTapHSCTTrongThonXomListBox"
+                    ItemsSource="{Binding CacTapHSCTGoc, Mode=OneWay}"
+                    ItemTemplate="{StaticResource TapHSCTItemDataTemplate}"
+                    Style="{StaticResource HienThiCacTapHSCTListBoxKhongCoItemNaoStyle}">
+                    <ListBox.Resources>
+                        <!-- Style hien thi context menu -->
+                        <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                            <Setter Property="ContextMenu" Value="{StaticResource ChinhSuaThongTinTapHSCTItemContextMenu}" />
+                        </Style>
+                    </ListBox.Resources>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
             </StackPanel>
         </DataTemplate>
-        <!-- Hien thi danh sach thon xom khi khong co thon xom nao -->
-        <DataTemplate x:Key="HienThiChuaCoThonXomDataTemplate">
-            <TextBlock Text="Chưa có thôn, xóm nào được thêm"></TextBlock>
-        </DataTemplate>
-        <!-- Hien thi danh sach tap ho so khi co thon xom -->
-        <DataTemplate x:Key="HienThiDanhSachThonXomDataTemplate">
-            <ui:ItemsRepeaterScrollHost>
-                <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                    <ui:ItemsRepeater
-                        VerticalAlignment="Top"
-                        ItemsSource="{Binding CacThonXomKemTheoTapHSCTViewModel}"
-                        ItemTemplate="{StaticResource ThonXomKemTheoTapHSCTItemDataTemplate}"
-                        x:Name="CacThonXomItemsRepeater">
-                        <ui:ItemsRepeater.Layout>
-                            <ui:StackLayout Orientation="Vertical" />
-                        </ui:ItemsRepeater.Layout>
-                    </ui:ItemsRepeater>
-                </ScrollViewer>
-            </ui:ItemsRepeaterScrollHost>
-        </DataTemplate>
-        <!-- Style de lua chon data template hien thi danh sach tap ho so -->
-        <Style x:Key="HienThiNoiDungCacThonXomStyle"
-               TargetType="ContentControl">
-            <Setter Property="ContentTemplate"
-                    Value="{StaticResource HienThiDanhSachThonXomDataTemplate}">
-            </Setter>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding CacThonXomKemTheoTapHSCTViewModel.Count}"
-                             Value="0">
-                    <Setter Property="ContentTemplate"
-                            Value="{StaticResource HienThiChuaCoThonXomDataTemplate}">
-                    </Setter>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
 
     </UserControl.Resources>
 
@@ -214,9 +185,20 @@
                                     Style="{DynamicResource BoxHeaderStyle}" />
 
                                 <!-- Hien thi danh sach thon, xom thuoc xa, phuong -->
-                                <ContentControl Style="{StaticResource HienThiNoiDungCacThonXomStyle}"
-                                                Content="{Binding}">
-                                </ContentControl>
+                                <ui:ItemsRepeaterScrollHost>
+                                    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                                        <ui:ItemsRepeater
+                                            VerticalAlignment="Top"
+                                            ItemsSource="{Binding CacThonXomKemTheoTapHSCT, Mode=OneWay}"
+                                            ItemTemplate="{StaticResource ThonXomKemTheoTapHSCTItemDataTemplate}"
+                                            x:Name="CacThonXomItemsRepeater"
+                                            Style="{StaticResource HienThiCacThonXomListBoxKhongCoItemNaoStyle}">
+                                            <ui:ItemsRepeater.Layout>
+                                                <ui:StackLayout Orientation="Vertical" />
+                                            </ui:ItemsRepeater.Layout>
+                                        </ui:ItemsRepeater>
+                                    </ScrollViewer>
+                                </ui:ItemsRepeaterScrollHost>
                             </ui:SimpleStackPanel>
                         </ui:SimpleStackPanel>
                     </GroupBox>
