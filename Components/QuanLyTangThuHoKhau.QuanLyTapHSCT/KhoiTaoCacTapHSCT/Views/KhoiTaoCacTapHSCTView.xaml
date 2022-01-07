@@ -18,7 +18,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <TextBlock>Không có kết quả nào để hiển thị</TextBlock>
+                                <TextBlock>Không có tập HSCT nào để hiển thị</TextBlock>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -26,10 +26,12 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="HienThiCacThonXomListBoxKhongCoItemNaoStyle" TargetType="{x:Type ui:ItemsRepeater}">
+        <Style x:Key="HienThiCacThonXomListBoxKhongCoItemNaoStyle" 
+               TargetType="{x:Type ItemsControl}"
+               BasedOn="{StaticResource {x:Type ItemsControl}}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}" Value="0">
-                    <Setter Property="">
+                    <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
                                 <TextBlock>Không có thôn, xóm nào để hiển thị</TextBlock>
@@ -185,20 +187,13 @@
                                     Style="{DynamicResource BoxHeaderStyle}" />
 
                                 <!-- Hien thi danh sach thon, xom thuoc xa, phuong -->
-                                <ui:ItemsRepeaterScrollHost>
-                                    <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                                        <ui:ItemsRepeater
-                                            VerticalAlignment="Top"
-                                            ItemsSource="{Binding CacThonXomKemTheoTapHSCT, Mode=OneWay}"
-                                            ItemTemplate="{StaticResource ThonXomKemTheoTapHSCTItemDataTemplate}"
-                                            x:Name="CacThonXomItemsRepeater"
-                                            Style="{StaticResource HienThiCacThonXomListBoxKhongCoItemNaoStyle}">
-                                            <ui:ItemsRepeater.Layout>
-                                                <ui:StackLayout Orientation="Vertical" />
-                                            </ui:ItemsRepeater.Layout>
-                                        </ui:ItemsRepeater>
-                                    </ScrollViewer>
-                                </ui:ItemsRepeaterScrollHost>
+                                <ItemsControl
+                                    VerticalAlignment="Top"
+                                    ItemsSource="{Binding CacThonXomKemTheoTapHSCT, Mode=OneWay}"
+                                    ItemTemplate="{StaticResource ThonXomKemTheoTapHSCTItemDataTemplate}"
+                                    x:Name="CacThonXomListBox"
+                                    Style="{StaticResource HienThiCacThonXomListBoxKhongCoItemNaoStyle}">
+                                </ItemsControl>
                             </ui:SimpleStackPanel>
                         </ui:SimpleStackPanel>
                     </GroupBox>

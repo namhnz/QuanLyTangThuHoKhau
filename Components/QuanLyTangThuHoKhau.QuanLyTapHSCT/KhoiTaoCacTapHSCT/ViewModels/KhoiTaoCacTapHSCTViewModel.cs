@@ -49,9 +49,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
 
         private void InitData()
         {
-            CacThonXomKemTheoTapHSCT = new List<ThonXomKemTheoTapHSCT>();
-
-            // _danhSachThonXomGoc = new List<ThonXom>();
+            CacThonXomKemTheoTapHSCT = new ObservableCollection<ThonXomKemTheoTapHSCT>();
         }
 
         private void InitCommands()
@@ -73,20 +71,20 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
 
         #region Cac danh sach hien thi
 
-        private List<ThonXomKemTheoTapHSCT> _cacThonXomKemTheoTapHSCT;
+        private ObservableCollection<ThonXomKemTheoTapHSCT> _cacThonXomKemTheoTapHSCT;
 
-        public List<ThonXomKemTheoTapHSCT> CacThonXomKemTheoTapHSCT
+        public ObservableCollection<ThonXomKemTheoTapHSCT> CacThonXomKemTheoTapHSCT
         {
             get => _cacThonXomKemTheoTapHSCT;
             set
             {
-                if (value is List<ThonXomKemTheoTapHSCT> list)
+                if (value is ObservableCollection<ThonXomKemTheoTapHSCT> list)
                 {
                     SetProperty(ref _cacThonXomKemTheoTapHSCT, list);
                 }
                 else
                 {
-                    _cacThonXomKemTheoTapHSCT = new List<ThonXomKemTheoTapHSCT>();
+                    _cacThonXomKemTheoTapHSCT = new ObservableCollection<ThonXomKemTheoTapHSCT>();
                 }
             }
         }
@@ -377,44 +375,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
             {
                 var danhSachThonXomMoi = (List<ThonXom>)navigationParameters["DanhSachThonXom"];
 
-                // Debug.WriteLine(JsonConvert.SerializeObject(danhSachThonXomMoi));
-
-                // var duLieuThonXomCu = string.Join(string.Empty, _danhSachThonXomGoc.Select(x => x.TenThonXomDayDu));
-                // var duLieuThonXomMoi = string.Join(string.Empty, danhSachThonXomMoi.Select(x => x.TenThonXomDayDu));
-                //
-                // if (duLieuThonXomMoi != duLieuThonXomCu)
-                // {
-                //     foreach (var thonXomGoc in _danhSachThonXomGoc)
-                //     {
-                //         //Truong hop thon, xom goc khong co trong danh sach thon, xom moi thi xoa di
-                //         if (!danhSachThonXomMoi.Select(x => x.TenThonXomDayDu).Contains(thonXomGoc.TenThonXomDayDu))
-                //         {
-                //             var thonXomCanXoa = CacThonXomKemTheoTapHSCT.FirstOrDefault(x =>
-                //                 x.ThonXom.TenThonXomDayDu == thonXomGoc.TenThonXomDayDu);
-                //
-                //             if (thonXomCanXoa != null)
-                //             {
-                //                 var indexCanXoa = CacThonXomKemTheoTapHSCT.IndexOf(thonXomCanXoa);
-                //
-                //                 CacThonXomKemTheoTapHSCT.RemoveAt(indexCanXoa);
-                //             }
-                //         }
-                //     }
-                //
-                //     foreach (var thonXomMoi in danhSachThonXomMoi)
-                //     {
-                //         //Truong hop thon, xom moi khong co trong danh sach thon, xom goc thi them vao
-                //         if (!_danhSachThonXomGoc.Select(x => x.TenThonXomDayDu).Contains(thonXomMoi.TenThonXomDayDu))
-                //         {
-                //             var thonXomMoiKemTheoTapHSCTGoc = new ThonXomKemTheoTapHSCT(thonXomMoi,
-                //                 new List<TapHSCTGocInitModel>());
-                //
-                //             CacThonXomKemTheoTapHSCT.Add(thonXomMoiKemTheoTapHSCTGoc);
-                //         }
-                //     }
-                // }
-
-                var cacThonXomKemTheoTapHSCTMoi = new List<ThonXomKemTheoTapHSCT>();
+                var cacThonXomKemTheoTapHSCTMoi = new ObservableCollection<ThonXomKemTheoTapHSCT>();
 
                 foreach (var thonXomMoi in danhSachThonXomMoi)
                 {
