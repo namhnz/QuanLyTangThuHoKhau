@@ -63,7 +63,9 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
                     .ObservesProperty(() => DonViXaPhuongDaChon);
 
             //3
-            ChuyenBuocKhoiTaoCacTapHSCTGocCommand = new DelegateCommand(ChuyenBuocKhoiTaoCacTapHSCTGoc);
+            ChuyenBuocKhoiTaoCacTapHSCTGocCommand =
+                new DelegateCommand(ChuyenBuocKhoiTaoCacTapHSCTGoc, () => CacThonXomThuocXaPhuongDaChon.Count > 0)
+                    .ObservesProperty(() => CacThonXomThuocXaPhuongDaChon.Count);
         }
 
         #endregion
@@ -143,7 +145,7 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
             var xoaThonXomItemKhoiDanhSachConfirmResult = MessageBox.Show(
                 "Bạn có muốn xoá thôn, xóm này khỏi danh sách các thôn, xóm đã nhập không?", "Xoá thôn, xóm",
                 MessageBoxButton.YesNo);
-            
+
             if (xoaThonXomItemKhoiDanhSachConfirmResult == MessageBoxResult.Yes)
             {
                 lock (_cacThonXomThuocXaPhuongDaChonCollectionLock)

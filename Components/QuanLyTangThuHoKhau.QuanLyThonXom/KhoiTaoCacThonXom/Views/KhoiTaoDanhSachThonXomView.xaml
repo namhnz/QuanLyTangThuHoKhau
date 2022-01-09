@@ -25,10 +25,29 @@
                     <DataTemplate>
                         <DockPanel LastChildFill="True"
                                    Width="{TemplateBinding Width}">
-                            <Button Content="Xoá"
-                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Path=DataContext.DeleteThonXomItemCommand}"
+                            <Button Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Path=DataContext.DeleteThonXomItemCommand}"
                                     CommandParameter="{Binding }"
-                                    DockPanel.Dock="Right" />
+                                    DockPanel.Dock="Right"
+                                    ToolTip="Xoá khỏi danh sách"
+                                    Width="16"
+                                    Height="16"
+                                    Padding="2">
+                                <Button.Content>
+                                    <ui:FontIcon Glyph="&#xE106;"
+                                                 FontSize="8"
+                                                 ></ui:FontIcon>
+                                </Button.Content>
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
                             <TextBlock Text="{Binding TenThonXom}"
                                        Margin="0 0 20 0"
                                        VerticalAlignment="Center" />
