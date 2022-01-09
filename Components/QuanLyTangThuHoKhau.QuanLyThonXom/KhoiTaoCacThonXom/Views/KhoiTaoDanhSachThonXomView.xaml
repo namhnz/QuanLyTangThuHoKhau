@@ -10,56 +10,19 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True">
     <UserControl.Resources>
-        <DataTemplate x:Key="HienThiDanhSachThonXomDaCoDataTemplate">
-            <ListBox
-                x:Name="CacThonXomThuocXaPhuongListBox"
-                ItemsSource="{Binding CacThonXomThuocXaPhuongDaChon}"
-                Width="500"
-                HorizontalAlignment="Left">
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <DockPanel LastChildFill="True"
-                                   Width="{TemplateBinding Width}">
-                            <Button Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Path=DataContext.DeleteThonXomItemCommand}"
-                                    CommandParameter="{Binding }"
-                                    DockPanel.Dock="Right"
-                                    ToolTip="Xoá khỏi danh sách"
-                                    Width="16"
-                                    Height="16"
-                                    Padding="2">
-                                <Button.Content>
-                                    <ui:FontIcon Glyph="&#xE106;"
-                                                 FontSize="8"
-                                                 ></ui:FontIcon>
-                                </Button.Content>
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                                        <Setter Property="Visibility" Value="Hidden" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" Value="True">
-                                                <Setter Property="Visibility" Value="Visible" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                            <TextBlock Text="{Binding TenThonXom}"
-                                       Margin="0 0 20 0"
-                                       VerticalAlignment="Center" />
-                        </DockPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </DataTemplate>
-
-        <DataTemplate x:Key="HienThiThongBaoChuaCoThonXomDataTemplate">
-            <TextBlock Text="Chưa có thôn, xóm nào được thêm"></TextBlock>
-        </DataTemplate>
+        <Style x:Key="HienThiListBoxKhongCoItemNaoStyle" TargetType="{x:Type ListBox}" BasedOn="{StaticResource {x:Type ListBox}}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}" Value="0">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <TextBlock Text="Chưa có thôn, xóm nào được thêm"></TextBlock>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
     <DockPanel LastChildFill="True">
@@ -156,23 +119,51 @@
                                 Text="Danh sách thôn, xóm thuộc xã, phường"
                                 Style="{DynamicResource BoxHeaderStyle}" />
 
-                            <ContentControl Content="{Binding}">
-                                <ContentControl.Style>
-                                    <Style TargetType="{x:Type ContentControl}">
-                                        <Setter Property="ContentTemplate"
-                                                Value="{StaticResource HienThiDanhSachThonXomDaCoDataTemplate}">
-                                        </Setter>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding CacThonXomThuocXaPhuongDaChon.Count}"
-                                                         Value="0">
-                                                <Setter Property="ContentTemplate"
-                                                        Value="{StaticResource HienThiThongBaoChuaCoThonXomDataTemplate}">
-                                                </Setter>
-                                            </DataTrigger>
-                                        </Style.Triggers>
+                            <ListBox
+                                x:Name="CacThonXomThuocXaPhuongListBox"
+                                ItemsSource="{Binding CacThonXomThuocXaPhuongDaChon, Mode=OneWay}"
+                                Width="500"
+                                HorizontalAlignment="Left"
+                                Style="{StaticResource HienThiListBoxKhongCoItemNaoStyle}">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
                                     </Style>
-                                </ContentControl.Style>
-                            </ContentControl>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel LastChildFill="True"
+                                                   Width="{TemplateBinding Width}">
+                                            <Button Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}}, Path=DataContext.XoaThonXomItemCommand}"
+                                                    CommandParameter="{Binding }"
+                                                    DockPanel.Dock="Right"
+                                                    ToolTip="Xoá khỏi danh sách"
+                                                    Width="16"
+                                                    Height="16"
+                                                    Padding="2">
+                                                <Button.Content>
+                                                    <ui:FontIcon Glyph="&#xE106;"
+                                                                 FontSize="8"
+                                                    ></ui:FontIcon>
+                                                </Button.Content>
+                                                <Button.Style>
+                                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListBoxItem}},Path=IsMouseOver}" Value="True">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                            <TextBlock Text="{Binding TenThonXom}"
+                                                       Margin="0 0 20 0"
+                                                       VerticalAlignment="Center" />
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
                         </ui:SimpleStackPanel>
                     </ui:SimpleStackPanel>
                 </GroupBox>

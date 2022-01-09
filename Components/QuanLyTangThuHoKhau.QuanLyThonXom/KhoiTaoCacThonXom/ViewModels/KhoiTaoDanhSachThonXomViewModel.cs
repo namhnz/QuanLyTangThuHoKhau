@@ -17,7 +17,7 @@ using QuanLyTangThuHoKhau.Core.Ultis;
 
 namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 {
-    public class KhoiTaoDanhSachThonXomViewModel : BindableBase
+    public class KhoiTaoDanhSachThonXomViewModel : BindableBase, INavigationAware
     {
         private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -43,10 +43,6 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
         {
             CacThonXomThuocXaPhuongDaChon = new ObservableCollection<ThonXom>();
 
-            _cacThonXomThuocXaPhuongDaChonCollectionLock = new object();
-            BindingOperations.EnableCollectionSynchronization(_cacThonXomThuocXaPhuongDaChon,
-                _cacThonXomThuocXaPhuongDaChonCollectionLock);
-
             _toanBoXaPhuongVietNam = (await _dvhcService.LoadToanBoXaPhuongVietNam()).ToList();
         }
 
@@ -56,7 +52,7 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 
 
             //2
-            DeleteThonXomItemCommand = new DelegateCommand<ThonXom>(DeleteThonXomItem);
+            XoaThonXomItemCommand = new DelegateCommand<ThonXom>(XoaThonXomItem);
             ThemThonXomItemCommand =
                 new DelegateCommand<string>(ThemThonXomItem,
                         s => DonViXaPhuongDaChon != null)
@@ -126,21 +122,28 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 
         #region Quan ly cac thon, xom
 
-        //Cap nhat ObservableCollection tu thread khac ngoai UI thread
-        private object _cacThonXomThuocXaPhuongDaChonCollectionLock;
-
         //Danh sach the view model dung de hien thi
         private ObservableCollection<ThonXom> _cacThonXomThuocXaPhuongDaChon;
 
         public ObservableCollection<ThonXom> CacThonXomThuocXaPhuongDaChon
         {
             get => _cacThonXomThuocXaPhuongDaChon;
-            set => SetProperty(ref _cacThonXomThuocXaPhuongDaChon, value);
+            set
+            {
+                if (value is ObservableCollection<ThonXom> list)
+                {
+                    SetProperty(ref _cacThonXomThuocXaPhuongDaChon, list);
+                }
+                else
+                {
+                    _cacThonXomThuocXaPhuongDaChon = new ObservableCollection<ThonXom>();
+                }
+            }
         }
 
-        public ICommand DeleteThonXomItemCommand { get; private set; }
+        public ICommand XoaThonXomItemCommand { get; private set; }
 
-        private void DeleteThonXomItem(ThonXom thonXomItem)
+        private void XoaThonXomItem(ThonXom thonXomItem)
         {
             var xoaThonXomItemKhoiDanhSachConfirmResult = MessageBox.Show(
                 "Bạn có muốn xoá thôn, xóm này khỏi danh sách các thôn, xóm đã nhập không?", "Xoá thôn, xóm",
@@ -148,10 +151,9 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 
             if (xoaThonXomItemKhoiDanhSachConfirmResult == MessageBoxResult.Yes)
             {
-                lock (_cacThonXomThuocXaPhuongDaChonCollectionLock)
-                {
-                    CacThonXomThuocXaPhuongDaChon.Remove(thonXomItem);
-                }
+                var indexCanXoa = CacThonXomThuocXaPhuongDaChon.IndexOf(thonXomItem);
+
+                CacThonXomThuocXaPhuongDaChon.RemoveAt(indexCanXoa);
             }
         }
 
@@ -195,10 +197,7 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
                 }
                 else
                 {
-                    lock (_cacThonXomThuocXaPhuongDaChonCollectionLock)
-                    {
-                        CacThonXomThuocXaPhuongDaChon.Add(thonXomItemMoi);
-                    }
+                    CacThonXomThuocXaPhuongDaChon.Add(thonXomItemMoi);
                 }
             }
             catch (Exception ex)
@@ -223,6 +222,25 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 
             _regionManager.RequestNavigate(KhoiTaoDuLieuBanDauRegionNames.KHOI_TAO_DU_LIEU_BAN_DAU_ROOT_REGION,
                 "KhoiTaoCacTapHSCTView", navigationParameters);
+        }
+
+        #endregion
+
+        #region Dieu huong
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            
         }
 
         #endregion
