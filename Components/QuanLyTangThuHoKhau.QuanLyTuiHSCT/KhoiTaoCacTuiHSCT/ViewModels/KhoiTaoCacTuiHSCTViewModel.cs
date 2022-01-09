@@ -62,21 +62,24 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
             TaoDuLieuVaGhiVaoDbCommand =
                 new DelegateCommand(TaoDuLieuVaGhiVaoDb, () => !ProgressManager.IsActive).ObservesProperty(() =>
                     ProgressManager);
-            
+
             //Khoi tao command dieu huong truoc, sau
-            QuayVeBuocTaoCacTapHSCTGocCommand = new DelegateCommand(QuayVeBuocTaoCacTapHSCTGoc, () => !ProgressManager.IsActive).ObservesProperty(() =>
-                ProgressManager);
-            HoanThanhKhoiTaoDuLieuBanDauCommand = new DelegateCommand(HoanThanhKhoiTaoDuLieuBanDau, () => !ProgressManager.IsActive).ObservesProperty(() =>
-                ProgressManager);
+            QuayVeBuocTaoCacTapHSCTGocCommand =
+                new DelegateCommand(QuayVeBuocTaoCacTapHSCTGoc, () => !ProgressManager.IsActive).ObservesProperty(() =>
+                    ProgressManager);
+            HoanThanhKhoiTaoDuLieuBanDauCommand =
+                new DelegateCommand(HoanThanhKhoiTaoDuLieuBanDau, () => !ProgressManager.IsActive).ObservesProperty(
+                    () =>
+                        ProgressManager);
         }
 
         #endregion
 
         private List<TapHSCTGocInitModel> _toanBoTapHSCTGoc;
 
-        private List<ThonXom> _danhSachThonXom;
+        private List<ThonXom> _danhSachThonXomThemVaoDb;
         private List<TapHSCT> _toanBoTapHSCTThemVaoDb;
-        private List<TuiHSCT> _toanBoTuiHSCTBanDau;
+        private List<TuiHSCT> _toanBoTuiHSCTThemVaoDb;
 
         #region Hien thi trang thai
 
@@ -160,7 +163,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 
             if (danhSachThonXom != null && toanBoTapHSCTGoc != null)
             {
-                _danhSachThonXom = new List<ThonXom>(danhSachThonXom);
+                _danhSachThonXomThemVaoDb = new List<ThonXom>(danhSachThonXom);
                 _toanBoTapHSCTGoc = new List<TapHSCTGocInitModel>(toanBoTapHSCTGoc);
             }
         }
@@ -187,6 +190,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
                 ThonXom = tapHSCTGoc.ThonXom,
                 ThuTuTapHSCT = tapHSCTGoc.ThuTuTapHSCT
             };
+
             //Them tap ho so vao danh sach tap ho so them vao DB
             _toanBoTapHSCTThemVaoDb.Add(tapHSCT);
 
@@ -216,32 +220,34 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
             return cacTuiHSCTTrongTapHSCT;
         }
 
-        private void GenerateData()
+        private void TaoDuLieuToanBoTuiHSCT()
         {
             _toanBoTapHSCTThemVaoDb = new List<TapHSCT>();
-            _toanBoTuiHSCTBanDau = new List<TuiHSCT>();
-            int tongSoTuiHSCTDaTao = 0;
+            _toanBoTuiHSCTThemVaoDb = new List<TuiHSCT>();
+
+            // int tongSoTuiHSCTDaTao = 0;
 
             foreach (var tapHSCTGoc in _toanBoTapHSCTGoc)
             {
                 var cacTuiHSCTDuocTao = TaoCacTuiHSCTTheoTapHSCTGocInit(tapHSCTGoc);
-                _toanBoTuiHSCTBanDau.AddRange(cacTuiHSCTDuocTao);
 
-                tongSoTuiHSCTDaTao += cacTuiHSCTDuocTao.Count;
+                _toanBoTuiHSCTThemVaoDb.AddRange(cacTuiHSCTDuocTao);
+
+                // tongSoTuiHSCTDaTao += cacTuiHSCTDuocTao.Count;
             }
 
-            // foreach (var tuiHSCT in _toanBoTuiHSCTBanDau)
+            // foreach (var tuiHSCT in _toanBoTuiHSCTThemVaoDb)
             // {
             //     Debug.WriteLine(JsonConvert.SerializeObject(tuiHSCT));
             // }
 
-            SoLuongTuiHSCTDaKhoiTaoXong = tongSoTuiHSCTDaTao;
+            // SoLuongTuiHSCTDaKhoiTaoXong = tongSoTuiHSCTDaTao;
         }
 
         private async Task ThemToanBoDuLieuVaoDb()
         {
             // Them thon xom
-            foreach (var thonXom in _danhSachThonXom)
+            foreach (var thonXom in _danhSachThonXomThemVaoDb)
             {
                 await _thonXomService.ThemThonXomMoi(thonXom);
             }
@@ -253,7 +259,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
             }
 
             // Them cac tap ho so bo sung
-            foreach (var thonXom in _danhSachThonXom)
+            foreach (var thonXom in _danhSachThonXomThemVaoDb)
             {
                 int thuTuTapHSCTBoSung;
 
@@ -278,7 +284,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
             }
 
             // Them cac tui ho so
-            foreach (var tuiHSCTDb in _toanBoTuiHSCTBanDau)
+            foreach (var tuiHSCTDb in _toanBoTuiHSCTThemVaoDb)
             {
                 await _tuiHSCTService.ThemTuiHSCTMoi(tuiHSCTDb);
             }
@@ -288,12 +294,6 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 
         private async void TaoDuLieuVaGhiVaoDb()
         {
-            // if (IsDangKhoiTaoCacTuiHSCT)
-            // {
-            //     MessageBox.Show("Quá trình tạo dữ liệu đang được thực hiện");
-            //     return;
-            // }
-
             try
             {
                 using (var operation = ProgressManager.CreateOperation())
@@ -302,7 +302,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
                     operation.Report(0);
 
                     // Tao cac tap ho so va tui ho so
-                    var taoDuLieuTask = Task.Run(GenerateData);
+                    var taoDuLieuTask = Task.Run(TaoDuLieuToanBoTuiHSCT);
 
                     // Reset lai database
                     var resetDbTask = _thonXomService.XoaTatCaDuLieu();
@@ -321,10 +321,6 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
                 Log.Error(ex);
                 MessageBox.Show("Đã có lỗi xảy ra trong quá trình khởi tạo các túi HSCT");
             }
-            // finally
-            // {
-            //     IsDangKhoiTaoCacTuiHSCT = false;
-            // }
         }
 
         #endregion

@@ -79,111 +79,161 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
 
         #region Them moi tap ho so
 
-        public async Task ThemTapHSCTMoi(int thuTuTapHSCT, LoaiTapHSCT loaiTapHSCT, ThonXom thonXom)
+        public Task ThemTapHSCTMoi(int thuTuTapHSCT, LoaiTapHSCT loaiTapHSCT, ThonXom thonXom)
         {
-            if (thuTuTapHSCT <= 0)
-            {
-                throw new ThuTuTapHSCTKhongDungException()
-                {
-                    ErrorMessage = "Số thứ tự của tập hồ sơ thêm mới không đúng"
-                };
-            }
-
-            if (thonXom == null)
-            {
-                throw new ChuaChonThonXomChuaTapHSCTException()
-                {
-                    ErrorMessage = "Chưa chọn thôn, xóm chứa tập hồ sơ"
-                };
-            }
-
-            var thonXomDaCo = _dataService.ThonXomRepository.FindOne(thonXom.Id);
-            if (thonXomDaCo == null)
-            {
-                throw new ChuaChonThonXomChuaTapHSCTException()
-                {
-                    ErrorMessage = "Thôn, xóm đã chọn không tồn tại"
-                };
-            }
-
-            //Khong the them moi tap ho so goc co cung so thu tu
-            if (loaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTGoc)
-            {
-                var tapHSCTGocDaTonTai = (await LietKeToanBoTapHSCT()).Any(x =>
-                    x.ThuTuTapHSCT == thuTuTapHSCT && x.ThonXom.Id == thonXom.Id);
-
-                if (tapHSCTGocDaTonTai)
-                {
-                    throw new ThuTuTapHSCTKhongDungException()
-                    {
-                        ErrorMessage = "Không thể thêm thêm tập hồ sơ gốc với cùng số thứ tự trong cùng thôn, xóm"
-                    };
-                }
-            }
-
-
             var tapHSCTMoi = new TapHSCT()
             {
-                ThuTuTapHSCT = thuTuTapHSCT,
                 LoaiTapHSCT = loaiTapHSCT,
-                ThonXom = thonXom
+                ThonXom = thonXom,
+                ThuTuTapHSCT = thuTuTapHSCT
             };
 
-            await Task.Run(() => { _dataService.TapHSCTRepository.Insert(tapHSCTMoi); });
+            return ThemTapHSCTMoi(tapHSCTMoi);
+
+            // // if (thuTuTapHSCT <= 0)
+            // // {
+            // //     throw new ThuTuTapHSCTKhongDungException()
+            // //     {
+            // //         ErrorMessage = "Số thứ tự của tập hồ sơ thêm mới không đúng"
+            // //     };
+            // // }
+            // //
+            // // if (thonXom == null)
+            // // {
+            // //     throw new ChuaChonThonXomChuaTapHSCTException()
+            // //     {
+            // //         ErrorMessage = "Chưa chọn thôn, xóm chứa tập hồ sơ"
+            // //     };
+            // // }
+            // //
+            // // var thonXomDaCo = _dataService.ThonXomRepository.FindOne(thonXom.Id);
+            // // if (thonXomDaCo == null)
+            // // {
+            // //     throw new ChuaChonThonXomChuaTapHSCTException()
+            // //     {
+            // //         ErrorMessage = "Thôn, xóm đã chọn không tồn tại"
+            // //     };
+            // // }
+            // //
+            // // //Khong the them moi tap ho so goc co cung so thu tu
+            // // if (loaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTGoc)
+            // // {
+            // //     var tapHSCTGocDaTonTai = (await LietKeToanBoTapHSCT()).Any(x =>
+            // //         x.ThuTuTapHSCT == thuTuTapHSCT && x.ThonXom.Id == thonXom.Id);
+            // //
+            // //     if (tapHSCTGocDaTonTai)
+            // //     {
+            // //         throw new ThuTuTapHSCTKhongDungException()
+            // //         {
+            // //             ErrorMessage = "Không thể thêm thêm tập hồ sơ gốc với cùng số thứ tự trong cùng thôn, xóm"
+            // //         };
+            // //     }
+            // // }
+            //
+            //
+            // var tapHSCTMoi = new TapHSCT()
+            // {
+            //     ThuTuTapHSCT = thuTuTapHSCT,
+            //     LoaiTapHSCT = loaiTapHSCT,
+            //     ThonXom = thonXom
+            // };
+            //
+            // await Task.Run(() => { _dataService.TapHSCTRepository.Insert(tapHSCTMoi); });
         }
 
         public async Task ThemTapHSCTMoi(TapHSCT tapHSCTMoi)
         {
-            if (tapHSCTMoi.ThuTuTapHSCT <= 0)
+            // Kiem tra kieu du lieu
+            KiemTraTapHSCTTheoKieuDuLieu(tapHSCTMoi);
+
+            // Kiem tra trong db xem da ton tai hay chua
+            await KiemTraTapHSCTTheoDb(tapHSCTMoi);
+            
+            // Them tap ho so vao Db
+            await Task.Run(() => _dataService.TapHSCTRepository.Insert(tapHSCTMoi));
+        }
+
+        public async Task<int> ThemMoiNhieuTapHSCT(List<TapHSCT> cacTapHSCTMoi)
+        {
+            List<bool> themCacTapHSCTMoiResult = new List<bool>();
+
+            foreach (var tapHSCTMoi in cacTapHSCTMoi)
             {
-                throw new ThuTuTapHSCTKhongDungException()
-                {
-                    ErrorMessage = "Số thứ tự của tập hồ sơ thêm mới không đúng"
-                };
+                // Kiem tra kieu du lieu
+                KiemTraTapHSCTTheoKieuDuLieu(tapHSCTMoi);
+
+                // Kiem tra trong db xem da ton tai hay chua
+                await KiemTraTapHSCTTheoDb(tapHSCTMoi);
+
+                // Them tap ho so vao Db
+                var insertResult = await Task.Run(() => _dataService.TapHSCTRepository.Insert(tapHSCTMoi));
+                themCacTapHSCTMoiResult.Add(insertResult);
             }
 
-            if (tapHSCTMoi.ThonXom == null)
-            {
-                throw new ChuaChonThonXomChuaTapHSCTException()
-                {
-                    ErrorMessage = "Chưa chọn thôn, xóm chứa tập hồ sơ"
-                };
-            }
-
-            var thonXomDaCo = _dataService.ThonXomRepository.FindOne(tapHSCTMoi.ThonXom.Id);
-            if (thonXomDaCo == null)
-            {
-                throw new ChuaChonThonXomChuaTapHSCTException()
-                {
-                    ErrorMessage = "Thôn, xóm đã chọn không tồn tại"
-                };
-            }
-
-            //Khong the them moi tap ho so goc co cung so thu tu
-            if (tapHSCTMoi.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTGoc)
-            {
-                var tapHSCTGocDaTonTai = (await LietKeToanBoTapHSCT()).Any(x =>
-                    x.ThuTuTapHSCT == tapHSCTMoi.ThuTuTapHSCT && x.ThonXom.Id == tapHSCTMoi.ThonXom.Id);
-
-                if (tapHSCTGocDaTonTai)
-                {
-                    throw new ThuTuTapHSCTKhongDungException()
-                    {
-                        ErrorMessage = "Không thể thêm thêm tập hồ sơ gốc với cùng số thứ tự trong cùng thôn, xóm"
-                    };
-                }
-            }
-
-            await Task.Run(() => { _dataService.TapHSCTRepository.Insert(tapHSCTMoi); });
+            return themCacTapHSCTMoiResult.Count(x => x == true);
         }
 
         #endregion
 
         //Tap ho so sau khi da tao thi khong the thay doi
 
+        #region Xoa tap ho so
+
         public async Task XoaTapHSCTDaCo(int idTapHSCTDaCo)
         {
             await Task.Run(() => { _dataService.ThonXomRepository.Delete(idTapHSCTDaCo); });
         }
+
+        #endregion
+
+        #region Cac phuong thuc ho tro
+
+        private void KiemTraTapHSCTTheoKieuDuLieu(TapHSCT tapHSCTCanKiemTra)
+        {
+            if (tapHSCTCanKiemTra.ThuTuTapHSCT <= 0)
+            {
+                throw new ThuTuTapHSCTKhongDungException()
+                {
+                    ErrorMessage = "Số thứ tự của tập hồ sơ thêm mới không đúng"
+                };
+            }
+
+            if (tapHSCTCanKiemTra.ThonXom == null)
+            {
+                throw new ChuaChonThonXomChuaTapHSCTException()
+                {
+                    ErrorMessage = "Chưa chọn thôn, xóm chứa tập hồ sơ"
+                };
+            }
+
+            var thonXomDaCo = _dataService.ThonXomRepository.FindOne(tapHSCTCanKiemTra.ThonXom.Id);
+            if (thonXomDaCo == null)
+            {
+                throw new ChuaChonThonXomChuaTapHSCTException()
+                {
+                    ErrorMessage = "Thôn, xóm đã chọn không tồn tại"
+                };
+            }
+        }
+
+        private async Task KiemTraTapHSCTTheoDb(TapHSCT tapHSCTCanKiemTra)
+        {
+            //Khong the them moi tap ho so goc co cung so thu tu
+            if (tapHSCTCanKiemTra.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTGoc)
+            {
+                var tapHSCTGocDaTonTai = (await LietKeToanBoTapHSCT()).Any(x =>
+                    x.ThuTuTapHSCT == tapHSCTCanKiemTra.ThuTuTapHSCT && x.ThonXom.Id == tapHSCTCanKiemTra.ThonXom.Id);
+
+                if (tapHSCTGocDaTonTai)
+                {
+                    throw new ThuTuTapHSCTKhongDungException()
+                    {
+                        ErrorMessage = "Không thể thêm thêm tập hồ sơ gốc với cùng số thứ tự trong cùng thôn, xóm"
+                    };
+                }
+            }
+        }
+
+        #endregion
     }
 }
