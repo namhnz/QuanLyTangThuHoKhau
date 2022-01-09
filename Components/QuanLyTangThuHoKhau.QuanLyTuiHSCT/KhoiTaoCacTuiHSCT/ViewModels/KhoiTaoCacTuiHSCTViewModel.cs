@@ -83,6 +83,14 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 
         #region Hien thi trang thai
 
+        private int _soLuongThonXomDaKhoiTaoXong;
+
+        public int SoLuongThonXomDaKhoiTaoXong
+        {
+            get => _soLuongThonXomDaKhoiTaoXong;
+            set => SetProperty(ref _soLuongThonXomDaKhoiTaoXong, value);
+        }
+
         // private bool _isDangKhoiTaoCacTuiHSCT;
         //
         // public bool IsDangKhoiTaoCacTuiHSCT
@@ -91,16 +99,24 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
         //     set { SetProperty(ref _isDangKhoiTaoCacTuiHSCT, value); }
         // }
 
-        #endregion
+        private int _soLuongTapHSCTDaKhoiTaoXong;
 
+        public int SoLuongTapHSCTDaKhoiTaoXong
+        {
+            get => _soLuongTapHSCTDaKhoiTaoXong;
+            set => SetProperty(ref _soLuongTapHSCTDaKhoiTaoXong, value);
+        }
 
         private int _soLuongTuiHSCTDaKhoiTaoXong;
 
         public int SoLuongTuiHSCTDaKhoiTaoXong
         {
-            get { return _soLuongTuiHSCTDaKhoiTaoXong; }
-            set { SetProperty(ref _soLuongTuiHSCTDaKhoiTaoXong, value); }
+            get => _soLuongTuiHSCTDaKhoiTaoXong;
+            set => SetProperty(ref _soLuongTuiHSCTDaKhoiTaoXong, value);
         }
+
+        #endregion
+
 
         #region Dieu huong truoc, sau
 
@@ -247,41 +263,47 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
         private async Task ThemToanBoDuLieuVaoDb()
         {
             // Them thon xom
-            foreach (var thonXom in _danhSachThonXomThemVaoDb)
-            {
-                await _thonXomService.ThemThonXomMoi(thonXom);
-            }
+            // foreach (var thonXom in _danhSachThonXomThemVaoDb)
+            // {
+            //     await _thonXomService.ThemThonXomMoi(thonXom);
+            // }
+            SoLuongThonXomDaKhoiTaoXong = await _thonXomService.ThemNhieuThonXomMoi(_danhSachThonXomThemVaoDb);
 
             // Them toan bo tap ho so goc
-            foreach (var tapHSCTDb in _toanBoTapHSCTThemVaoDb)
-            {
-                await _tapHSCTService.ThemTapHSCTMoi(tapHSCTDb);
-            }
+            // foreach (var tapHSCTDb in _toanBoTapHSCTThemVaoDb)
+            // {
+            //     await _tapHSCTService.ThemTapHSCTMoi(tapHSCTDb);
+            // }
+            var soTapHSCTDaThemVaoDb = await _tapHSCTService.ThemNhieuTapHSCTMoi(_toanBoTapHSCTThemVaoDb);
 
             // Them cac tap ho so bo sung
             foreach (var thonXom in _danhSachThonXomThemVaoDb)
             {
-                int thuTuTapHSCTBoSung;
+                // int thuTuTapHSCTBoSung;
+                //
+                // if (_toanBoTapHSCTGoc.Count(x => x.ThonXom.Id == thonXom.Id) == 0)
+                // {
+                //     thuTuTapHSCTBoSung = 1;
+                // }
+                // else
+                // {
+                //     thuTuTapHSCTBoSung = _toanBoTapHSCTGoc.Where(x => x.ThonXom.Id == thonXom.Id)
+                //         .Max(x => x.ThuTuTapHSCT);
+                // }
+                //
+                // var tapHSCTBoSung = new TapHSCT()
+                // {
+                //     LoaiTapHSCT = LoaiTapHSCT.LoaiTapHSCTBoSung,
+                //     ThonXom = thonXom,
+                //     ThuTuTapHSCT = thuTuTapHSCTBoSung
+                // };
 
-                if (_toanBoTapHSCTGoc.Count(x => x.ThonXom.Id == thonXom.Id) == 0)
-                {
-                    thuTuTapHSCTBoSung = 1;
-                }
-                else
-                {
-                    thuTuTapHSCTBoSung = _toanBoTapHSCTGoc.Where(x => x.ThonXom.Id == thonXom.Id)
-                        .Max(x => x.ThuTuTapHSCT);
-                }
+                // await _tapHSCTService.ThemTapHSCTMoi(tapHSCTBoSung);
 
-                var tapHSCTBoSung = new TapHSCT()
-                {
-                    LoaiTapHSCT = LoaiTapHSCT.LoaiTapHSCTBoSung,
-                    ThonXom = thonXom,
-                    ThuTuTapHSCT = thuTuTapHSCTBoSung
-                };
-
-                await _tapHSCTService.ThemTapHSCTMoi(tapHSCTBoSung);
+                await _tapHSCTService.ThemTapHSCTBoSung(thonXom);
+                soTapHSCTDaThemVaoDb++;
             }
+            SoLuongTapHSCTDaKhoiTaoXong = soTapHSCTDaThemVaoDb;
 
             // Them cac tui ho so
             foreach (var tuiHSCTDb in _toanBoTuiHSCTThemVaoDb)

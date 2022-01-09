@@ -1,21 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using log4net;
 using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types;
 using QuanLyTangThuHoKhau.Core.DbDataSerivces;
 using QuanLyTangThuHoKhau.Core.Models;
+using QuanLyTangThuHoKhau.Core.Ultis;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Exceptions;
 
 namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
 {
-    public class ThonXomCRUDService: IThonXomCRUDService
+    public class ThonXomCRUDService : IThonXomCRUDService
     {
+        #region Cac phu thuoc
+
+        private static readonly ILog Log =
+            LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private readonly ILiteDbDataService _dataService;
+
+        #endregion
 
         public ThonXomCRUDService(ILiteDbDataService dataService)
         {
             _dataService = dataService;
         }
+
+        #region Tim kiem
 
         public async Task<List<ThonXom>> LietKeToanBoThonXom()
         {
@@ -23,27 +36,13 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
             return toanBoThonXom;
         }
 
+        #endregion
+
         #region Them moi
 
         public async Task ThemThonXomMoi(string tenThonXom, DonViHanhChinhChung donViHanhChinhXaPhuong)
         {
             tenThonXom = tenThonXom.Trim();
-
-            if (string.IsNullOrEmpty(tenThonXom))
-            {
-                throw new TenThonXomKhongDungException()
-                {
-                    ErrorMessage = "Tên thôn, xóm thêm mới không đúng"
-                };
-            }
-
-            if (donViHanhChinhXaPhuong == null || donViHanhChinhXaPhuong.LoaiCapDonVi != CapDonViHanhChinh.PhuongXa)
-            {
-                throw new DonViHanhChinhXaPhuongKhongDungException()
-                {
-                    ErrorMessage = "Lựa chọn đơn vị hành chính của thôn, xóm thêm mới không phải cấp xã, phường"
-                };
-            }
 
             var thonXomMoi = new ThonXom()
             {
@@ -51,37 +50,55 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
                 DonViHanhChinhPhuongXa = donViHanhChinhXaPhuong
             };
 
-            await Task.Run(() =>
-            {
-                _dataService.ThonXomRepository.Insert(thonXomMoi);
-            });
+            // Them thon xom moi
+            await ThemThonXomMoi(thonXomMoi);
+
+            await Task.Run(() => { _dataService.ThonXomRepository.Insert(thonXomMoi); });
         }
 
         public async Task ThemThonXomMoi(ThonXom thonXomMoi)
         {
-            if (thonXomMoi == null || string.IsNullOrEmpty(thonXomMoi.TenThonXom))
+            // Kiem tra xem cac thong tin trong thon, xom da dung hay chua
+            KiemTraThonXomThemMoiTheoKieuDuLieu(thonXomMoi);
+
+            // Kiem tra thon xom da ton tai trong db chua
+            await KiemTraThonXomThemMoiTheoDb(thonXomMoi);
+
+            await Task.Run(() => { _dataService.ThonXomRepository.Insert(thonXomMoi); });
+        }
+
+        public async Task<int> ThemNhieuThonXomMoi(List<ThonXom> cacThonXomMoi)
+        {
+            // Kiem tra cac thon xom trong danh sach co thon xom nao giong nhau hay khong
+            var cacTenThonXomCoSuTrungNhau = cacThonXomMoi.GroupBy(x => x.TenThonXom)
+                .Where(g => g.Count() > 1)
+                .Select(y => y.Key);
+            if (cacTenThonXomCoSuTrungNhau.Any())
             {
                 throw new TenThonXomKhongDungException()
                 {
-                    ErrorMessage = "Tên thôn, xóm thêm mới không đúng"
+                    ErrorMessage = "Tên các thôn, xóm thêm mới không được trùng nhau"
                 };
             }
 
-            if (thonXomMoi.DonViHanhChinhPhuongXa == null || thonXomMoi.DonViHanhChinhPhuongXa.LoaiCapDonVi != CapDonViHanhChinh.PhuongXa)
+            //Kiem tra thong tin cac thon, xom
+            //Do so luong cac thon, com it nen van se kiem tra trong Db da ton tai hay chua
+            foreach (var thonXomMoi in cacThonXomMoi)
             {
-                throw new DonViHanhChinhXaPhuongKhongDungException()
-                {
-                    ErrorMessage = "Lựa chọn đơn vị hành chính của thôn, xóm thêm mới không phải cấp xã, phường"
-                };
+                // Kiem tra xem cac thong tin trong thon, xom da dung hay chua
+                KiemTraThonXomThemMoiTheoKieuDuLieu(thonXomMoi);
+
+                // Kiem tra thon xom da ton tai trong db chua
+                await KiemTraThonXomThemMoiTheoDb(thonXomMoi);
             }
-            
-            await Task.Run(() =>
-            {
-                _dataService.ThonXomRepository.Insert(thonXomMoi);
-            });
+
+            // Them cac thon, xom moi vao Db
+            return await Task.Run(() => _dataService.ThonXomRepository.InsertMany(cacThonXomMoi));
         }
 
         #endregion
+
+        #region Chinh sua
 
         public async Task ThayDoiTenThonXomDaCo(int idThonXomDaCo, string tenThonXom)
         {
@@ -113,14 +130,15 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
             });
         }
 
+        #endregion
+
+        #region Xoa
+
         public async Task XoaThonXomDaCo(int idThonXomDaCo)
         {
             //Kiem tra co ton tai nhung tui/tap ho so lien quan den thon do khong
 
-            await Task.Run(() =>
-            {
-                _dataService.ThonXomRepository.Delete(idThonXomDaCo);
-            });
+            await Task.Run(() => { _dataService.ThonXomRepository.Delete(idThonXomDaCo); });
         }
 
         public async Task XoaTatCaDuLieu()
@@ -132,5 +150,49 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
                 _dataService.ThonXomRepository.DeleteAll();
             });
         }
+
+        #endregion
+
+        #region Cac phuong thuc ho tro
+
+        private void KiemTraThonXomThemMoiTheoKieuDuLieu(ThonXom thonXomCanKiemTra)
+        {
+            if (thonXomCanKiemTra == null || string.IsNullOrEmpty(thonXomCanKiemTra.TenThonXom.Trim()))
+            {
+                throw new TenThonXomKhongDungException()
+                {
+                    ErrorMessage = "Tên thôn, xóm thêm mới không đúng"
+                };
+            }
+
+            if (thonXomCanKiemTra.DonViHanhChinhPhuongXa == null ||
+                thonXomCanKiemTra.DonViHanhChinhPhuongXa.LoaiCapDonVi != CapDonViHanhChinh.PhuongXa)
+            {
+                throw new DonViHanhChinhXaPhuongKhongDungException()
+                {
+                    ErrorMessage =
+                        "Lựa chọn đơn vị hành chính trực thuộc của thôn, xóm thêm mới không phải cấp xã, phường"
+                };
+            }
+        }
+
+        private async Task KiemTraThonXomThemMoiTheoDb(ThonXom thonXomCanKiemTra)
+        {
+            // TODO: Kiem tra don vi xa, phuong cua thon, xom them moi co trung voi cac thon, xom khac hay khong
+
+            var thonXomDaCoTrongDb =
+                (await Task.Run(() => _dataService.ThonXomRepository.FindAll())).Any(x =>
+                    x.TenThonXom == thonXomCanKiemTra.TenThonXom);
+
+            if (thonXomDaCoTrongDb)
+            {
+                throw new ThonXomKhongTonTaiException()
+                {
+                    ErrorMessage = "Thôn, xóm cần cần thêm mới đã có trong Db"
+                };
+            }
+        }
+
+        #endregion
     }
 }

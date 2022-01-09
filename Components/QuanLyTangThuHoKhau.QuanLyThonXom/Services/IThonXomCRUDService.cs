@@ -7,15 +7,32 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
 {
     public interface IThonXomCRUDService
     {
+        #region Tim kiem
+
         public Task<List<ThonXom>> LietKeToanBoThonXom();
 
-        public Task ThemThonXomMoi(string tenThonXom, DonViHanhChinhChung donViHanhChinhXaPhuong);
+        #endregion
+
+        #region Them moi
+
         public Task ThemThonXomMoi(ThonXom thonXomMoi);
+        public Task ThemThonXomMoi(string tenThonXom, DonViHanhChinhChung donViHanhChinhXaPhuong);
+
+        public Task<int> ThemNhieuThonXomMoi(List<ThonXom> cacThonXomMoi);
+        #endregion
+
+        #region Chinh sua
 
         public Task ThayDoiTenThonXomDaCo(int idThonXomDaCo, string tenThonXom);
+
+        #endregion
+
+        #region Xoa
 
         public Task XoaThonXomDaCo(int idThonXomDaCo);
 
         public Task XoaTatCaDuLieu();
+
+        #endregion
     }
 }

@@ -19,6 +19,5 @@ namespace QuanLyTangThuHoKhau.Core.Models
         {
             return $"Tập {ThuTuTapHSCT} - " + (LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTGoc ? "Gốc" : "Bổ sung");
         }
-        
     }
 }

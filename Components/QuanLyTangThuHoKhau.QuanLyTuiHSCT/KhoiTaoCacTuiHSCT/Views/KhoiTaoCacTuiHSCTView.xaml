@@ -31,7 +31,7 @@
                     Text="Đã khởi tạo xong các túi HSCT"
                     Style="{StaticResource BodyTextBlockStyle}" />
                 <TextBlock d:Text="Tổng số thôn, xóm đã khởi tạo: 4"
-                           Text="{Binding SoLuongTuiHSCTDaKhoiTaoXong, StringFormat='{}Tổng số thôn, xóm đã khởi tạo: {0}'}"
+                           Text="{Binding SoLuongThonXomDaKhoiTaoXong, StringFormat='{}Tổng số thôn, xóm đã khởi tạo: {0}'}"
                            Style="{StaticResource CaptionTextBlockStyle}">
                 </TextBlock>
                 <TextBlock d:Text="Tổng số tập HSCT đã khởi tạo: 15"
