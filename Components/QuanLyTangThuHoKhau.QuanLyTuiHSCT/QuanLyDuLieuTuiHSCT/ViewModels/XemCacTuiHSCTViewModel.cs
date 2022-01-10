@@ -17,7 +17,7 @@ using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 {
-    public class XemCacTuiHSCTViewModel : BindableBase
+    public class XemCacTuiHSCTViewModel : BindableBase, INavigationAware
     {
         private readonly IRegionManager _regionManager;
 
@@ -71,10 +71,10 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             }
 
             //Khoi tao list view hien thi danh sach ho so
-            _toanBoHSCTCuaXaPhuong = (await _tuiHSCTService.LietKeToanBoTuiHSCT()).ToList();
+            // _toanBoHSCTCuaXaPhuong = (await _tuiHSCTService.LietKeToanBoTuiHSCT()).ToList();
 
             //Hien thi thong ke
-            TongSoHoDangThuongTru = _toanBoHSCTCuaXaPhuong.Count(x => x.HSCT.DangThuongTru);
+            // TongSoHoDangThuongTru = _toanBoHSCTCuaXaPhuong.Count(x => x.HSCT.DangThuongTru);
         }
 
         private void InitCommands()
@@ -182,6 +182,30 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
         public ICommand ChinhSuaTuiHSCTCommand { get; private set; }
         public ICommand XoaDangKyThuongTruTuiHSCTCommand { get; private set; }
+
+        #endregion
+
+        #region Dieu huong
+
+        public async void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            //Khoi tao list view hien thi danh sach ho so
+            _toanBoHSCTCuaXaPhuong = (await _tuiHSCTService.LietKeToanBoTuiHSCT()).ToList();
+
+            //Hien thi thong ke
+            TongSoHoDangThuongTru = _toanBoHSCTCuaXaPhuong.Count(x => x.HSCT.DangThuongTru);
+
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            
+        }
 
         #endregion
     }

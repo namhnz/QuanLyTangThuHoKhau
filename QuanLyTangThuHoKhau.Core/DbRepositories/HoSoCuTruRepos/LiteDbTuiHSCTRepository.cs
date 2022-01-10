@@ -34,7 +34,7 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos
         public TuiHSCT FindOneTheoSoHSCT(int soHSCTCanTim)
         {
             return _liteDb.GetCollection<TuiHSCT>(DataReposNames.CAC_TUI_HSCT)
-                .Include(x => x.TapHSCT)
+                .Include(x => x.TapHSCT).Include(x => x.TapHSCT.ThonXom)
                 .Find(x => x.HSCT.SoHSCT == soHSCTCanTim).FirstOrDefault();
         }
 
