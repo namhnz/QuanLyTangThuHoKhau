@@ -11,6 +11,7 @@
              xmlns:ui="http://schemas.modernwpf.com/2019"
              x:Name="RootKhoiTaoCacTuiHoSoUserControl">
     <UserControl.Resources>
+        <!-- Hien thi dang khoi tao cac tui ho so -->
         <DataTemplate x:Key="TrangThaiDangKhoiTaoCacTuiHSCTDataTemplate" DataType="{x:Type ContentControl}">
             <StackPanel>
                 <TextBlock
@@ -25,6 +26,7 @@
             </StackPanel>
         </DataTemplate>
 
+        <!-- Hien thi da khoi tao xong cac tui ho so -->
         <DataTemplate x:Key="TrangThaiDaKhoiTaoXongCacTuiHSCTDataTemplate" DataType="{x:Type ContentControl}">
             <StackPanel>
                 <TextBlock
@@ -35,13 +37,22 @@
                            Style="{StaticResource CaptionTextBlockStyle}">
                 </TextBlock>
                 <TextBlock d:Text="Tổng số tập HSCT đã khởi tạo: 15"
-                           Text="{Binding SoLuongTuiHSCTDaKhoiTaoXong, StringFormat='{}Tổng số tập HSCT đã khởi tạo: {0}'}"
+                           Text="{Binding SoLuongTapHSCTDaKhoiTaoXong, StringFormat='{}Tổng số tập HSCT đã khởi tạo: {0}'}"
                            Style="{StaticResource CaptionTextBlockStyle}">
                 </TextBlock>
                 <TextBlock d:Text="Tổng số lượng túi HSCT đã khởi tạo: 127"
                            Text="{Binding SoLuongTuiHSCTDaKhoiTaoXong, StringFormat='{}Tổng số lượng túi HSCT đã khởi tạo: {0}'}"
                            Style="{StaticResource CaptionTextBlockStyle}">
                 </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+
+        <!-- Hien thi chua khoi tao cac tui ho so -->
+        <DataTemplate x:Key="TrangThaiChuaKhoiTaoCacTuiHSCTDataTemplate" DataType="{x:Type ContentControl}">
+            <StackPanel>
+                <TextBlock
+                    Text="Chưa khởi tạo các túi HSCT"
+                    Style="{StaticResource BodyTextBlockStyle}" />
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
@@ -77,33 +88,42 @@
                     <GroupBox Header="Khởi tạo các túi HSCT">
                         <ui:SimpleStackPanel Spacing="8">
                             <TextBlock Style="{StaticResource CaptionTextBlockStyle}"
-                                   Text="Túi HSCT là cấp lưu trữ nhỏ nhất chứa thông tin HSCT"
-                                   TextWrapping="WrapWithOverflow">
+                                       Text="Túi HSCT là cấp lưu trữ nhỏ nhất chứa thông tin HSCT"
+                                       TextWrapping="WrapWithOverflow">
                             </TextBlock>
 
                             <Button Content="Khởi tạo dữ liệu"
-                                Command="{Binding TaoDuLieuVaGhiVaoDbCommand}">
+                                    Command="{Binding TaoDuLieuVaGhiVaoDbCommand}">
                             </Button>
 
                             <ui:SimpleStackPanel Spacing="4">
                                 <TextBlock
-                                Text="Trạng thái khởi tạo các túi HSCT"
-                                Style="{DynamicResource BoxHeaderStyle}" />
+                                    Text="Trạng thái khởi tạo các túi HSCT"
+                                    Style="{DynamicResource BoxHeaderStyle}" />
 
                                 <ContentControl
-                                Content="{Binding}"
-                                d:ContentTemplate="{StaticResource TrangThaiDaKhoiTaoXongCacTuiHSCTDataTemplate}">
+                                    Content="{Binding}"
+                                    d:ContentTemplate="{StaticResource TrangThaiDaKhoiTaoXongCacTuiHSCTDataTemplate}">
                                     <ContentControl.Style>
                                         <Style TargetType="{x:Type ContentControl}">
+                                            <!-- Trang thai da khoi tao xong -->
                                             <Setter Property="ContentTemplate"
-                                                Value="{StaticResource TrangThaiDaKhoiTaoXongCacTuiHSCTDataTemplate}">
+                                                    Value="{StaticResource TrangThaiDaKhoiTaoXongCacTuiHSCTDataTemplate}">
                                             </Setter>
                                             <Style.Triggers>
+                                                <!-- Trang thai dang khoi tao -->
                                                 <DataTrigger
-                                                Binding="{Binding DataContext.ProgressManager.IsActive, ElementName=RootKhoiTaoCacTuiHoSoUserControl}"
-                                                Value="True">
+                                                    Binding="{Binding ProgressManager.IsActive}"
+                                                    Value="True">
                                                     <Setter Property="ContentTemplate"
-                                                        Value="{StaticResource TrangThaiDangKhoiTaoCacTuiHSCTDataTemplate}" />
+                                                            Value="{StaticResource TrangThaiDangKhoiTaoCacTuiHSCTDataTemplate}" />
+                                                </DataTrigger>
+                                                <!-- Trang thai chua khoi tao -->
+                                                <DataTrigger
+                                                    Binding="{Binding SoLuongThonXomDaKhoiTaoXong}"
+                                                    Value="0">
+                                                    <Setter Property="ContentTemplate"
+                                                            Value="{StaticResource TrangThaiChuaKhoiTaoCacTuiHSCTDataTemplate}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>

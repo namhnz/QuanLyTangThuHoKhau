@@ -16,6 +16,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
         public Task ThemTuiHSCTMoi(TapHSCT tapHSCT, int viTriTui, DateTime? ngayDangKy, string chuHo = "");
         public Task ThemTuiHSCTMoi(TuiHSCT tuiHSCTMoi);
+        public Task<int> ThemNhieuTuiHSCTMoi(List<TuiHSCT> cacTuiHSCTMoi);
 
         public Task ThayDoiTenChuHoCuaTuiHSCT(int idTuiHSCT, string chuHoMoi);
         public Task CapNhatThongTinTuiHSCT(TuiHSCT tuiHSCTChinhSua);

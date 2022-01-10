@@ -144,6 +144,11 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             await Task.Run(() => { TuiHSCTSampleData.ThemTuiHSCTMoi(tuiHSCTMoi); });
         }
 
+        public Task<int> ThemNhieuTuiHSCTMoi(List<TuiHSCT> cacTuiHSCTMoi)
+        {
+            throw new NotImplementedException();
+        }
+
         //Dung cho phuong thuc tao moi tui ho so
         private async Task<HSCT> TaoHSCTMoi(ThonXom thonXom, DateTime? ngayDangKy, string chuHo = "")
         {

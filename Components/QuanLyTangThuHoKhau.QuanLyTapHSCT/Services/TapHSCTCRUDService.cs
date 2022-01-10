@@ -103,6 +103,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
             await Task.Run(() => _dataService.TapHSCTRepository.Insert(tapHSCTMoi));
         }
 
+        // Chi dung phuong thuc nay trong khoi tao du lieu
         public async Task<int> ThemNhieuTapHSCTMoi(List<TapHSCT> cacTapHSCTMoi)
         {
             foreach (var tapHSCTMoi in cacTapHSCTMoi)
@@ -110,8 +111,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
                 // Kiem tra kieu du lieu
                 KiemTraTapHSCTTheoKieuDuLieu(tapHSCTMoi);
 
-                // Kiem tra trong db xem da ton tai hay chua
-                await KiemTraTapHSCTTheoDb(tapHSCTMoi);
+                // Khong can kiem tra trong db xem da ton tai hay chua do truoc khi them moi da xoa toan bo db
+                // await KiemTraTapHSCTTheoDb(tapHSCTMoi);
             }
 
             // Kiem tra cac tap ho so trong danh sach co tap ho so nao giong nhau hay khong
@@ -132,15 +133,14 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
             return await Task.Run(() => _dataService.TapHSCTRepository.InsertMany(cacTapHSCTMoi));
         }
 
+        // Chi dung phuong thuc nay trong khoi tao du lieu
         public async Task ThemTapHSCTBoSung(ThonXom thonXom)
         {
             var cacTapHSCTGocTheoThonXom =
                 (await LietKeToanBoTapHSCTTheoThonXom(thonXom)).Where(x => x.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTGoc)
                 .ToList();
 
-            int thuTuTapHSCTBoSung;
-
-            thuTuTapHSCTBoSung =
+            var thuTuTapHSCTBoSung =
                 !cacTapHSCTGocTheoThonXom.Any() ? 1 : cacTapHSCTGocTheoThonXom.Max(x => x.ThuTuTapHSCT);
 
             var tapHSCTMoi = new TapHSCT()
@@ -151,6 +151,15 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
             };
 
             await Task.Run(() => ThemTapHSCTMoi(tapHSCTMoi));
+
+            // Kiem tra kieu du lieu
+            // KiemTraTapHSCTTheoKieuDuLieu(tapHSCTMoi);
+
+            // Khong kiem tra trong db xem da ton tai hay do truoc do da xoa toan bo du lieu
+            // await KiemTraTapHSCTTheoDb(tapHSCTMoi);
+
+            // Them tap ho so vao Db
+            // await Task.Run(() => _dataService.TapHSCTRepository.Insert(tapHSCTMoi));
         }
 
         #endregion
@@ -216,7 +225,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
             if (tapHSCTCanKiemTra.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTBoSung)
             {
                 var tapHSCTBoSungDaTonTai =
-                    (await LietKeToanBoTapHSCT()).Any(x => x.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTBoSung);
+                    (await LietKeToanBoTapHSCT()).Any(x => x.ThonXom.Id == tapHSCTCanKiemTra.ThonXom.Id && x.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTBoSung);
                 if (tapHSCTBoSungDaTonTai)
                 {
                     throw new LoaiTapHSCTKhongDungException()

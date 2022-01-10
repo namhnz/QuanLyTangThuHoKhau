@@ -67,6 +67,7 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
             await Task.Run(() => { _dataService.ThonXomRepository.Insert(thonXomMoi); });
         }
 
+        // Phuong thuc chi dung trong khoi tao du lieu
         public async Task<int> ThemNhieuThonXomMoi(List<ThonXom> cacThonXomMoi)
         {
             // Kiem tra cac thon xom trong danh sach co thon xom nao giong nhau hay khong
@@ -88,8 +89,8 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
                 // Kiem tra xem cac thong tin trong thon, xom da dung hay chua
                 KiemTraThonXomThemMoiTheoKieuDuLieu(thonXomMoi);
 
-                // Kiem tra thon xom da ton tai trong db chua
-                await KiemTraThonXomThemMoiTheoDb(thonXomMoi);
+                // Khong can kiem tra thon xom da ton tai trong db chua do truoc khi khoi tao da clear du lieu
+                // await KiemTraThonXomThemMoiTheoDb(thonXomMoi);
             }
 
             // Them cac thon, xom moi vao Db

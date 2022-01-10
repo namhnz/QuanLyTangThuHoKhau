@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.DbDataSerivces;
 using QuanLyTangThuHoKhau.Core.Models;
@@ -69,7 +68,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
         #endregion
 
 
-        #region Them tui ho so moi
+        #region Tao cac gia tri moi
 
         public async Task<int> TaoSoHSCTMoi()
         {
@@ -93,14 +92,22 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             return viTriTuiLonNhat + 1;
         }
 
+        #endregion
+
+        #region Them tui ho so moi
+
         public async Task ThemTuiHSCTMoi(TapHSCT tapHSCT, int viTriTui, DateTime? ngayDangKy, string chuHo = "")
         {
             // Tao ho so moi
             var thonXomThemHSCTMoi = tapHSCT.ThonXom;
-            var hsctMoi = await TaoHSCTMoi(thonXomThemHSCTMoi, ngayDangKy, chuHo);
+
+            // Tao HSCT moi
+            var soHSCTMoi = await TaoSoHSCTMoi();
+            var hsctMoi = new HSCT((uint)soHSCTMoi, thonXomThemHSCTMoi, ngayDangKy, chuHo);
 
             // Lay vi tri tui ho so moi
-            var viTriTuiHSCTMoi = _dataService.TuiHSCTRepository.FindAll().Count(x => x.TapHSCT.Id == tapHSCT.Id) + 1;
+            // var viTriTuiHSCTMoi = _dataService.TuiHSCTRepository.FindAll().Count(x => x.TapHSCT.Id == tapHSCT.Id) + 1;
+            var viTriTuiHSCTMoi = await TaoViTriTuiHSCTMoi(thonXomThemHSCTMoi);
 
             // Tao tui ho so moi
             var tuiHSCTMoi = new TuiHSCT()
@@ -110,7 +117,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
                 ViTriTui = viTriTuiHSCTMoi
             };
 
-            await Task.Run(() => { _dataService.TuiHSCTRepository.Insert(tuiHSCTMoi); });
+            // Them tui ho so moi
+            await ThemTuiHSCTMoi(tuiHSCTMoi);
         }
 
         public async Task ThemTuiHSCTMoi(TuiHSCT tuiHSCTMoi)
@@ -130,28 +138,32 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             await Task.Run(() => _dataService.TuiHSCTRepository.Insert(tuiHSCTMoi));
         }
 
-        private async Task<HSCT> TaoHSCTMoi(ThonXom thonXom, DateTime? ngayDangKy, string chuHo = "")
+        // Chi dung phuong thuc nay trong khoi tao du lieu
+        public async Task<int> ThemNhieuTuiHSCTMoi(List<TuiHSCT> cacTuiHSCTMoi)
         {
-            //Kiem tra thon xom da chon xem ton tai hay khong
-            
-
-            
-            
-
-
-            var hsctMoi = await Task.Run(() =>
+            // Kiem tra cac thon xom trong danh sach co thon xom nao giong nhau hay khong
+            var cacSoHSCTCoSuTrungNhau = cacTuiHSCTMoi.GroupBy(x => x.HSCT.SoHSCT)
+                .Where(g => g.Count() > 1)
+                .Select(y => y.Key);
+            if (cacSoHSCTCoSuTrungNhau.Any())
             {
-                //Lay so ho so moi nhat
-                var tuiHSCTCuoiCung = _dataService.TuiHSCTRepository.FindTuiHSCTMoiNhat();
-                int soHSCTMoiNhat;
+                throw new SoHSCTKhongDungException()
+                {
+                    ErrorMessage = "Các túi HSCT thêm mới không được trùng nhau"
+                };
+            }
 
-                soHSCTMoiNhat = tuiHSCTCuoiCung == null ? 1 : tuiHSCTCuoiCung.HSCT.SoHSCT + 1;
+            // Kiem tra thong tin cac tui ho so
+            // Khong tien hanh kiem tra voi Db do so luong ho so can them vao lon, neu kiem tra db se gay anh huong den toc do them
+            foreach (var tuiHSCTMoi in cacTuiHSCTMoi)
+            {
+                KiemTraTuiHSCTThemMoiTheoKieuDuLieu(tuiHSCTMoi);
 
-                //Tao ho so moi
-                return new HSCT((uint)soHSCTMoiNhat, thonXom, ngayDangKy, chuHo);
-            });
+                // Khong can kiem tra Db do truoc do da xoa toan bo du lieu
+            }
 
-            return hsctMoi;
+            // Them vao Db
+            return await Task.Run(() => _dataService.TuiHSCTRepository.InsertMany(cacTuiHSCTMoi));
         }
 
         #endregion
@@ -263,7 +275,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
         private async Task KiemTraTuiHSCTThemMoiTheoDb(TuiHSCT tuiHSCTCanKiemTra)
         {
-            var thonXomDaCo = await Task.Run(() => _dataService.ThonXomRepository.FindOne(tuiHSCTCanKiemTra.TapHSCT.ThonXom.Id));
+            var thonXomDaCo = await Task.Run(() =>
+                _dataService.ThonXomRepository.FindOne(tuiHSCTCanKiemTra.TapHSCT.ThonXom.Id));
             if (thonXomDaCo == null)
             {
                 throw new ThonXomKhongTonTaiException()
@@ -273,7 +286,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             }
 
             //Kiem tra tap ho so ton tai
-            var tapHSCTDaCo = await Task.Run(() => _dataService.TapHSCTRepository.FindOne(tuiHSCTCanKiemTra.TapHSCT.Id));
+            var tapHSCTDaCo =
+                await Task.Run(() => _dataService.TapHSCTRepository.FindOne(tuiHSCTCanKiemTra.TapHSCT.Id));
             if (tapHSCTDaCo == null)
             {
                 throw new TapHSCTChuaTuiHSCTMoiKhongDungException()
@@ -285,7 +299,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             // Kiem tra tui ho so da ton tai
             if (tuiHSCTCanKiemTra.HSCT.SoHSCT > 0)
             {
-                var tuiHSCTDaCo = await Task.Run(() => _dataService.TuiHSCTRepository.FindOneTheoSoHSCT(tuiHSCTCanKiemTra.HSCT.SoHSCT));
+                var tuiHSCTDaCo = await Task.Run(() =>
+                    _dataService.TuiHSCTRepository.FindOneTheoSoHSCT(tuiHSCTCanKiemTra.HSCT.SoHSCT));
                 if (tuiHSCTDaCo != null)
                 {
                     throw new SoHSCTKhongDungException()

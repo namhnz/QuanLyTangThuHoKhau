@@ -72,6 +72,16 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.Services
                 "Sample data không hỗ trợ các phương thức khởi tạo dữ liệu mà tự tạo dữ liệu có sẵn");
         }
 
+        public Task<int> ThemNhieuTapHSCTMoi(List<TapHSCT> cacTapHSCTMoi)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ThemTapHSCTBoSung(ThonXom thonXom)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         //Tap ho so sau khi da tao thi khong the thay doi

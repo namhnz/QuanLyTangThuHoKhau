@@ -23,7 +23,8 @@ using QuanLyTraThe.Core.Constants.Settings;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 {
-    public class KhoiTaoCacTuiHSCTViewModel : BindableBase, INavigationAware
+    public class
+        KhoiTaoCacTuiHSCTViewModel : BindableBase, INavigationAware
     {
         private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -61,16 +62,18 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
             // Khoi tao command tao va ghi du lieu vao db
             TaoDuLieuVaGhiVaoDbCommand =
                 new DelegateCommand(TaoDuLieuVaGhiVaoDb, () => !ProgressManager.IsActive).ObservesProperty(() =>
-                    ProgressManager);
+                    ProgressManager.IsActive);
 
             //Khoi tao command dieu huong truoc, sau
             QuayVeBuocTaoCacTapHSCTGocCommand =
                 new DelegateCommand(QuayVeBuocTaoCacTapHSCTGoc, () => !ProgressManager.IsActive).ObservesProperty(() =>
-                    ProgressManager);
+                    ProgressManager.IsActive);
             HoanThanhKhoiTaoDuLieuBanDauCommand =
-                new DelegateCommand(HoanThanhKhoiTaoDuLieuBanDau, () => !ProgressManager.IsActive).ObservesProperty(
+                new DelegateCommand(HoanThanhKhoiTaoDuLieuBanDau,
+                    () => !ProgressManager.IsActive && SoLuongThonXomDaKhoiTaoXong > 0).ObservesProperty(
                     () =>
-                        ProgressManager);
+                        ProgressManager.IsActive).ObservesProperty(() => SoLuongThonXomDaKhoiTaoXong);
+            ;
         }
 
         #endregion
@@ -154,13 +157,16 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 
         public ICommand QuayVeBuocTaoCacTapHSCTGocCommand { get; private set; }
 
-        private void QuayVeBuocTaoCacTapHSCTGoc()
+        private async void QuayVeBuocTaoCacTapHSCTGoc()
         {
             // if (IsDangKhoiTaoCacTuiHSCT)
             // {
             //     MessageBox.Show("Quá trình tạo dữ liệu đang được thực hiện");
             //     return;
             // }
+
+            // Reset lai Db
+            await _thonXomService.XoaTatCaDuLieu();
 
             _regionManager.RequestNavigate(KhoiTaoDuLieuBanDauRegionNames.KHOI_TAO_DU_LIEU_BAN_DAU_ROOT_REGION,
                 "KhoiTaoCacTapHSCTView");
@@ -303,13 +309,15 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
                 await _tapHSCTService.ThemTapHSCTBoSung(thonXom);
                 soTapHSCTDaThemVaoDb++;
             }
+
             SoLuongTapHSCTDaKhoiTaoXong = soTapHSCTDaThemVaoDb;
 
             // Them cac tui ho so
-            foreach (var tuiHSCTDb in _toanBoTuiHSCTThemVaoDb)
-            {
-                await _tuiHSCTService.ThemTuiHSCTMoi(tuiHSCTDb);
-            }
+            // foreach (var tuiHSCTDb in _toanBoTuiHSCTThemVaoDb)
+            // {
+            //     await _tuiHSCTService.ThemTuiHSCTMoi(tuiHSCTDb);
+            // }
+            SoLuongTuiHSCTDaKhoiTaoXong = await _tuiHSCTService.ThemNhieuTuiHSCTMoi(_toanBoTuiHSCTThemVaoDb);
         }
 
         public ICommand TaoDuLieuVaGhiVaoDbCommand { get; private set; }

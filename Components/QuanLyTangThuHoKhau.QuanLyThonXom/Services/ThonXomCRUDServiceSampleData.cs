@@ -51,6 +51,11 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
             });
         }
 
+        public Task<int> ThemNhieuThonXomMoi(List<ThonXom> cacThonXomMoi)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task ThemThonXomMoi(ThonXom thonXomMoi)
         {
             if (thonXomMoi == null || string.IsNullOrEmpty(thonXomMoi.TenThonXom))

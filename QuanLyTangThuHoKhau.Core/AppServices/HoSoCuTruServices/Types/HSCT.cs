@@ -21,6 +21,11 @@ namespace QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types
             NgayDangKy = ngayDangKy;
             DangThuongTru = dangThuongTru;
         }
-        
+
+        // Chi dung cho db tu dong load
+        public HSCT()
+        {
+            
+        }
     }
 }
