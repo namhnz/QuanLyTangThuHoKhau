@@ -13,6 +13,14 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types.ViewModels
             set => SetProperty(ref _sourceId, value);
         }
 
+        private object _sourceItem;
+
+        public object SourceItem
+        {
+            get => _sourceItem;
+            set => SetProperty(ref _sourceItem, value);
+        }
+
         private string _name;
 
         public string Name

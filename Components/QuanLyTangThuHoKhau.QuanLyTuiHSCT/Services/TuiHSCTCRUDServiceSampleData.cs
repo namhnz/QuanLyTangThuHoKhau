@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.AppServices.SampleDataServices;
 using QuanLyTangThuHoKhau.Core.Models;
+using QuanLyTangThuHoKhau.QuanLyTapHSCT.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions;
 
@@ -48,6 +49,36 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             var toanBoTuiHSCTCuaThonXom = await Task.Run(() =>
                 TuiHSCTSampleData.ToanBoTuiHSCT().Where(x => x.TapHSCT.ThonXom.Id == thonXom.Id).ToList());
             return toanBoTuiHSCTCuaThonXom;
+        }
+
+        public async Task<List<TuiHSCT>> LietKeToanBoTuiHSCTTheoTapHSCT(TapHSCT tapHSCT)
+        {
+            if (tapHSCT == null)
+            {
+                throw new ThuTuTapHSCTKhongDungException()
+                {
+                    ErrorMessage = "Chưa chọn tập HSCT để lấy các túi HSCT"
+                };
+            }
+
+            var tapHSCTDaCo = TapHSCTSampleData.ToanBoHSCT().FirstOrDefault(x => x.Id == tapHSCT.Id);
+            if (tapHSCTDaCo == null)
+            {
+                throw new ThuTuTapHSCTKhongDungException()
+                {
+                    ErrorMessage = "Tập HSCT đã chọn không tồn tại"
+                };
+            }
+
+            // var cacTapHSCTCuaThonXom =
+            //     _dataService.TapHSCTRepository.FindAll().Where(x => x.ThonXom.Id == thonXom.Id).ToList();
+
+            var toanBoTuiHSCT = await LietKeToanBoTuiHSCT();
+
+            var toanBoTuiHSCTTheoTapHSCT =
+                toanBoTuiHSCT.Where(x => x.TapHSCT.Id == tapHSCT.Id).ToList();
+
+            return toanBoTuiHSCTTheoTapHSCT;
         }
 
         public async Task<TuiHSCT> TimKiemTuiHSCTTheoSoHSCT(int soHSCTCanTim)

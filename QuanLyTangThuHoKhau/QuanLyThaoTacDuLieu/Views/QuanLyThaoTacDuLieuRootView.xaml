@@ -21,19 +21,12 @@
             <ColumnDefinition Width="200" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-    
-        <Grid Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-    
-            <!-- Hien thi menu -->
 
-            <menuPart:MenuPartRootView></menuPart:MenuPartRootView>
-    
-        </Grid>
-    
+        <!-- Hien thi menu -->
+        <menuPart:MenuPartRootView Grid.Row="0"
+                                   Grid.ColumnSpan="2"
+                                   Grid.Column="0"></menuPart:MenuPartRootView>
+
         <DockPanel
             Grid.Row="1"
             Background="{DynamicResource NavigationViewExpandedPaneBackground}">
@@ -49,6 +42,7 @@
         </DockPanel>
     
         <ContentControl
+            Margin="16 0 0 0"
             Grid.Row="1"
             Grid.Column="1"
             prism:RegionManager.RegionName="{x:Static qldlCoreTypes:QuanLyDuLieuRegionNames.QUAN_LY_DU_LIEU_ROOT_REGION}"

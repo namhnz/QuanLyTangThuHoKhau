@@ -1,11 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using log4net;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
+using QuanLyTangThuHoKhau.Core.Exceptions;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.Core.Types.QuanLyDuLieu;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Services;
@@ -17,8 +23,11 @@ using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 {
-    public class XemCacTuiHSCTViewModel : BindableBase, INavigationAware
+    public class XemCacTuiHSCTViewModel : BindableBase
     {
+        private static readonly ILog Log =
+            LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private readonly IRegionManager _regionManager;
 
         private readonly IThonXomCRUDService _thonXomService;
@@ -35,7 +44,6 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
             InitCommands();
             InitData();
-            
         }
 
 
@@ -57,6 +65,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                     x => new ExplorerItemViewModel()
                     {
                         SourceId = x.Id,
+                        SourceItem = x,
                         Name = x.ToString(),
                         Type = ExplorerItemType.TapHSCT
                     });
@@ -64,6 +73,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                 DanhSachCapLuuTru.Add(new ExplorerItemViewModel()
                 {
                     SourceId = thonXom.Id,
+                    SourceItem = thonXom,
                     Name = thonXom.TenThonXom,
                     Type = ExplorerItemType.ThonXom,
                     Children = new ObservableCollection<ExplorerItemViewModel>(toanBoTapHSCTTheoThonXomVM)
@@ -75,6 +85,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
             //Hien thi thong ke
             // TongSoHoDangThuongTru = _toanBoHSCTCuaXaPhuong.Count(x => x.HSCT.DangThuongTru);
+
+            await TaiToanBoTuiHSCT();
         }
 
         private void InitCommands()
@@ -98,7 +110,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             get => _danhSachCapLuuTru;
             set => SetProperty(ref _danhSachCapLuuTru, value);
         }
-        
+
         #endregion
 
         #region Toan bo tui ho so
@@ -117,19 +129,32 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
         private void ThayDoiDanhSachHSCTHienThi(ExplorerItemViewModel selectedCapLuuTru)
         {
-            if (selectedCapLuuTru != null)
+            Task.Run(async () =>
             {
-                if (selectedCapLuuTru.Type == ExplorerItemType.ThonXom)
+                if (selectedCapLuuTru != null)
                 {
-                    DanhSachHSCTTheoCapLuuTru = _toanBoHSCTCuaXaPhuong
-                        .Where(x => x.TapHSCT.ThonXom.Id == selectedCapLuuTru.SourceId).ToList();
+                    if (selectedCapLuuTru.Type == ExplorerItemType.ThonXom)
+                    {
+                        // DanhSachHSCTTheoCapLuuTru = _toanBoHSCTCuaXaPhuong
+                        //     .Where(x => x.TapHSCT.ThonXom.Id == selectedCapLuuTru.SourceId).ToList();
+
+                        var selectedThonXom = (ThonXom)selectedCapLuuTru.SourceItem;
+
+                        DanhSachHSCTTheoCapLuuTru =
+                            await _tuiHSCTService.LietKeToanBoTuiHSCTTheoThonXom(selectedThonXom);
+                    }
+                    else
+                    {
+                        var selectedTapHSCT = (TapHSCT)selectedCapLuuTru.SourceItem;
+
+                        // DanhSachHSCTTheoCapLuuTru = _toanBoHSCTCuaXaPhuong
+                        //     .Where(x => x.TapHSCT.Id == selectedCapLuuTru.SourceId).ToList();
+
+                        DanhSachHSCTTheoCapLuuTru =
+                            await _tuiHSCTService.LietKeToanBoTuiHSCTTheoTapHSCT(selectedTapHSCT);
+                    }
                 }
-                else
-                {
-                    DanhSachHSCTTheoCapLuuTru = _toanBoHSCTCuaXaPhuong
-                        .Where(x => x.TapHSCT.Id == selectedCapLuuTru.SourceId).ToList();
-                }
-            }
+            });
         }
 
         private TuiHSCT _selectedTuiHSCT;
@@ -139,7 +164,6 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             get => _selectedTuiHSCT;
             set => SetProperty(ref _selectedTuiHSCT, value);
         }
-
 
         #endregion
 
@@ -160,7 +184,6 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             get => _tongSoHoDangThuongTru;
             set => SetProperty(ref _tongSoHoDangThuongTru, value);
         }
-
 
         #endregion
 
@@ -184,27 +207,31 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
         public ICommand XoaDangKyThuongTruTuiHSCTCommand { get; private set; }
 
         #endregion
+        
+        #region Lay du lieu tu Db
 
-        #region Dieu huong
-
-        public async void OnNavigatedTo(NavigationContext navigationContext)
+        private async Task TaiToanBoTuiHSCT()
         {
-            //Khoi tao list view hien thi danh sach ho so
-            _toanBoHSCTCuaXaPhuong = (await _tuiHSCTService.LietKeToanBoTuiHSCT()).ToList();
+            try
+            {
+                //Khoi tao list view hien thi danh sach ho so
+                _toanBoHSCTCuaXaPhuong = (await _tuiHSCTService.LietKeToanBoTuiHSCT()).ToList();
 
-            //Hien thi thong ke
-            TongSoHoDangThuongTru = _toanBoHSCTCuaXaPhuong.Count(x => x.HSCT.DangThuongTru);
-
-        }
-
-        public bool IsNavigationTarget(NavigationContext navigationContext)
-        {
-            return true;
-        }
-
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-            
+                //Hien thi thong ke
+                TongSoHoDangThuongTru = _toanBoHSCTCuaXaPhuong.Count(x => x.HSCT.DangThuongTru);
+            }
+            catch (Exception ex)
+            {
+                if (ex is BaseException)
+                {
+                    MessageBox.Show(((BaseException)ex).ErrorMessage);
+                }
+                else
+                {
+                    Log.Error(ex);
+                    MessageBox.Show("Đã có lỗi xảy ra khi tải danh sách các túi HSCT");
+                }
+            }
         }
 
         #endregion

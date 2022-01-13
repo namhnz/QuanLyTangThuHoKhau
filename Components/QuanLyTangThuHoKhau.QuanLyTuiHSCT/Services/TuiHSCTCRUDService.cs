@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.DbDataSerivces;
 using QuanLyTangThuHoKhau.Core.Models;
+using QuanLyTangThuHoKhau.QuanLyTapHSCT.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions.TimKiemTuiHSCTExceptions;
@@ -24,8 +26,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
         public async Task<List<TuiHSCT>> LietKeToanBoTuiHSCT()
         {
-            var toanBoTuiHSCT = await Task.Run(() => _dataService.TuiHSCTRepository.FindAll().ToList());
-            return toanBoTuiHSCT;
+            return await Task.Run(() => _dataService.TuiHSCTRepository.FindAll().ToList());
         }
 
         public async Task<List<TuiHSCT>> LietKeToanBoTuiHSCTTheoThonXom(ThonXom thonXom)
@@ -53,14 +54,45 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             var toanBoTuiHSCT = await LietKeToanBoTuiHSCT();
 
             var toanBoTuiHSCTCuaThonXom =
-                toanBoTuiHSCT.Where(x => x.TapHSCT.ThonXom.TenThonXom == thonXom.TenThonXom).ToList();
+                toanBoTuiHSCT.Where(x => x.TapHSCT.ThonXom.Id == thonXom.Id).ToList();
 
             return toanBoTuiHSCTCuaThonXom;
         }
 
+        public async Task<List<TuiHSCT>> LietKeToanBoTuiHSCTTheoTapHSCT(TapHSCT tapHSCT)
+        {
+            if (tapHSCT == null)
+            {
+                throw new ThuTuTapHSCTKhongDungException()
+                {
+                    ErrorMessage = "Chưa chọn tập HSCT để lấy các túi HSCT"
+                };
+            }
+
+            var tapHSCTDaCo = _dataService.TapHSCTRepository.FindOne(tapHSCT.Id);
+            if (tapHSCTDaCo == null)
+            {
+                throw new ThuTuTapHSCTKhongDungException()
+                {
+                    ErrorMessage = "Tập HSCT đã chọn không tồn tại"
+                };
+            }
+
+            // var cacTapHSCTCuaThonXom =
+            //     _dataService.TapHSCTRepository.FindAll().Where(x => x.ThonXom.Id == thonXom.Id).ToList();
+
+            var toanBoTuiHSCT = await LietKeToanBoTuiHSCT();
+
+            var toanBoTuiHSCTTheoTapHSCT =
+                toanBoTuiHSCT.Where(x => x.TapHSCT.Id == tapHSCT.Id).ToList();
+
+            return toanBoTuiHSCTTheoTapHSCT;
+        }
+
         public async Task<TuiHSCT> TimKiemTuiHSCTTheoSoHSCT(int soHSCTCanTim)
         {
-            var tuiHSCTCanTim = await Task.Run(() => _dataService.TuiHSCTRepository.FindOneTheoSoHSCT(soHSCTCanTim));
+            var tuiHSCTCanTim =
+                await Task.Run(() => _dataService.TuiHSCTRepository.FindOneTheoSoHSCT(soHSCTCanTim));
 
             return tuiHSCTCanTim;
         }
@@ -86,8 +118,28 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
                 };
             }
 
-            var viTriTuiLonNhat = (await LietKeToanBoTuiHSCTTheoThonXom(thonXom))
-                .Where(x => x.TapHSCT.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTBoSung).Max(x => x.ViTriTui);
+            // var cacTuiHSCTThuocTapHSCTBoSung = (await LietKeToanBoTuiHSCTTheoThonXom(thonXom))
+            //     .Where(x => x.TapHSCT.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTBoSung);
+
+            var thuTuCacTapHSCTLonNhat =
+                (await Task.Run(() => _dataService.TapHSCTRepository.FindAll())).Max(x => x.ThuTuTapHSCT);
+
+            var cacTuiHSCTThuocCacTapHSCTLonNhat =
+                (await LietKeToanBoTuiHSCTTheoThonXom(thonXom)).Where(x =>
+                    x.TapHSCT.ThuTuTapHSCT == thuTuCacTapHSCTLonNhat);
+
+            int viTriTuiLonNhat;
+
+            if (cacTuiHSCTThuocCacTapHSCTLonNhat.Any())
+            {
+                //Da co tui ho so trong tap ho so bo sung thi lay vi tri tiep sau so lon nhat
+                viTriTuiLonNhat = cacTuiHSCTThuocCacTapHSCTLonNhat.Max(x => x.ViTriTui);
+            }
+            else
+            {
+                //Chua co ho so nao trong tap bo sung, can lay vi tri ke tiep tui ho so cua tap ho so cuoi cung
+                viTriTuiLonNhat = 0;
+            }
 
             return viTriTuiLonNhat + 1;
         }
