@@ -11,6 +11,7 @@ using Prism.Regions;
 using QuanLyTangThuHoKhau.Core.Exceptions;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.Core.Ultis;
+using QuanLyTangThuHoKhau.Core.Ultis.CommonContentDialogs;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions.TimKiemTuiHSCTExceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types;
@@ -190,7 +191,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                 else
                 {
                     Log.Error(ex);
-                    MessageBox.Show("Đã có lỗi xảy ra khi tìm kiếm thông tin hộ thường trú");
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Đã có lỗi xảy ra khi tìm kiếm thông tin hộ thường trú");
                 }
             }
         }
@@ -275,23 +276,23 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                     //Chinh sua tap ho so
                     await _tuiHSCTService.CapNhatThongTinTuiHSCT(tuiHSCTCanChinhSua);
 
-                    MessageBox.Show("Chỉnh sửa tập hồ sơ gốc trong thôn, xóm thành công");
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Chỉnh sửa tập hồ sơ gốc trong thôn, xóm thành công");
 
                     // Debug.WriteLine(JsonConvert.SerializeObject(TuiHSCTSampleData.ToanBoTuiHSCT()
                     //     .FirstOrDefault(x => x.Id == tuiHSCTCanChinhSua.Id)));
-                    TimKiemThongTinHSCT();
+                    await TimKiemThongTinHSCT();
                 }
                 catch (Exception ex)
                 {
                     if (ex is TenChuHoKhongDungException or TuiHSCTKhongTonTaiException)
                     {
                         var exBase = (BaseException)ex;
-                        MessageBox.Show(exBase.ErrorMessage);
+                        await ReducedDisplayInfoContentDialog.Show(_dialogService, exBase.ErrorMessage);
                     }
                     else
                     {
                         Log.Error(ex);
-                        MessageBox.Show("Đã có lỗi xảy ra khi chỉnh sửa thông tin hộ thường trú");
+                        await ReducedDisplayInfoContentDialog.Show(_dialogService, "Đã có lỗi xảy ra khi chỉnh sửa thông tin hộ thường trú");
                     }
                 }
             }

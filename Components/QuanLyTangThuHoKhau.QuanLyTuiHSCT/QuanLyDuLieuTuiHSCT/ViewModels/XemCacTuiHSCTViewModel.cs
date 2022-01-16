@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using CustomMVVMDialogs;
 using log4net;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -14,6 +15,7 @@ using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.Exceptions;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.Core.Types.QuanLyDuLieu;
+using QuanLyTangThuHoKhau.Core.Ultis.CommonContentDialogs;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Services;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Services;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types;
@@ -30,17 +32,19 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
         private readonly IRegionManager _regionManager;
 
+        private readonly IDialogService _dialogService;
         private readonly IThonXomCRUDService _thonXomService;
         private readonly ITapHSCTCRUDService _tapHSCTService;
         private readonly ITuiHSCTCRUDService _tuiHSCTService;
 
         public XemCacTuiHSCTViewModel(IThonXomCRUDService thonXomService, ITapHSCTCRUDService tapHSCTService,
-            ITuiHSCTCRUDService tuiHSCTService, IRegionManager regionManager)
+            ITuiHSCTCRUDService tuiHSCTService, IRegionManager regionManager, IDialogService dialogService)
         {
             _thonXomService = thonXomService;
             _tapHSCTService = tapHSCTService;
             _tuiHSCTService = tuiHSCTService;
             _regionManager = regionManager;
+            _dialogService = dialogService;
 
             InitCommands();
             InitData();
@@ -224,12 +228,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             {
                 if (ex is BaseException)
                 {
-                    MessageBox.Show(((BaseException)ex).ErrorMessage);
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService, ((BaseException)ex).ErrorMessage);
                 }
                 else
                 {
                     Log.Error(ex);
-                    MessageBox.Show("Đã có lỗi xảy ra khi tải danh sách các túi HSCT");
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Đã có lỗi xảy ra khi tải danh sách các túi HSCT");
                 }
             }
         }

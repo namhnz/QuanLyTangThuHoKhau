@@ -5,7 +5,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using CustomMVVMDialogs;
 using log4net;
+using ModernWpf.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -14,6 +16,7 @@ using QuanLyTangThuHoKhau.Core.AppServices.HanhChinhVietNamServices.Types;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.Core.Types.KhoiTaoDuLieuBanDau;
 using QuanLyTangThuHoKhau.Core.Ultis;
+using QuanLyTangThuHoKhau.Core.Ultis.CommonContentDialogs;
 
 namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 {
@@ -23,14 +26,16 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly IRegionManager _regionManager;
+        private readonly IDialogService _dialogService;
 
         private readonly IDonViHanhChinhService _dvhcService;
 
         public KhoiTaoDanhSachThonXomViewModel(IDonViHanhChinhService dvhcService,
-            IRegionManager regionManager)
+            IRegionManager regionManager, IDialogService dialogService)
         {
             _dvhcService = dvhcService;
             _regionManager = regionManager;
+            _dialogService = dialogService;
 
             InitCommands();
 
@@ -143,13 +148,13 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 
         public ICommand XoaThonXomItemCommand { get; private set; }
 
-        private void XoaThonXomItem(ThonXom thonXomItem)
+        private async void XoaThonXomItem(ThonXom thonXomItem)
         {
-            var xoaThonXomItemKhoiDanhSachConfirmResult = MessageBox.Show(
-                "Bạn có muốn xoá thôn, xóm này khỏi danh sách các thôn, xóm đã nhập không?", "Xoá thôn, xóm",
-                MessageBoxButton.YesNo);
+            var xoaThonXomItemKhoiDanhSachConfirmResult = await ReducedYesNoConfirmContentDialog.Show(_dialogService,
+                "Bạn có muốn xoá thôn, xóm này khỏi danh sách các thôn, xóm đã nhập không?");
 
-            if (xoaThonXomItemKhoiDanhSachConfirmResult == MessageBoxResult.Yes)
+
+            if (xoaThonXomItemKhoiDanhSachConfirmResult == ContentDialogResult.Primary)
             {
                 var indexCanXoa = CacThonXomThuocXaPhuongDaChon.IndexOf(thonXomItem);
 
@@ -164,7 +169,7 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 
         public ICommand ThemThonXomItemCommand { get; private set; }
 
-        private void ThemThonXomItem(string tenThonXomItem)
+        private async void ThemThonXomItem(string tenThonXomItem)
         {
             try
             {
@@ -172,13 +177,13 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
 
                 if (string.IsNullOrEmpty(tenThonXomItem))
                 {
-                    MessageBox.Show("Tên thôn, xóm thêm mới không đúng");
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Tên thôn, xóm thêm mới không đúng");
                     return;
                 }
 
                 if (DonViXaPhuongDaChon == null || DonViXaPhuongDaChon.LoaiCapDonVi != CapDonViHanhChinh.PhuongXa)
                 {
-                    MessageBox.Show("Lựa chọn đơn vị hành chính của thôn, xóm thêm mới không phải cấp xã, phường");
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Lựa chọn đơn vị hành chính của thôn, xóm thêm mới không phải cấp xã, phường");
                     return;
                 }
 
@@ -193,7 +198,7 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
                     CacThonXomThuocXaPhuongDaChon.Any(x => x.TenThonXom == tenThonXomItem);
                 if (isThonXomItemMoiDaDuocThemVaoDanhSach)
                 {
-                    MessageBox.Show("Thôn, xóm này đã được thêm vào danh sách các thôn, xóm thuộc xã, phường đã chọn");
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Thôn, xóm này đã được thêm vào danh sách các thôn, xóm thuộc xã, phường đã chọn");
                 }
                 else
                 {
@@ -203,7 +208,7 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.KhoiTaoCacThonXom.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex);
-                MessageBox.Show("Đã có lỗi xảy ra khi thêm thôn, xóm mới");
+                await ReducedDisplayInfoContentDialog.Show(_dialogService, "Đã có lỗi xảy ra khi thêm thôn, xóm mới");
             }
         }
 

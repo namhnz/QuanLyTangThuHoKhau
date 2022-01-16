@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using CustomMVVMDialogs;
 using log4net;
 using Newtonsoft.Json;
 using Prism.Commands;
@@ -12,6 +13,7 @@ using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.Exceptions;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.Core.Types.QuanLyDuLieu;
+using QuanLyTangThuHoKhau.Core.Ultis.CommonContentDialogs;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Services;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Services;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions;
@@ -26,12 +28,13 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public ThemMoiTuiHSCTViewModel(IThonXomCRUDService thonXomService, ITapHSCTCRUDService tapHSCTService,
-            ITuiHSCTCRUDService tuiHSCTService, IRegionManager regionManager)
+            ITuiHSCTCRUDService tuiHSCTService, IRegionManager regionManager, IDialogService dialogService)
         {
             _thonXomService = thonXomService;
             _tapHSCTService = tapHSCTService;
             _tuiHSCTService = tuiHSCTService;
             _regionManager = regionManager;
+            _dialogService = dialogService;
 
             InitData();
             InitCommands();
@@ -91,6 +94,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
         private readonly ITapHSCTCRUDService _tapHSCTService;
         private readonly ITuiHSCTCRUDService _tuiHSCTService;
         private readonly IRegionManager _regionManager;
+        private readonly IDialogService _dialogService;
 
         #endregion
 
@@ -142,7 +146,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                 await _tuiHSCTService.ThemTuiHSCTMoi(tuiHSCTMoi);
 
                 // Debug.WriteLine(JsonConvert.SerializeObject(tuiHSCTMoi));
-                MessageBox.Show("Thêm hộ thường trú mới thành công");
+                await ReducedDisplayInfoContentDialog.Show(_dialogService, "Thêm hộ thường trú mới thành công");
 
                 //Hien thi thong tin tui ho so moi tao o tren
                 HienThiThongTinTuiHSCTMoiTao(tuiHSCTMoi);
@@ -157,7 +161,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                 else
                 {
                     Log.Error(ex);
-                    MessageBox.Show("Đã có lỗi xảy ra khi thêm hộ thường trú mới");
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Đã có lỗi xảy ra khi thêm hộ thường trú mới");
                 }
             }
         }

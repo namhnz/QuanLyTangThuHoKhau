@@ -17,6 +17,7 @@ using Prism.Regions;
 using QuanLyTangThuHoKhau.Core.Exceptions;
 using QuanLyTangThuHoKhau.Core.Types.KhoiTaoDuLieuBanDau;
 using QuanLyTangThuHoKhau.Core.Ultis;
+using QuanLyTangThuHoKhau.Core.Ultis.CommonContentDialogs;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views;
 
@@ -125,7 +126,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
                             x => x.ThonXom.TenThonXom == dialogViewModel.SelectedThonXomChuaTapHSCT.TenThonXom)
                         .CacTapHSCTGoc.Add(tapHSCTGocMoi);
 
-                    MessageBox.Show("Thêm tập hồ sơ gốc mới vào thôn, xóm thành công");
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Thêm tập hồ sơ gốc mới vào thôn, xóm thành công");
                 }
                 catch (Exception ex)
                 {
@@ -133,12 +134,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
                         ThuTuTapHSCTKhongDungException)
                     {
                         var exBase = (BaseException)ex;
-                        MessageBox.Show(exBase.ErrorMessage);
+                        await ReducedDisplayInfoContentDialog.Show(_dialogService, exBase.ErrorMessage);
                     }
                     else
                     {
                         Log.Error(ex);
-                        MessageBox.Show("Đã có lỗi xảy ra khi thêm tập hồ sơ gốc mới");
+                        await ReducedDisplayInfoContentDialog.Show(_dialogService, "Đã có lỗi xảy ra khi thêm tập hồ sơ gốc mới");
                     }
                 }
             }
@@ -221,7 +222,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
 
                     cacTapHSCTGocTrongCungThonXom[indexTapHSCTGocChinhSua] = tapHSCTCanChinhSua;
 
-                    MessageBox.Show("Chỉnh sửa tập hồ sơ gốc trong thôn, xóm thành công");
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Chỉnh sửa tập hồ sơ gốc trong thôn, xóm thành công");
                 }
                 catch (Exception ex)
                 {
@@ -229,12 +230,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
                         ThuTuTapHSCTKhongDungException)
                     {
                         var exBase = (BaseException)ex;
-                        MessageBox.Show(exBase.ErrorMessage);
+                        await ReducedDisplayInfoContentDialog.Show(_dialogService, exBase.ErrorMessage);
                     }
                     else
                     {
                         Log.Error(ex);
-                        MessageBox.Show("Đã có lỗi xảy ra khi chỉnh sửa tập hồ sơ gốc");
+                        await ReducedDisplayInfoContentDialog.Show(_dialogService, "Đã có lỗi xảy ra khi chỉnh sửa tập hồ sơ gốc");
                     }
                 }
             }
@@ -291,7 +292,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
 
         public ICommand XoaTapHSCTGocInitCommand { get; private set; }
 
-        private void XoaTapHSCTGocInit(TapHSCTGocInitModel tapHSCTGoc)
+        private async void XoaTapHSCTGocInit(TapHSCTGocInitModel tapHSCTGoc)
         {
             try
             {
@@ -308,7 +309,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
 
                 toanBoCacTapHSCTTrongToanXaPhuong.Remove(tapHSCTGoc);
 
-                MessageBox.Show("Xoá tập hồ sơ gốc thành công");
+                await ReducedDisplayInfoContentDialog.Show(_dialogService, "Xoá tập hồ sơ gốc thành công");
             }
             catch (Exception ex)
             {
@@ -316,12 +317,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.ViewModels
                     ThuTuTapHSCTKhongDungException)
                 {
                     var exBase = (BaseException)ex;
-                    MessageBox.Show(exBase.ErrorMessage);
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService, exBase.ErrorMessage);
                 }
                 else
                 {
                     Log.Error(ex);
-                    MessageBox.Show("Đã có lỗi xảy ra khi xoá tập hồ sơ gốc");
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Đã có lỗi xảy ra khi xoá tập hồ sơ gốc");
                 }
             }
         }

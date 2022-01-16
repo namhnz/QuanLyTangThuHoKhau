@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using CustomMVVMDialogs;
 using Gress;
 using log4net;
 using Newtonsoft.Json;
@@ -15,6 +16,8 @@ using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.Core.Settings;
 using QuanLyTangThuHoKhau.Core.Types.KhoiTaoDuLieuBanDau;
+using QuanLyTangThuHoKhau.Core.Ultis;
+using QuanLyTangThuHoKhau.Core.Ultis.CommonContentDialogs;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Types;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Services;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Services;
@@ -31,13 +34,14 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 
         public KhoiTaoCacTuiHSCTViewModel(IRegionManager regionManager,
             ISettingsManager settingsManager, IThonXomCRUDService thonXomService, ITapHSCTCRUDService tapHSCTService,
-            ITuiHSCTCRUDService tuiHSCTService)
+            ITuiHSCTCRUDService tuiHSCTService, IDialogService dialogService)
         {
             _regionManager = regionManager;
             _settingsManager = settingsManager;
             _thonXomService = thonXomService;
             _tapHSCTService = tapHSCTService;
             _tuiHSCTService = tuiHSCTService;
+            _dialogService = dialogService;
 
             InitCommands();
         }
@@ -50,6 +54,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
         private readonly IThonXomCRUDService _thonXomService;
         private readonly ITapHSCTCRUDService _tapHSCTService;
         private readonly ITuiHSCTCRUDService _tuiHSCTService;
+        private readonly IDialogService _dialogService;
 
         #endregion
 
@@ -125,18 +130,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 
         public ICommand HoanThanhKhoiTaoDuLieuBanDauCommand { get; private set; }
 
-        private void HoanThanhKhoiTaoDuLieuBanDau()
+        private async void HoanThanhKhoiTaoDuLieuBanDau()
         {
-            // if (IsDangKhoiTaoCacTuiHSCT)
-            // {
-            //     MessageBox.Show("Quá trình tạo dữ liệu đang được thực hiện");
-            //     return;
-            // }
-
             try
             {
                 CapNhatCaiDatBoQuaBuocKhoiTaoDuLieuBanDau();
-                MessageBox.Show("Khởi tạo dữ liệu ban đầu thành công. Phần mềm sẽ tự khởi động lại để tải dữ liệu mới");
+                await ReducedDisplayInfoContentDialog.Show(_dialogService, "Khởi tạo dữ liệu ban đầu thành công. Phần mềm sẽ tự khởi động lại để tải dữ liệu mới");
 
                 // Khoi dong lai app
                 Process.Start(Process.GetCurrentProcess().MainModule.FileName);
@@ -145,7 +144,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
             catch (Exception ex)
             {
                 Log.Error(ex);
-                MessageBox.Show("Đã có lỗi xảy ra. Quá trình khởi tạo dữ liệu không thành công, vui lòng thử lại");
+                await ReducedDisplayInfoContentDialog.Show(_dialogService,
+                    "Đã có lỗi xảy ra. Quá trình khởi tạo dữ liệu không thành công, vui lòng thử lại");
             }
         }
 
@@ -159,12 +159,6 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 
         private async void QuayVeBuocTaoCacTapHSCTGoc()
         {
-            // if (IsDangKhoiTaoCacTuiHSCT)
-            // {
-            //     MessageBox.Show("Quá trình tạo dữ liệu đang được thực hiện");
-            //     return;
-            // }
-
             // Reset lai Db
             await _thonXomService.XoaTatCaDuLieu();
 
@@ -247,65 +241,25 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
             _toanBoTapHSCTThemVaoDb = new List<TapHSCT>();
             _toanBoTuiHSCTThemVaoDb = new List<TuiHSCT>();
 
-            // int tongSoTuiHSCTDaTao = 0;
-
             foreach (var tapHSCTGoc in _toanBoTapHSCTGoc)
             {
                 var cacTuiHSCTDuocTao = TaoCacTuiHSCTTheoTapHSCTGocInit(tapHSCTGoc);
 
                 _toanBoTuiHSCTThemVaoDb.AddRange(cacTuiHSCTDuocTao);
-
-                // tongSoTuiHSCTDaTao += cacTuiHSCTDuocTao.Count;
             }
-
-            // foreach (var tuiHSCT in _toanBoTuiHSCTThemVaoDb)
-            // {
-            //     Debug.WriteLine(JsonConvert.SerializeObject(tuiHSCT));
-            // }
-
-            // SoLuongTuiHSCTDaKhoiTaoXong = tongSoTuiHSCTDaTao;
         }
 
         private async Task ThemToanBoDuLieuVaoDb()
         {
             // Them thon xom
-            // foreach (var thonXom in _danhSachThonXomThemVaoDb)
-            // {
-            //     await _thonXomService.ThemThonXomMoi(thonXom);
-            // }
             SoLuongThonXomDaKhoiTaoXong = await _thonXomService.ThemNhieuThonXomMoi(_danhSachThonXomThemVaoDb);
 
             // Them toan bo tap ho so goc
-            // foreach (var tapHSCTDb in _toanBoTapHSCTThemVaoDb)
-            // {
-            //     await _tapHSCTService.ThemTapHSCTMoi(tapHSCTDb);
-            // }
             var soTapHSCTDaThemVaoDb = await _tapHSCTService.ThemNhieuTapHSCTMoi(_toanBoTapHSCTThemVaoDb);
 
             // Them cac tap ho so bo sung
             foreach (var thonXom in _danhSachThonXomThemVaoDb)
             {
-                // int thuTuTapHSCTBoSung;
-                //
-                // if (_toanBoTapHSCTGoc.Count(x => x.ThonXom.Id == thonXom.Id) == 0)
-                // {
-                //     thuTuTapHSCTBoSung = 1;
-                // }
-                // else
-                // {
-                //     thuTuTapHSCTBoSung = _toanBoTapHSCTGoc.Where(x => x.ThonXom.Id == thonXom.Id)
-                //         .Max(x => x.ThuTuTapHSCT);
-                // }
-                //
-                // var tapHSCTBoSung = new TapHSCT()
-                // {
-                //     LoaiTapHSCT = LoaiTapHSCT.LoaiTapHSCTBoSung,
-                //     ThonXom = thonXom,
-                //     ThuTuTapHSCT = thuTuTapHSCTBoSung
-                // };
-
-                // await _tapHSCTService.ThemTapHSCTMoi(tapHSCTBoSung);
-
                 await _tapHSCTService.ThemTapHSCTBoSung(thonXom);
                 soTapHSCTDaThemVaoDb++;
             }
@@ -313,10 +267,6 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
             SoLuongTapHSCTDaKhoiTaoXong = soTapHSCTDaThemVaoDb;
 
             // Them cac tui ho so
-            // foreach (var tuiHSCTDb in _toanBoTuiHSCTThemVaoDb)
-            // {
-            //     await _tuiHSCTService.ThemTuiHSCTMoi(tuiHSCTDb);
-            // }
             SoLuongTuiHSCTDaKhoiTaoXong = await _tuiHSCTService.ThemNhieuTuiHSCTMoi(_toanBoTuiHSCTThemVaoDb);
         }
 
@@ -344,12 +294,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
                     operation.Report(1);
                 }
 
-                MessageBox.Show("Thêm dữ liệu vào database thành công");
+                await ReducedDisplayInfoContentDialog.Show(_dialogService, "Thêm dữ liệu vào database thành công");
             }
             catch (Exception ex)
             {
                 Log.Error(ex);
-                MessageBox.Show("Đã có lỗi xảy ra trong quá trình khởi tạo các túi HSCT");
+                await ReducedDisplayInfoContentDialog.Show(_dialogService, "Đã có lỗi xảy ra trong quá trình khởi tạo các túi HSCT");
             }
         }
 

@@ -10,6 +10,7 @@ using Prism.Mvvm;
 using QuanLyTangThuHoKhau.Core.Settings;
 using QuanLyTangThuHoKhau.Core.Types.ViewModels;
 using QuanLyTangThuHoKhau.Core.Types.Views;
+using QuanLyTangThuHoKhau.Core.Ultis.CommonContentDialogs;
 using QuanLyTangThuHoKhau.MenuPart.TroGiup;
 using QuanLyTangThuHoKhau.MenuPart.TroGiup.ViewModels;
 using QuanLyTangThuHoKhau.MenuPart.TroGiup.Views;
@@ -78,11 +79,14 @@ namespace QuanLyTangThuHoKhau.MenuPart
 
         private async void ShowResetToanBoDuLieuDialog()
         {
-            var dialogViewModel = new YesNoConfirmCustomContentDialogViewModel();
-            dialogViewModel.NoiDungXacNhan = "Bạn có muốn xoá toàn bộ dữ liệu và khởi tạo lại từ đầu không?";
+            // var dialogViewModel = new YesNoConfirmCustomContentDialogViewModel();
+            // dialogViewModel.NoiDungXacNhan = "Bạn có muốn xoá toàn bộ dữ liệu và khởi tạo lại từ đầu không?";
+            //
+            // var dialogResult = await _dialogService.ShowCustomContentDialogAsync<YesNoConfirmCustomContentDialog>(
+            //     dialogViewModel);
 
-            var dialogResult = await _dialogService.ShowCustomContentDialogAsync<YesNoConfirmCustomContentDialog>(
-                dialogViewModel);
+            var dialogResult = await ReducedYesNoConfirmContentDialog.Show(_dialogService,
+                "Bạn có muốn xoá toàn bộ dữ liệu và khởi tạo lại từ đầu không?");
 
             if (dialogResult == ContentDialogResult.Primary)
             {
@@ -94,7 +98,7 @@ namespace QuanLyTangThuHoKhau.MenuPart
                     // Cap nhat lai cai dat
                     CapNhatCaiDatQuayLaiBuocKhoiTaoDuLieuBanDau();
 
-                    MessageBox.Show(
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService,
                         "Khởi tạo dữ liệu ban đầu thành công. Phần mềm sẽ tự khởi động lại để tải dữ liệu mới");
 
                     // Khoi dong lai app
@@ -104,7 +108,7 @@ namespace QuanLyTangThuHoKhau.MenuPart
                 catch (Exception ex)
                 {
                     Log.Error(ex);
-                    MessageBox.Show("Đã có lỗi xảy ra. Quá trình khởi tạo dữ liệu không thành công, vui lòng thử lại");
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Đã có lỗi xảy ra. Quá trình khởi tạo dữ liệu không thành công, vui lòng thử lại");
                 }
             }
         }
