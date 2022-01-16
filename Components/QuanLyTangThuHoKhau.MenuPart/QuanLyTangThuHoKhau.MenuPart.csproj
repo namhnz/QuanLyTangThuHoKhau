@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libs\CustomMVVMDialogs\CustomMVVMDialogs.csproj" />
+    <ProjectReference Include="..\..\QuanLyTangThuHoKhau.Core\QuanLyTangThuHoKhau.Core.csproj" />
+    <ProjectReference Include="..\QuanLyTangThuHoKhau.QuanLyThonXom\QuanLyTangThuHoKhau.QuanLyThonXom.csproj" />
   </ItemGroup>
 
 </Project>

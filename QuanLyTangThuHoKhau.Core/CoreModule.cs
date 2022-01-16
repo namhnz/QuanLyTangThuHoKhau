@@ -18,7 +18,8 @@ namespace QuanLyTangThuHoKhau.Core
             // containerRegistry.RegisterSingleton<IDefaultDiaGioiContainer, DefaultDiaGioiContainer>();
 
             // containerRegistry.RegisterSingleton<ISettingsManager, SettingsManager>();
-            containerRegistry.RegisterSingleton<IDonViHanhChinhService, DonViHanhChinhService>();
+            // containerRegistry.RegisterSingleton<IDonViHanhChinhService, DonViHanhChinhService>();
+            containerRegistry.RegisterScoped<IDonViHanhChinhService, DonViHanhChinhService>();
         }
 
         public void OnInitialized(IContainerProvider containerProvider)

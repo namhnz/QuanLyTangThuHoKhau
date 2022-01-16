@@ -73,19 +73,9 @@
         <!--         Header="Disabled" -->
         <!--         Checked="ShadowsDisabled_Checked" /> -->
         <!-- </MenuItem> -->
-        <MenuItem Header="Settings">
-            <MenuItem Header="Automatically hide scroll bars">
-                <ui:RadioMenuItem
-                            x:Name="AutoHideScrollBarsAuto"
-                            Header="Use system setting"
-                            IsChecked="True"/>
-                <ui:RadioMenuItem
-                            x:Name="AutoHideScrollBarsOn"
-                            Header="On"/>
-                <ui:RadioMenuItem
-                            x:Name="AutoHideScrollBarsOff"
-                            Header="Off"/>
-            </MenuItem>
+        <MenuItem Header="Dữ liệu">
+            <MenuItem Header="Khởi tạo lại dữ liệu"
+                      Command="{Binding ShowResetToanBoDuLieuDialogCommand}"></MenuItem>
         </MenuItem>
          <MenuItem 
              x:Name="TroGiupMenuItem" 
