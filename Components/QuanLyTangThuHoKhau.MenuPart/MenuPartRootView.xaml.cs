@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using ModernWpf;
+using QuanLyTangThuHoKhau.MenuPart.TepTin.Ultis;
 
 namespace QuanLyTangThuHoKhau.MenuPart
 {
@@ -23,6 +13,36 @@ namespace QuanLyTangThuHoKhau.MenuPart
         public MenuPartRootView()
         {
             InitializeComponent();
+        }
+
+
+        #region Thay doi theme
+
+        private void Default_Checked(object sender, RoutedEventArgs e)
+        {
+            SetApplicationTheme(null);
+        }
+
+        private void Light_Checked(object sender, RoutedEventArgs e)
+        {
+            SetApplicationTheme(ApplicationTheme.Light);
+        }
+
+        private void Dark_Checked(object sender, RoutedEventArgs e)
+        {
+            SetApplicationTheme(ApplicationTheme.Dark);
+        }
+
+        private void SetApplicationTheme(ApplicationTheme? theme)
+        {
+            DispatcherHelper.RunOnMainThread(() => { ThemeManager.Current.ApplicationTheme = theme; });
+        }
+
+        #endregion
+
+        private void On_ThoatApp(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

@@ -29,14 +29,14 @@
             Header="Thứ tự tập HSCT:"
             Value="{Binding ThuTuTapHSCT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             d:Value="1"
-            SpinButtonPlacementMode="Compact"
+            SpinButtonPlacementMode="Inline"
             SmallChange="1" />
         <ui:NumberBox
             x:Name="SoHSCTBatDauNumberBox"
             Value="{Binding SoHSCTBatDau, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             Header="Số HSCT bắt đầu từ:"
             d:Value="1"
-            SpinButtonPlacementMode="Compact"
+            SpinButtonPlacementMode="Inline"
             SmallChange="10"
             LargeChange="100" />
         <ui:NumberBox
@@ -44,7 +44,7 @@
             Value="{Binding SoHSCTKetThuc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             Header="Số HSCT kết thúc tại:"
             d:Value="1"
-            SpinButtonPlacementMode="Compact"
+            SpinButtonPlacementMode="Inline"
             SmallChange="10"
             LargeChange="100" />
         <StackPanel>

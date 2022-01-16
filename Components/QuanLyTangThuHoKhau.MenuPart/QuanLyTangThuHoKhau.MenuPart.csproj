@@ -20,4 +20,9 @@
     <ProjectReference Include="..\QuanLyTangThuHoKhau.QuanLyThonXom\QuanLyTangThuHoKhau.QuanLyThonXom.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TepTin\Types\" />
+    <Folder Include="TepTin\Ultis\" />
+  </ItemGroup>
+
 </Project>
