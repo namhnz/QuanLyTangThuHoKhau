@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using CustomMVVMDialogs;
 using log4net;
+using ModernWpf.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -101,6 +102,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             XemThongChiTietTuiHSCTCommand = new DelegateCommand(() => XemThongChiTietTuiHSCT(false, false));
             ChinhSuaTuiHSCTCommand = new DelegateCommand(() => XemThongChiTietTuiHSCT(true, false));
             XoaDangKyThuongTruTuiHSCTCommand = new DelegateCommand(() => XemThongChiTietTuiHSCT(true, true));
+
+            LoaiBoTuiHSCTKhoiDbCommand = new DelegateCommand(LoaiBoTuiHSCTKhoiDb);
         }
 
         #endregion
@@ -210,8 +213,20 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
         public ICommand ChinhSuaTuiHSCTCommand { get; private set; }
         public ICommand XoaDangKyThuongTruTuiHSCTCommand { get; private set; }
 
+        public ICommand LoaiBoTuiHSCTKhoiDbCommand { get; private set; }
+
+        private async void LoaiBoTuiHSCTKhoiDb()
+        {
+            var confirmLoaiBoResult = await ReducedYesNoConfirmContentDialog.Show(_dialogService, "Bạn có muốn xoá hoàn toàn túi HSCT này không?");
+
+            if (confirmLoaiBoResult == ContentDialogResult.Primary)
+            {
+                await _tuiHSCTService.XoaTuiHSCT(SelectedTuiHSCT.Id);
+            }
+        }
+
         #endregion
-        
+
         #region Lay du lieu tu Db
 
         private async Task TaiToanBoTuiHSCT()

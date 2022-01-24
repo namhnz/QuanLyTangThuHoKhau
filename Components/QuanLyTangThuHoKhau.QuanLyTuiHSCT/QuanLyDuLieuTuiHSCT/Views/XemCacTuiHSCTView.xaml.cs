@@ -73,5 +73,16 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views
             var viewModel = (XemCacTuiHSCTViewModel)this.DataContext;
             viewModel.XoaDangKyThuongTruTuiHSCTCommand.Execute(sender);
         }
+
+        private void ChinhSuaTuiHSCTCommandBarFlyout_OnLoaiBo(object sender, RoutedEventArgs e)
+        {
+            if (ChinhSuaTuiHSCTCommandBarFlyout.IsOpen)
+            {
+                ChinhSuaTuiHSCTCommandBarFlyout.Hide();
+            }
+
+            var viewModel = (XemCacTuiHSCTViewModel)this.DataContext;
+            viewModel.LoaiBoTuiHSCTKhoiDbCommand.Execute(sender);
+        }
     }
 }
