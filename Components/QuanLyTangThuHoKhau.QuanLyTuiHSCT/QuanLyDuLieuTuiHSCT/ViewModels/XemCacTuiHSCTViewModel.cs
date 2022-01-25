@@ -89,7 +89,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             // _toanBoHSCTCuaXaPhuong = (await _tuiHSCTService.LietKeToanBoTuiHSCT()).ToList();
 
             //Hien thi thong ke
-            // TongSoHoDangThuongTru = _toanBoHSCTCuaXaPhuong.Count(x => x.HSCT.DangThuongTru);
+            // TongSoHoDangThuongTru = _toanBoHSCTCuaXaPhuong.Count(x => x.HSCT.ViTriTuiHSCT);
 
             await TaiToanBoTuiHSCT();
         }

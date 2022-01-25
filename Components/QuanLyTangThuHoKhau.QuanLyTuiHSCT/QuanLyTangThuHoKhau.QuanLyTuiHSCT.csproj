@@ -31,4 +31,10 @@
     <Folder Include="KhoiTaoCacTuiHSCT\ViewModels\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="QuanLyDuLieuTuiHSCT\Views\ChinhSuaViTriTuiHSCTContentDialog.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+  </ItemGroup>
+
 </Project>
