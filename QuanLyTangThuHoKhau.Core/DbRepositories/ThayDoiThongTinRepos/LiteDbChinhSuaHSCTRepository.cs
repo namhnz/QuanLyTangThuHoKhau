@@ -37,27 +37,27 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.ThayDoiThongTinRepos
 
         public bool Insert(ChinhSuaHSCT chinhSuaHSCT)
         {
-            var insertedId = _liteDb.GetCollection<TapHSCT>(DataReposNames.CAC_TAP_HSCT)
-                .Insert(tapHSCT);
+            var insertedId = _liteDb.GetCollection<ChinhSuaHSCT>(DataReposNames.CAC_CHINH_SUA_HSCT)
+                .Insert(chinhSuaHSCT);
 
             return (int)insertedId > 0;
         }
 
-        public int InsertMany(List<TapHSCT> cacTapHSCT)
-        {
-            return _liteDb.GetCollection<TapHSCT>(DataReposNames.CAC_TAP_HSCT)
-                .InsertBulk(cacTapHSCT);
-        }
+        // public int InsertMany(List<TapHSCT> cacTapHSCT)
+        // {
+        //     return _liteDb.GetCollection<TapHSCT>(DataReposNames.CAC_CHINH_SUA_HSCT)
+        //         .InsertBulk(cacTapHSCT);
+        // }
 
         #endregion
 
         #region Chinh sua
 
-        public bool Update(TapHSCT tapHSCT)
-        {
-            return _liteDb.GetCollection<TapHSCT>(DataReposNames.CAC_TAP_HSCT)
-                .Update(tapHSCT);
-        }
+        // public bool Update(ChinhSuaHSCT chinhSuaHSCT)
+        // {
+        //     return _liteDb.GetCollection<ChinhSuaHSCT>(DataReposNames.CAC_CHINH_SUA_HSCT)
+        //         .Update(chinhSuaHSCT);
+        // }
 
         #endregion
 
@@ -65,13 +65,13 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.ThayDoiThongTinRepos
 
         public bool Delete(int id)
         {
-            return _liteDb.GetCollection<TapHSCT>(DataReposNames.CAC_TAP_HSCT)
+            return _liteDb.GetCollection<ChinhSuaHSCT>(DataReposNames.CAC_CHINH_SUA_HSCT)
                 .Delete(id);
         }
 
         public int DeleteAll()
         {
-            return _liteDb.GetCollection<TapHSCT>(DataReposNames.CAC_TAP_HSCT)
+            return _liteDb.GetCollection<ChinhSuaHSCT>(DataReposNames.CAC_CHINH_SUA_HSCT)
                 .DeleteAll();
         }
 

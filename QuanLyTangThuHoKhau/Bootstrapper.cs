@@ -49,6 +49,7 @@ namespace QuanLyTangThuHoKhau
             moduleCatalog.AddModule<QuanLyThonXomModule>();
             moduleCatalog.AddModule<QuanLyTapHSCTModule>();
             moduleCatalog.AddModule<QuanLyTuiHSCTModule>();
+            moduleCatalog.AddModule<ThongTinChinhSuaHSCTModule>();
             moduleCatalog.AddModule<MenuPartModule>();
             // moduleCatalog.AddModule<QuetTheModule>();
             // moduleCatalog.AddModule<NhanTheModule>();

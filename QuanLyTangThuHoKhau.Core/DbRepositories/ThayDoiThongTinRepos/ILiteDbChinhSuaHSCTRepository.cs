@@ -16,7 +16,7 @@ namespace QuanLyTangThuHoKhau.Core.DbRepositories.ThayDoiThongTinRepos
         #region Them moi
 
         public bool Insert(ChinhSuaHSCT chinhSuaHSCT);
-        public int InsertMany(List<ChinhSuaHSCT> cacChinhSuaHSCT);
+        // public int InsertMany(List<ChinhSuaHSCT> cacChinhSuaHSCT);
 
         #endregion
 
