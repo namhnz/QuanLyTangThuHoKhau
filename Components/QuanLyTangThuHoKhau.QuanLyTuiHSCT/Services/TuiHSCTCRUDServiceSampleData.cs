@@ -248,6 +248,11 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             });
         }
 
+        public Task ThayDoiThonXomCuaTuiHSCT(int idTuiHSCT, ThonXom thonXom)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task CapNhatThongTinTuiHSCT(TuiHSCT tuiHSCTChinhSua)
         {
             // tuiHSCTChinhSua.HSCT.ChuHo = tuiHSCTChinhSua.HSCT.ChuHo.Trim();

@@ -44,7 +44,7 @@
             x:Key="ChinhSuaTuiHSCTCommandBarFlyout">
             <ui:AppBarButton Label="Xem" Icon="View" ToolTipService.ToolTip="Xem thông tin hộ" 
                              Click="ChinhSuaTuiHSCTCommandBarFlyout_OnXem"/>
-            <ui:AppBarButton Label="Chỉnh sửa" Icon="Edit" ToolTipService.ToolTip="Chỉnh sửa chủ hộ"
+            <ui:AppBarButton Label="Chỉnh sửa" Icon="Edit" ToolTipService.ToolTip="Chỉnh sửa thông tin hộ"
                              Click="ChinhSuaTuiHSCTCommandBarFlyout_OnChinhSua"/>
             <ui:AppBarButton Label="Xoá thường trú" Icon="Clear" ToolTipService.ToolTip="Xoá đăng ký hộ" 
                              Click="ChinhSuaTuiHSCTCommandBarFlyout_OnXoaDangKyThuongTru"/>

@@ -148,7 +148,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                         var selectedThonXom = (ThonXom)selectedCapLuuTru.SourceItem;
 
                         DanhSachHSCTTheoCapLuuTru =
-                            await _tuiHSCTService.LietKeToanBoTuiHSCTTheoThonXom(selectedThonXom);
+                            (await _tuiHSCTService.LietKeToanBoTuiHSCTTheoThonXom(selectedThonXom))
+                            .OrderBy(x => x.TapHSCT.ThuTuTapHSCT).ThenBy(x => x.ViTriTui).ToList();
                     }
                     else
                     {
@@ -158,7 +159,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                         //     .Where(x => x.TapHSCT.Id == selectedCapLuuTru.SourceId).ToList();
 
                         DanhSachHSCTTheoCapLuuTru =
-                            await _tuiHSCTService.LietKeToanBoTuiHSCTTheoTapHSCT(selectedTapHSCT);
+                            (await _tuiHSCTService.LietKeToanBoTuiHSCTTheoTapHSCT(selectedTapHSCT))
+                            .OrderBy(x => x.TapHSCT.ThuTuTapHSCT).ThenBy(x => x.ViTriTui).ToList();
                     }
                 }
             });
@@ -217,7 +219,9 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
         private async void LoaiBoTuiHSCTKhoiDb()
         {
-            var confirmLoaiBoResult = await ReducedYesNoConfirmContentDialog.Show(_dialogService, "Bạn có muốn xoá hoàn toàn túi HSCT này không?");
+            var confirmLoaiBoResult =
+                await ReducedYesNoConfirmContentDialog.Show(_dialogService,
+                    "Bạn có muốn xoá hoàn toàn túi HSCT này không?");
 
             if (confirmLoaiBoResult == ContentDialogResult.Primary)
             {
@@ -248,7 +252,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                 else
                 {
                     Log.Error(ex);
-                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Đã có lỗi xảy ra khi tải danh sách các túi HSCT");
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService,
+                        "Đã có lỗi xảy ra khi tải danh sách các túi HSCT");
                 }
             }
         }

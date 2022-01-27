@@ -25,6 +25,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
         public Task<int> ThemNhieuTuiHSCTMoi(List<TuiHSCT> cacTuiHSCTMoi);
 
         public Task ThayDoiTenChuHoCuaTuiHSCT(int idTuiHSCT, string chuHoMoi);
+        public Task ThayDoiThonXomCuaTuiHSCT(int idTuiHSCT, ThonXom thonXom);
         public Task CapNhatThongTinTuiHSCT(TuiHSCT tuiHSCTChinhSua);
 
         public Task XoaTuiHSCT(int idTuiHSCT);
