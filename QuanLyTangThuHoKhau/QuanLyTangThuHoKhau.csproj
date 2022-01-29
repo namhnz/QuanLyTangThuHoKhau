@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows10.0.18362.0</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>AppIcons\app_icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +12,14 @@
     <EmbeddedResource Remove="QuanLyDuLieu\**" />
     <None Remove="QuanLyDuLieu\**" />
     <Page Remove="QuanLyDuLieu\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="AppIcons\app_icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="AppIcons\app_icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +45,10 @@
 
   <ItemGroup>
     <Folder Include="KhoiTaoDuLieuBanDau\ViewModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="AppIcons\app_icon.ico" />
   </ItemGroup>
 
 </Project>
