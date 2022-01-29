@@ -3,7 +3,6 @@ using System.IO;
 using QuanLyTangThuHoKhau.Core.Database;
 using QuanLyTangThuHoKhau.Core.DbRepositories.DiaChiRepos;
 using QuanLyTangThuHoKhau.Core.DbRepositories.HoSoCuTruRepos;
-using QuanLyTangThuHoKhau.Core.DbRepositories.ThayDoiThongTinRepos;
 
 namespace QuanLyTangThuHoKhau.Core.DbDataSerivces
 {
@@ -18,7 +17,6 @@ namespace QuanLyTangThuHoKhau.Core.DbDataSerivces
         private ILiteDbTuiHSCTRepository _tuiHSCTRepository;
         private ILiteDbTapHSCTRepository _tapHSCTRepository;
         private ILiteDbThonXomRepository _thonXomRepository;
-        private ILiteDbChinhSuaHSCTRepository _chinhSuaHSCTRepository;
 
         public LiteDbDataService()
         {
@@ -55,11 +53,6 @@ namespace QuanLyTangThuHoKhau.Core.DbDataSerivces
         public ILiteDbThonXomRepository ThonXomRepository
         {
             get { return _thonXomRepository ??= new LiteDbThonXomRepository(Context); }
-        }
-
-        public ILiteDbChinhSuaHSCTRepository ChinhSuaHSCTRepository
-        {
-            get { return _chinhSuaHSCTRepository ??= new LiteDbChinhSuaHSCTRepository(Context); }
         }
 
         public void Dispose()

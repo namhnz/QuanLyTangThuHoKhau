@@ -146,7 +146,6 @@ namespace QuanLyTangThuHoKhau.QuanLyThonXom.Services
         {
             await Task.Run(() =>
             {
-                _dataService.ChinhSuaHSCTRepository.DeleteAll();
                 _dataService.TuiHSCTRepository.DeleteAll();
                 _dataService.TapHSCTRepository.DeleteAll();
                 _dataService.ThonXomRepository.DeleteAll();
