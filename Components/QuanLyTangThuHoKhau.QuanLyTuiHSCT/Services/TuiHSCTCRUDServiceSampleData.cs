@@ -14,6 +14,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 {
     public class TuiHSCTCRUDServiceSampleData : ITuiHSCTCRUDService
     {
+        private ITuiHSCTCRUDService _tuiHsctcrudServiceImplementation;
+
         public TuiHSCTCRUDServiceSampleData()
         {
         }
@@ -176,6 +178,11 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
         }
 
         public Task<int> ThemNhieuTuiHSCTMoi(List<TuiHSCT> cacTuiHSCTMoi)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ThayDoiViTriCuaTuiHSCT(int idTuiHSCT, int viTriMoi)
         {
             throw new NotImplementedException();
         }

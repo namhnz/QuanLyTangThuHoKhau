@@ -302,7 +302,8 @@
                     Width="350"
                     ui:ControlHelper.PlaceholderText="Nhập số HSCT"
                     SpinButtonPlacementMode="Inline"
-                    Value="{Binding SoHSCTRutGonCanTim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Value="{Binding SoHSCTRutGonCanTim, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                    SmallChange="10"/>
                 <Button Content="Tìm kiếm"
                         Command="{Binding TimKiemThongTinHSCTCommand}"
                         VerticalAlignment="Bottom">
