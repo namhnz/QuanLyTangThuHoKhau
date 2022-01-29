@@ -1,4 +1,4 @@
-﻿namespace QuanLyTraThe.Core.Constants.Settings
+﻿namespace QuanLyTangThuHoKhau.Core.Settings.Constants
 {
     public static class KhoiTaoDuLieuBanDauSettingKeys
     {

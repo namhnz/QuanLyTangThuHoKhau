@@ -19,7 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="AppIcons\app_icon.ico" />
+    <Content Include="AppIcons\app_icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

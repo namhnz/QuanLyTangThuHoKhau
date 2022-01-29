@@ -14,8 +14,7 @@
         WindowState="Maximized"
         xmlns:coreTypes="clr-namespace:QuanLyTangThuHoKhau.Core.Types;assembly=QuanLyTangThuHoKhau.Core"
         x:Name="RootMainWindow"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        Icon="pack://application:,,,/QuanLyTangThuHoKhau;component/AppIcons/app_icon.ico">
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
     <ContentControl prism:RegionManager.RegionName="{x:Static coreTypes:MainWindowRegionNames.MAIN_WINDOW_ROOT_REGION}" />
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">

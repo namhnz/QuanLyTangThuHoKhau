@@ -15,6 +15,7 @@ using Prism.Regions;
 using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.Core.Settings;
+using QuanLyTangThuHoKhau.Core.Settings.Constants;
 using QuanLyTangThuHoKhau.Core.Types.KhoiTaoDuLieuBanDau;
 using QuanLyTangThuHoKhau.Core.Ultis;
 using QuanLyTangThuHoKhau.Core.Ultis.CommonContentDialogs;
@@ -22,7 +23,6 @@ using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Types;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Services;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Services;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services;
-using QuanLyTraThe.Core.Constants.Settings;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.KhoiTaoCacTuiHSCT.ViewModels
 {
