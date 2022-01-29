@@ -14,6 +14,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 {
     public class TuiHSCTCRUDServiceSampleData : ITuiHSCTCRUDService
     {
+        private ITuiHSCTCRUDService _tuiHsctcrudServiceImplementation;
+
         public TuiHSCTCRUDServiceSampleData()
         {
         }
@@ -180,6 +182,11 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             throw new NotImplementedException();
         }
 
+        public Task ThayDoiViTriCuaTuiHSCT(int idTuiHSCT, int viTriMoi)
+        {
+            throw new NotImplementedException();
+        }
+
         //Dung cho phuong thuc tao moi tui ho so
         private async Task<HSCT> TaoHSCTMoi(ThonXom thonXom, DateTime? ngayDangKy, string chuHo = "")
         {
@@ -246,6 +253,11 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
                 TuiHSCTSampleData.ChinhSuaTuiHSCT(tuiHSCTDoiTenChuHo);
             });
+        }
+
+        public Task ThayDoiThonXomCuaTuiHSCT(int idTuiHSCT, ThonXom thonXom)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task CapNhatThongTinTuiHSCT(TuiHSCT tuiHSCTChinhSua)

@@ -7,11 +7,11 @@ using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 using QuanLyTangThuHoKhau.Core.Settings;
+using QuanLyTangThuHoKhau.Core.Settings.Constants;
 using QuanLyTangThuHoKhau.Core.Types;
 using QuanLyTangThuHoKhau.Core.Ultis.CommonContentDialogs;
 using QuanLyTangThuHoKhau.KhoiTaoDuLieuBanDau.Views;
 using QuanLyTangThuHoKhau.QuanLyThaoTacDuLieu.Views;
-using QuanLyTraThe.Core.Constants.Settings;
 
 namespace QuanLyTangThuHoKhau
 {

@@ -9,7 +9,7 @@
              xmlns:ui="http://schemas.modernwpf.com/2019"
              x:Name="RootChinhSuaViTriTuiHSCTContentDialog"
              Style="{StaticResource ScrollableContentDialogStyle}"
-             Title="Chỉnh sửa thông tin túi HSCT"
+             Title="Chỉnh sửa vị trí túi HSCT"
              PrimaryButtonText="Chỉnh sửa"
              CloseButtonText="Đóng"
              DefaultButton="Primary"
@@ -19,14 +19,19 @@
     <ui:SimpleStackPanel Spacing="12">
         <TextBox ui:ControlHelper.Header="Số HSCT"
                  Text="{Binding SoHSCT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 x:Name="SoHSCTTextBox"
+                 IsReadOnly="True"></TextBox>
+        <TextBox ui:ControlHelper.Header="Vị trí hiện tại túi HSCT"
+                 Text="{Binding ViTriCuTuiHSCT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 x:Name="ViTriCuTuiHSCTTextBox"
                  IsReadOnly="True"></TextBox>
         <ui:NumberBox
-            Value="{Binding ViTriTuiHSCT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            Header="Vị trí túi HSCT:"
+            x:Name="ViTriMoiTuiHSCTNumberBox"
+            Header="Vị trí mới túi HSCT:"
+            Value="{Binding ViTriMoiTuiHSCT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             d:Value="1"
-            SpinButtonPlacementMode="Compact"
-            SmallChange="10"
-            LargeChange="100" />
+            SpinButtonPlacementMode="Inline"
+            SmallChange="10" />
         <StackPanel>
             <TextBlock
                 x:Name="ErrorText"

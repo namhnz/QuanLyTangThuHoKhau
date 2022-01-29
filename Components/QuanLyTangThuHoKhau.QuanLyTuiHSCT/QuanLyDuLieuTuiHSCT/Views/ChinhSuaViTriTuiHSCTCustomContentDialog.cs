@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using CustomMVVMDialogs;
 using ModernWpf.Controls;
+using QuanLyTangThuHoKhau.QuanLyTapHSCT.KhoiTaoCacTapHSCT.Views;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views
 {

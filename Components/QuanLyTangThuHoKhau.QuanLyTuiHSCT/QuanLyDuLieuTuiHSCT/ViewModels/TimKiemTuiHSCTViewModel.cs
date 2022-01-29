@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -12,6 +13,7 @@ using QuanLyTangThuHoKhau.Core.Exceptions;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.Core.Ultis;
 using QuanLyTangThuHoKhau.Core.Ultis.CommonContentDialogs;
+using QuanLyTangThuHoKhau.QuanLyThonXom.Services;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions.TimKiemTuiHSCTExceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types;
@@ -22,16 +24,22 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 {
     public class TimKiemTuiHSCTViewModel : BindableBase, INavigationAware
     {
-        private readonly ITuiHSCTCRUDService _tuiHSCTService;
-        private readonly IDialogService _dialogService;
-
         private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public TimKiemTuiHSCTViewModel(ITuiHSCTCRUDService tuiHSCTService, IDialogService dialogService)
+        #region Cac phu thuoc
+
+        private readonly IThonXomCRUDService _thonXomService;
+        private readonly ITuiHSCTCRUDService _tuiHSCTService;
+        private readonly IDialogService _dialogService;
+
+        #endregion
+
+        public TimKiemTuiHSCTViewModel(ITuiHSCTCRUDService tuiHSCTService, IDialogService dialogService, IThonXomCRUDService thonXomService)
         {
             _tuiHSCTService = tuiHSCTService;
             _dialogService = dialogService;
+            _thonXomService = thonXomService;
             InitCommands();
             InitData();
         }
@@ -260,6 +268,9 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             dialogViewModel.SoHSCT = tuiHSCTCanChinhSua.HSCT.MaHSCTDayDu;
             dialogViewModel.ChuHo = tuiHSCTCanChinhSua.HSCT.ChuHo;
             dialogViewModel.DangThuongTru = xoaThuongTruTuiHSCT ? false : tuiHSCTCanChinhSua.HSCT.DangThuongTru;
+            dialogViewModel.DanhSachToanBoThonXom = await _thonXomService.LietKeToanBoThonXom();
+            // dialogViewModel.SelectedThonXomChuaTuiHSCT = tuiHSCTCanChinhSua.TapHSCT.ThonXom;
+            dialogViewModel.SelectedThonXomChuaTuiHSCT = dialogViewModel.DanhSachToanBoThonXom.First(x => x.Id == tuiHSCTCanChinhSua.TapHSCT.ThonXom.Id);
 
             var dialogResult =
                 await _dialogService.ShowCustomContentDialogAsync<ChinhSuaTuiHSCTCustomContentDialog>(
@@ -272,6 +283,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                     //Lay cac thong tin da chinh sua
                     tuiHSCTCanChinhSua.HSCT.ChuHo = dialogViewModel.ChuHo;
                     tuiHSCTCanChinhSua.HSCT.DangThuongTru = dialogViewModel.DangThuongTru;
+                    tuiHSCTCanChinhSua.TapHSCT.ThonXom = dialogViewModel.SelectedThonXomChuaTuiHSCT;
 
                     //Chinh sua tap ho so
                     await _tuiHSCTService.CapNhatThongTinTuiHSCT(tuiHSCTCanChinhSua);

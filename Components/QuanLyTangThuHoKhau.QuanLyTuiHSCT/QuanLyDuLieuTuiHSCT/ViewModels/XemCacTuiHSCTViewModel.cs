@@ -16,9 +16,13 @@ using QuanLyTangThuHoKhau.Core.AppServices.HoSoCuTruServices.Types;
 using QuanLyTangThuHoKhau.Core.Exceptions;
 using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.Core.Types.QuanLyDuLieu;
+using QuanLyTangThuHoKhau.Core.Ultis;
 using QuanLyTangThuHoKhau.Core.Ultis.CommonContentDialogs;
+using QuanLyTangThuHoKhau.QuanLyTapHSCT.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Services;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Services;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions.ChinhSuaTuiHSCTExceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types.ViewModels;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views;
@@ -103,6 +107,7 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             ChinhSuaTuiHSCTCommand = new DelegateCommand(() => XemThongChiTietTuiHSCT(true, false));
             XoaDangKyThuongTruTuiHSCTCommand = new DelegateCommand(() => XemThongChiTietTuiHSCT(true, true));
 
+            ChinhSuaViTriTuiHSCTCommand = new DelegateCommand(ChinhSuaViTriTuiHSCT);
             LoaiBoTuiHSCTKhoiDbCommand = new DelegateCommand(LoaiBoTuiHSCTKhoiDb);
         }
 
@@ -148,7 +153,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                         var selectedThonXom = (ThonXom)selectedCapLuuTru.SourceItem;
 
                         DanhSachHSCTTheoCapLuuTru =
-                            await _tuiHSCTService.LietKeToanBoTuiHSCTTheoThonXom(selectedThonXom);
+                            (await _tuiHSCTService.LietKeToanBoTuiHSCTTheoThonXom(selectedThonXom))
+                            .OrderBy(x => x.TapHSCT.ThuTuTapHSCT).ThenBy(x => x.ViTriTui).ToList();
                     }
                     else
                     {
@@ -158,7 +164,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                         //     .Where(x => x.TapHSCT.Id == selectedCapLuuTru.SourceId).ToList();
 
                         DanhSachHSCTTheoCapLuuTru =
-                            await _tuiHSCTService.LietKeToanBoTuiHSCTTheoTapHSCT(selectedTapHSCT);
+                            (await _tuiHSCTService.LietKeToanBoTuiHSCTTheoTapHSCT(selectedTapHSCT))
+                            .OrderBy(x => x.TapHSCT.ThuTuTapHSCT).ThenBy(x => x.ViTriTui).ToList();
                     }
                 }
             });
@@ -213,11 +220,61 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
         public ICommand ChinhSuaTuiHSCTCommand { get; private set; }
         public ICommand XoaDangKyThuongTruTuiHSCTCommand { get; private set; }
 
+        public ICommand ChinhSuaViTriTuiHSCTCommand { get; private set; }
+
+        private async void ChinhSuaViTriTuiHSCT()
+        {
+            var tuiHSCTCanChinhSua = SelectedTuiHSCT.DeepClone();
+
+            var dialogViewModel = new ChinhSuaViTriTuiHSCTCustomContentDialogViewModel();
+
+            dialogViewModel.SoHSCT = tuiHSCTCanChinhSua.HSCT.MaHSCTDayDu;
+            dialogViewModel.ViTriCuTuiHSCT = tuiHSCTCanChinhSua.ViTriTui;
+
+            var dialogResult =
+                await _dialogService.ShowCustomContentDialogAsync<ChinhSuaViTriTuiHSCTCustomContentDialog>(
+                    dialogViewModel);
+
+            if (dialogResult == ContentDialogResult.Primary)
+            {
+                try
+                {
+                    //Lay cac thong tin da chinh sua
+                    int viTriMoi = dialogViewModel.ViTriMoiTuiHSCT;
+
+                    //Chinh sua tap ho so
+                    await _tuiHSCTService.ThayDoiViTriCuaTuiHSCT(tuiHSCTCanChinhSua.Id, viTriMoi);
+
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Chỉnh sửa vị trí túi HSCT thành công");
+                }
+                catch (Exception ex)
+                {
+                    if (ex is BaseException exBase)
+                    {
+                        // var exBase = (BaseException)ex;
+                        await ReducedDisplayInfoContentDialog.Show(_dialogService, exBase.ErrorMessage);
+                    }
+                    else
+                    {
+                        Log.Error(ex);
+                        await ReducedDisplayInfoContentDialog.Show(_dialogService,
+                            "Đã có lỗi xảy ra khi chỉnh sửa thông tin hộ thường trú");
+                    }
+                }
+            }
+            else
+            {
+                // Debug.WriteLine("secondary or none");
+            }
+        }
+
         public ICommand LoaiBoTuiHSCTKhoiDbCommand { get; private set; }
 
         private async void LoaiBoTuiHSCTKhoiDb()
         {
-            var confirmLoaiBoResult = await ReducedYesNoConfirmContentDialog.Show(_dialogService, "Bạn có muốn xoá hoàn toàn túi HSCT này không?");
+            var confirmLoaiBoResult =
+                await ReducedYesNoConfirmContentDialog.Show(_dialogService,
+                    "Bạn có muốn xoá hoàn toàn túi HSCT này không?");
 
             if (confirmLoaiBoResult == ContentDialogResult.Primary)
             {
@@ -248,7 +305,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                 else
                 {
                     Log.Error(ex);
-                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Đã có lỗi xảy ra khi tải danh sách các túi HSCT");
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService,
+                        "Đã có lỗi xảy ra khi tải danh sách các túi HSCT");
                 }
             }
         }

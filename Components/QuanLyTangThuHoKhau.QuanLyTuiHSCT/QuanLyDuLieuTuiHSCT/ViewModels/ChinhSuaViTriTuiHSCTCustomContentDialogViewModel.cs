@@ -1,4 +1,6 @@
-﻿using Prism.Mvvm;
+﻿using System.Collections.Generic;
+using Prism.Mvvm;
+using QuanLyTangThuHoKhau.Core.Models;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 {
@@ -12,14 +14,20 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
             set => SetProperty(ref _soHSCT, value);
         }
 
-        private string _chuHo;
+        private int _viTriCuTuiHSCT;
 
-        private bool _viTriTuiHSCT;
-
-        public bool ViTriTuiHSCT
+        public int ViTriCuTuiHSCT
         {
-            get => _viTriTuiHSCT;
-            set => SetProperty(ref _viTriTuiHSCT, value);
+            get => _viTriCuTuiHSCT;
+            set => SetProperty(ref _viTriCuTuiHSCT, value);
+        }
+
+        private int _viTriMoiTuiHSCT;
+
+        public int ViTriMoiTuiHSCT
+        {
+            get => _viTriMoiTuiHSCT;
+            set => SetProperty(ref _viTriMoiTuiHSCT, value);
         }
 
     }

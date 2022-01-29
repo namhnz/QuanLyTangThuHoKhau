@@ -9,6 +9,7 @@ using QuanLyTangThuHoKhau.Core.Models;
 using QuanLyTangThuHoKhau.QuanLyTapHSCT.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Exceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions;
+using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions.ChinhSuaTuiHSCTExceptions;
 using QuanLyTangThuHoKhau.QuanLyTuiHSCT.Exceptions.TimKiemTuiHSCTExceptions;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
@@ -220,12 +221,67 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
         #endregion
 
+        public async Task ThayDoiViTriCuaTuiHSCT(int idTuiHSCT, int viTriMoi)
+        {
+            if (viTriMoi <= 0)
+            {
+                throw new ViTriTuiHSCTKhongDungException()
+                {
+                    ErrorMessage = "Vị trí mới của túi HSCT không đúng"
+                };
+            }
+
+            await Task.Run(() =>
+            {
+                var tuiHSCTDoiViTri = _dataService.TuiHSCTRepository.FindOne(idTuiHSCT);
+
+                if (tuiHSCTDoiViTri == null)
+                {
+                    throw new TuiHSCTKhongTonTaiException()
+                    {
+                        ErrorMessage = "Túi HSCT cần chỉnh sửa không tồn tại"
+                    };
+                }
+
+                // Neu vi tri moi va cu giong nhau thi khong can doi
+                if (tuiHSCTDoiViTri.ViTriTui == viTriMoi)
+                {
+                    return;
+                }
+
+                if (tuiHSCTDoiViTri.TapHSCT.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTGoc)
+                {
+                    throw new LoaiTapHSCTKhongDungException()
+                    {
+                        ErrorMessage = "Không thể thay đổi vị trí túi HSCT trong tập HSCT gốc"
+                    };
+                }
+
+                var isViTriTuiDaTonTai = _dataService.TuiHSCTRepository.FindAll().Any(x =>
+                    x.TapHSCT.Id == tuiHSCTDoiViTri.TapHSCT.Id && x.ViTriTui == viTriMoi);
+
+                if (isViTriTuiDaTonTai)
+                {
+                    throw new ViTriTuiHSCTKhongDungException()
+                    {
+                        ErrorMessage =
+                            "Thay đổi không thành cồng do vị trí mới trùng với vị trí của túi HSCT khác trong cùng thôn, xóm"
+                    };
+                }
+
+                // Thay doi vi tri cua tui ho so
+                tuiHSCTDoiViTri.ViTriTui = viTriMoi;
+
+                _dataService.TuiHSCTRepository.Update(tuiHSCTDoiViTri);
+            });
+            
+        }
+
         #region Chinh sua tui ho so, thong tin trong ho so
 
+        // Chi thay doi ten chu ho cua tui ho so
         public async Task ThayDoiTenChuHoCuaTuiHSCT(int idTuiHSCT, string chuHoMoi)
         {
-            chuHoMoi = chuHoMoi.Trim();
-
             if (string.IsNullOrEmpty(chuHoMoi))
             {
                 throw new TenChuHoKhongDungException()
@@ -233,6 +289,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
                     ErrorMessage = "Tên chủ hộ không đúng"
                 };
             }
+
+            chuHoMoi = chuHoMoi.Trim();
 
             await Task.Run(() =>
             {
@@ -242,8 +300,14 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
                 {
                     throw new TuiHSCTKhongTonTaiException()
                     {
-                        ErrorMessage = "Túi hồ sơ cần chỉnh sửa không tồn tại"
+                        ErrorMessage = "Túi HSCT cần chỉnh sửa không tồn tại"
                     };
+                }
+
+                // Neu ten chu ho cu trung ten chu ho moi thi khong can doi
+                if (tuiHSCTDoiTenChuHo.HSCT.ChuHo == chuHoMoi)
+                {
+                    return;
                 }
 
                 tuiHSCTDoiTenChuHo.HSCT.ChuHo = chuHoMoi;
@@ -252,16 +316,31 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
             });
         }
 
-        public async Task CapNhatThongTinTuiHSCT(TuiHSCT tuiHSCTChinhSua)
+        // Chi thay doi thon xom cua tui ho so
+        public async Task ThayDoiThonXomCuaTuiHSCT(int idTuiHSCT, ThonXom thonXom)
         {
-            // tuiHSCTChinhSua.HSCT.ChuHo = tuiHSCTChinhSua.HSCT.ChuHo.Trim();
-
-
-            await Task.Run(() =>
+            if (thonXom == null)
             {
-                var tuiHSCTTonTai = _dataService.TuiHSCTRepository.FindOne(tuiHSCTChinhSua.Id);
+                throw new ThonXomKhongTonTaiException()
+                {
+                    ErrorMessage = "Chưa chọn thôn, xóm mới của túi hồ sơ"
+                };
+            }
 
-                if (tuiHSCTTonTai == null)
+            await Task.Run(async () =>
+            {
+                var thonXomDaCo = _dataService.ThonXomRepository.FindOne(thonXom.Id);
+                if (thonXomDaCo == null)
+                {
+                    throw new ThonXomKhongTonTaiException()
+                    {
+                        ErrorMessage = "Thôn, xóm đã chọn không tồn tại"
+                    };
+                }
+
+                var tuiHSCTThayDoiThonXom = _dataService.TuiHSCTRepository.FindOne(idTuiHSCT);
+
+                if (tuiHSCTThayDoiThonXom == null)
                 {
                     throw new TuiHSCTKhongTonTaiException()
                     {
@@ -269,20 +348,70 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
                     };
                 }
 
-                //Khong duoc de trong ten chu ho neu truoc do da co
-                if (!string.IsNullOrEmpty(tuiHSCTTonTai.HSCT.ChuHo))
+                // Truong hop thon xom cu trung thon xom moi thi khong thay doi
+                if (tuiHSCTThayDoiThonXom.TapHSCT.ThonXom.Id == thonXom.Id)
                 {
-                    if (string.IsNullOrEmpty(tuiHSCTChinhSua.HSCT.ChuHo))
-                    {
-                        throw new TenChuHoKhongDungException()
-                        {
-                            ErrorMessage = "Tên chủ hộ không đúng"
-                        };
-                    }
+                    return;
                 }
 
-                _dataService.TuiHSCTRepository.Update(tuiHSCTChinhSua);
+                //Lay tap ho so bo sung cua thon xom chuyen sang
+                var tapHSCTBoSungCuaThonXomMoi = _dataService.TapHSCTRepository
+                    .FindAll()
+                    .FirstOrDefault(x => x.ThonXom.Id == thonXom.Id && x.LoaiTapHSCT == LoaiTapHSCT.LoaiTapHSCTBoSung);
+                tuiHSCTThayDoiThonXom.TapHSCT = tapHSCTBoSungCuaThonXomMoi;
+
+                // Lay vi tri cua tui ho so moi
+                var viTriTuiHSCTMoi = await TaoViTriTuiHSCTMoi(thonXom);
+                tuiHSCTThayDoiThonXom.ViTriTui = viTriTuiHSCTMoi;
+
+                _dataService.TuiHSCTRepository.Update(tuiHSCTThayDoiThonXom);
             });
+        }
+
+        public async Task CapNhatThongTinTuiHSCT(TuiHSCT tuiHSCTChinhSua)
+        {
+            // tuiHSCTChinhSua.HSCT.ChuHo = tuiHSCTChinhSua.HSCT.ChuHo.Trim();
+
+            // await Task.Run(() =>
+            // {
+            //     var tuiHSCTTonTai = _dataService.TuiHSCTRepository.FindOne(tuiHSCTChinhSua.Id);
+            //
+            //     if (tuiHSCTTonTai == null)
+            //     {
+            //         throw new TuiHSCTKhongTonTaiException()
+            //         {
+            //             ErrorMessage = "Túi hồ sơ cần chỉnh sửa không tồn tại"
+            //         };
+            //     }
+            //
+            //     //Khong duoc de trong ten chu ho neu truoc do da co
+            //     if (!string.IsNullOrEmpty(tuiHSCTTonTai.HSCT.ChuHo))
+            //     {
+            //         if (string.IsNullOrEmpty(tuiHSCTChinhSua.HSCT.ChuHo))
+            //         {
+            //             throw new TenChuHoKhongDungException()
+            //             {
+            //                 ErrorMessage = "Tên chủ hộ không đúng"
+            //             };
+            //         }
+            //     }
+            //
+            //     _dataService.TuiHSCTRepository.Update(tuiHSCTChinhSua);
+            // });
+
+            if (tuiHSCTChinhSua == null)
+            {
+                throw new TuiHSCTKhongTonTaiException()
+                {
+                    ErrorMessage = "Không có túi HSCT để chỉnh sửa"
+                };
+            }
+
+            // Chinh sua thon xom cua tui ho so
+            await ThayDoiThonXomCuaTuiHSCT(tuiHSCTChinhSua.Id, tuiHSCTChinhSua.TapHSCT.ThonXom);
+
+            // Chinh sua ten chu ho
+            await ThayDoiTenChuHoCuaTuiHSCT(tuiHSCTChinhSua.Id, tuiHSCTChinhSua.HSCT.ChuHo);
         }
 
         #endregion

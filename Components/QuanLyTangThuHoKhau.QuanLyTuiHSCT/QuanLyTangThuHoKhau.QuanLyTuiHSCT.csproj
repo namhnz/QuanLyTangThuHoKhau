@@ -27,13 +27,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Exceptions\ChinhSuaTuiHSCTExceptions\" />
     <Folder Include="Exceptions\TimKiemTuiHSCTExceptions\" />
     <Folder Include="KhoiTaoCacTuiHSCT\ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="QuanLyDuLieuTuiHSCT\Views\ChinhSuaViTriTuiHSCTContentDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Update="QuanLyDuLieuTuiHSCT\Views\ChinhSuaViTriTuiHSCTContentDialog.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
 

@@ -8,6 +8,7 @@ using ModernWpf.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
 using QuanLyTangThuHoKhau.Core.Settings;
+using QuanLyTangThuHoKhau.Core.Settings.Constants;
 using QuanLyTangThuHoKhau.Core.Types.ViewModels;
 using QuanLyTangThuHoKhau.Core.Types.Views;
 using QuanLyTangThuHoKhau.Core.Ultis.CommonContentDialogs;
@@ -15,7 +16,6 @@ using QuanLyTangThuHoKhau.MenuPart.TroGiup;
 using QuanLyTangThuHoKhau.MenuPart.TroGiup.ViewModels;
 using QuanLyTangThuHoKhau.MenuPart.TroGiup.Views;
 using QuanLyTangThuHoKhau.QuanLyThonXom.Services;
-using QuanLyTraThe.Core.Constants.Settings;
 
 namespace QuanLyTangThuHoKhau.MenuPart
 {

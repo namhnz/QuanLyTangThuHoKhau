@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:ui="http://schemas.modernwpf.com/2019"
-             x:Name="RootChinhSuaTapHSCTGocInitContentDialog"
+             x:Name="RootChinhSuaTuiHSCTContentDialog"
              Style="{StaticResource ScrollableContentDialogStyle}"
              Title="Chỉnh sửa thông tin hộ"
              PrimaryButtonText="Chỉnh sửa"
@@ -21,6 +21,13 @@
                  Text="{Binding SoHSCT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  x:Name="SoHSCTTextBox"
                  IsReadOnly="True"></TextBox>
+        <ComboBox
+            ui:ControlHelper.Header="Địa chỉ:"
+            ui:ControlHelper.PlaceholderText="Chọn thôn, xóm hộ thường trú"
+            ItemsSource="{Binding DanhSachToanBoThonXom}"
+            SelectedItem="{Binding SelectedThonXomChuaTuiHSCT, Mode=TwoWay}"
+            DisplayMemberPath="TenThonXom"
+            HorizontalAlignment="Stretch"/>
         <TextBox ui:ControlHelper.Header="Họ tên chủ hộ"
                  Text="{Binding ChuHo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  x:Name="HoTenChuHoTextBox"></TextBox>
