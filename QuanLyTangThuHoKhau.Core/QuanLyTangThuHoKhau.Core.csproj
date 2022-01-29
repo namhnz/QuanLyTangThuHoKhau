@@ -7,6 +7,8 @@
 
   <ItemGroup>
     <None Remove="Assets\AppIcons\app_icon.ico" />
+    <None Remove="Assets\DonatePaymentMethodImages\momo.png" />
+    <None Remove="Assets\DonatePaymentMethodImages\vietinbank.png" />
     <None Remove="Assets\KhoiTaoDuLieuBanDauImages\anh_gioi_thieu_khoi_tao.png" />
   </ItemGroup>
 
@@ -38,6 +40,8 @@
 
   <ItemGroup>
     <Resource Include="Assets\AppIcons\app_icon.ico" />
+    <Resource Include="Assets\DonatePaymentMethodImages\momo.png" />
+    <Resource Include="Assets\DonatePaymentMethodImages\vietinbank.png" />
     <Resource Include="Assets\KhoiTaoDuLieuBanDauImages\anh_gioi_thieu_khoi_tao.png" />
   </ItemGroup>
 

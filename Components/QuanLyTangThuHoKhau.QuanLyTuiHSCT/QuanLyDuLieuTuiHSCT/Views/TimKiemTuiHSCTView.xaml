@@ -8,7 +8,8 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             xmlns:types="clr-namespace:QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types">
+             xmlns:types="clr-namespace:QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Types"
+             xmlns:coreViews="clr-namespace:QuanLyTangThuHoKhau.Core.Types.Views;assembly=QuanLyTangThuHoKhau.Core">
     <UserControl.Resources>
         <Style x:Key="BoxHeaderStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
             <Setter Property="Margin" Value="0,0,0,4" />
@@ -340,6 +341,10 @@
                 </Style>
             </ContentControl.Style>
         </ContentControl>
+
+        <coreViews:DonatePaymentMethodsView HorizontalAlignment="Center"
+                                            Margin="0 40 0 0"
+                                            x:Name="HienThiThongTinDonateUserControl"></coreViews:DonatePaymentMethodsView>
 
     </ui:SimpleStackPanel>
 </UserControl>

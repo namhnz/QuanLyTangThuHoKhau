@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views
 {
@@ -10,6 +11,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.Views
         public TimKiemTuiHSCTView()
         {
             InitializeComponent();
+
+            #if DEBUG
+                HienThiThongTinDonateUserControl.Visibility = Visibility.Hidden;
+#else
+                HienThiThongTinDonateUserControl.Visibility = Visibility.Visible; // or Collapsed
+#endif
         }
     }
 }
