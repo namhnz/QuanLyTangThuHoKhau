@@ -274,7 +274,6 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
 
                 _dataService.TuiHSCTRepository.Update(tuiHSCTDoiViTri);
             });
-            
         }
 
         #region Chinh sua tui ho so, thong tin trong ho so
@@ -282,16 +281,6 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
         // Chi thay doi ten chu ho cua tui ho so
         public async Task ThayDoiTenChuHoCuaTuiHSCT(int idTuiHSCT, string chuHoMoi)
         {
-            if (string.IsNullOrEmpty(chuHoMoi))
-            {
-                throw new TenChuHoKhongDungException()
-                {
-                    ErrorMessage = "Tên chủ hộ không đúng"
-                };
-            }
-
-            chuHoMoi = chuHoMoi.Trim();
-
             await Task.Run(() =>
             {
                 var tuiHSCTDoiTenChuHo = _dataService.TuiHSCTRepository.FindOne(idTuiHSCT);
@@ -304,13 +293,23 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.Services
                     };
                 }
 
+                // Kiem tra ten chu ho
+                if (string.IsNullOrEmpty(chuHoMoi) && !string.IsNullOrEmpty(tuiHSCTDoiTenChuHo.HSCT.ChuHo))
+                {
+                    throw new TenChuHoKhongDungException()
+                    {
+                        ErrorMessage = "Tên chủ hộ không đúng"
+                    };
+                }
+
                 // Neu ten chu ho cu trung ten chu ho moi thi khong can doi
-                if (tuiHSCTDoiTenChuHo.HSCT.ChuHo == chuHoMoi)
+                if (string.IsNullOrEmpty(tuiHSCTDoiTenChuHo.HSCT.ChuHo) && string.IsNullOrEmpty(chuHoMoi) ||
+                    tuiHSCTDoiTenChuHo.HSCT.ChuHo == chuHoMoi)
                 {
                     return;
                 }
 
-                tuiHSCTDoiTenChuHo.HSCT.ChuHo = chuHoMoi;
+                tuiHSCTDoiTenChuHo.HSCT.ChuHo = chuHoMoi.Trim();
 
                 _dataService.TuiHSCTRepository.Update(tuiHSCTDoiTenChuHo);
             });

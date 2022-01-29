@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using CustomMVVMDialogs;
+using Gress;
 using log4net;
 using Newtonsoft.Json;
 using Prism.Commands;
@@ -26,6 +27,12 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
     {
         private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        #region Hien loading
+
+        public IProgressManager ProgressManager { get; } = new ProgressManager();
+
+        #endregion
 
         public ThemMoiTuiHSCTViewModel(IThonXomCRUDService thonXomService, ITapHSCTCRUDService tapHSCTService,
             ITuiHSCTCRUDService tuiHSCTService, IRegionManager regionManager, IDialogService dialogService)
@@ -102,7 +109,9 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
         private void InitCommands()
         {
-            ThemMoiTuiHSCTCommand = new DelegateCommand(ThemMoiTuiHSCT);
+            ThemMoiTuiHSCTCommand =
+                new DelegateCommand(ThemMoiTuiHSCT, () => !ProgressManager.IsActive).ObservesProperty(() =>
+                    ProgressManager.IsActive);
         }
 
         private async void InitData()
@@ -123,33 +132,40 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
 
             try
             {
-                KiemTraThongTinCuaTuiHSCT();
-
-                //Lay so HSCT lon nhat tu du lieu da co
-                int soHSCTMoi = await _tuiHSCTService.TaoSoHSCTMoi();
-
-                var hsctMoi = new HSCT((uint)soHSCTMoi, SelectedThonXomChuaTuiHSCT, NgayDangKy, HoTenChuHo);
-
-                //Lay thong tin tap ho so bo sung cua thon, xom da chon
-                var tapHSCTBoSungCuaThonXom =
-                    await _tapHSCTService.LayTapHSCTBoSungCuaThonXom(SelectedThonXomChuaTuiHSCT);
-                var viTriTuiHSCTMoi = await _tuiHSCTService.TaoViTriTuiHSCTMoi(SelectedThonXomChuaTuiHSCT);
-
-                var tuiHSCTMoi = new TuiHSCT()
+                using (var operation = ProgressManager.CreateOperation())
                 {
-                    HSCT = hsctMoi,
-                    TapHSCT = tapHSCTBoSungCuaThonXom,
-                    ViTriTui = viTriTuiHSCTMoi
-                };
+                    operation.Report(0);
 
-                //Them moi tui ho so vao du lieu
-                await _tuiHSCTService.ThemTuiHSCTMoi(tuiHSCTMoi);
+                    KiemTraThongTinCuaTuiHSCT();
 
-                // Debug.WriteLine(JsonConvert.SerializeObject(tuiHSCTMoi));
-                await ReducedDisplayInfoContentDialog.Show(_dialogService, "Thêm hộ thường trú mới thành công");
+                    //Lay so HSCT lon nhat tu du lieu da co
+                    int soHSCTMoi = await _tuiHSCTService.TaoSoHSCTMoi();
 
-                //Hien thi thong tin tui ho so moi tao o tren
-                HienThiThongTinTuiHSCTMoiTao(tuiHSCTMoi);
+                    var hsctMoi = new HSCT((uint)soHSCTMoi, SelectedThonXomChuaTuiHSCT, NgayDangKy, HoTenChuHo);
+
+                    //Lay thong tin tap ho so bo sung cua thon, xom da chon
+                    var tapHSCTBoSungCuaThonXom =
+                        await _tapHSCTService.LayTapHSCTBoSungCuaThonXom(SelectedThonXomChuaTuiHSCT);
+                    var viTriTuiHSCTMoi = await _tuiHSCTService.TaoViTriTuiHSCTMoi(SelectedThonXomChuaTuiHSCT);
+
+                    var tuiHSCTMoi = new TuiHSCT()
+                    {
+                        HSCT = hsctMoi,
+                        TapHSCT = tapHSCTBoSungCuaThonXom,
+                        ViTriTui = viTriTuiHSCTMoi
+                    };
+
+                    //Them moi tui ho so vao du lieu
+                    await _tuiHSCTService.ThemTuiHSCTMoi(tuiHSCTMoi);
+
+                    operation.Report(1);
+
+                    // Debug.WriteLine(JsonConvert.SerializeObject(tuiHSCTMoi));
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Thêm hộ thường trú mới thành công");
+
+                    //Hien thi thong tin tui ho so moi tao o tren
+                    HienThiThongTinTuiHSCTMoiTao(tuiHSCTMoi);
+                }
             }
             catch (Exception ex)
             {
@@ -161,7 +177,8 @@ namespace QuanLyTangThuHoKhau.QuanLyTuiHSCT.QuanLyDuLieuTuiHSCT.ViewModels
                 else
                 {
                     Log.Error(ex);
-                    await ReducedDisplayInfoContentDialog.Show(_dialogService, "Đã có lỗi xảy ra khi thêm hộ thường trú mới");
+                    await ReducedDisplayInfoContentDialog.Show(_dialogService,
+                        "Đã có lỗi xảy ra khi thêm hộ thường trú mới");
                 }
             }
         }
